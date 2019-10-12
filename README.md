@@ -1,1 +1,1 @@
-amitdu6ey.giuhub.io
+https://amitdu6ey.github.io/

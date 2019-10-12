@@ -1,2 +1,1 @@
-# Hello! I am Amit dubey.
-## ....underConstruction....
+amitdu6ey.giuhub.io

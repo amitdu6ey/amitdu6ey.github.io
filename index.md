@@ -6,19 +6,21 @@ A Junior (3rd Year) Computer Science Undergrad at Ramaiah Institute of Technolog
 I am a Computer Geek who wants to be Programmer, Engineer, Problem Solver (Whatever that is..) and to achieve my dream my daily schedule looks like this ;
 
 ```markup
-While(Alive){
+While(Alive()){
   wakeUp();
   eat();
-  if(NotAttendingClasses()){
-    solveAlgorithmicSomeProblems();
+  if(notAttendingClasses()){
+    solveSomeAlgorithmicProblems();
   }
-  if(noOnlineContestisThere())
-    workOnPoject();
+  if(noAlgorithmicContestIsThere())
+    workOnSomePoject();
   else
     participateInOnlineContest();
-  emotional_state mood;
-  if(ratingincrease)  mood = Happy;
-  else mood = Sad;
+  EmotionalState mood;
+  if(ratingIncrease)
+    mood = Happy;
+  else
+    mood = Sad;
   sleep(mood);
 }
 ```

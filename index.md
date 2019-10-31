@@ -1,3 +1,4 @@
+logo : [https://www.gravatar.com/avatar/48d25b64d4a1324324ba285f7c9bed5b?s=290&20191031]
 ## Welcome to GitHub Pages
 
 You can use the [editor on GitHub](https://github.com/amitdu6ey/amitdu6ey.github.io/edit/master/index.md) to maintain and preview the content for your website in Markdown files.

@@ -11,7 +11,7 @@ While(Alive()){
   if(noAlgorithmicContestIsThere())
     workOnSomePoject();
   else
-    participateInOnlineContest();
+    participateInAlgorithmicContest();
   sleep();
 }
 ```

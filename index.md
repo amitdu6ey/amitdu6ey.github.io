@@ -3,17 +3,23 @@ Hi! I am Amit.
 
 A Junior (3rd Year) Computer Science Undergrad at Ramaiah Institute of Technology, Bangalore.
 
-I am a Computer Geek who wants to be Programmer, Engineer, Problem Solver (Whatever that is..);
+I am a Computer Geek who wants to be Programmer, Engineer, Problem Solver (Whatever that is..) and to achieve my dream my daily schedule looks like this ;
 
 ```markup
 While(Alive){
   wakeUp();
   eat();
+  if(NotAttendingClasses()){
+    solveAlgorithmicSomeProblems();
+  }
   if(noOnlineContestisThere())
     workOnPoject();
   else
     participateInOnlineContest();
-  sleep();
+  emotional_state mood;
+  if(ratingincrease)  mood = Happy;
+  else mood = Sad;
+  sleep(mood);
 }
 ```
 

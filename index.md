@@ -1,8 +1,8 @@
-## Welcome to GitHub Pages
+## About Me
 
-You can use the [editor on GitHub](https://github.com/amitdu6ey/amitdu6ey.github.io/edit/master/index.md) to maintain and preview the content for your website in Markdown files.
+I am currently persuing my Bachelor of Engineering Degree in Computer Science and Engineering from Ramaiah Institute of Technology (2017-2021).
+I am keenly interested in Competitive Programming , Web Development, Machine Learning and its applications.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
 ### Markdown
 

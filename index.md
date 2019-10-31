@@ -9,4 +9,4 @@ My research interests include Natural Language Processing, Computational Linguis
 
 ##  Find me on
 
-  -[Linkedin](https://www.linkedin.com/in/amitdu6ey/)
+####      -[Linkedin](https://www.linkedin.com/in/amitdu6ey/)

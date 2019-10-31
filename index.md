@@ -59,7 +59,7 @@ cell to reach towards a goal cell.
   
   
 ##  Achievements
- * [ACM ICPC Online Round 2019] (https://www.codechef.com/public/rankings/ICPCIN19)
+ * [ACM ICPC Online Round 2019](https://www.codechef.com/public/rankings/ICPCIN19)
     * Member of team Underdogs (3 members) ranked 731 out of 4401 teams in India ( First rank in college ).
     
 ##  Find me on

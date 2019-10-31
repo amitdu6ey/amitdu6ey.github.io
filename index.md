@@ -4,9 +4,9 @@ I am currently persuing my Bachelor of Engineering Degree in Computer Science an
 I am keenly interested in Competitive Programming , Web Development, Machine Learning and its applications.
 
 
-### Markdown
+### Find me on
+[codechef](https://www.codechef.com)
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
 
 ```markdown
 Syntax highlighted code block

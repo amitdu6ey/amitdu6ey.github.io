@@ -7,21 +7,12 @@ I am a Computer Geek who wants to be Programmer, Engineer, Problem Solver (Whate
 
 ```markup
 While(Alive()){
-  wakeUp();
   eat();
-  if(notAttendingClasses()){
-    solveSomeAlgorithmicProblems();
-  }
   if(noAlgorithmicContestIsThere())
     workOnSomePoject();
   else
     participateInOnlineContest();
-  EmotionalState mood;
-  if(ratingIncrease)
-    mood = Happy;
-  else
-    mood = Sad;
-  sleep(mood);
+  sleep();
 }
 ```
 

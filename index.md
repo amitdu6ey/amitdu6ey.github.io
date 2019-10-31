@@ -1,4 +1,4 @@
-## About me
+# About me
 Hi! I am Amit.
 
 A Junior (3rd Year) Computer Science Undergrad at Ramaiah Institute of Technology, Bangalore.
@@ -17,9 +17,9 @@ While(Alive()){
 ```
 
 
-##  Projects
+#  Projects
 
-* #### Ensemble of Machine Learning Models for predicting Music Genres
+* ### Ensemble of Machine Learning Models for predicting Music Genres
   * Worked under Prof. Srinidhi Hiriyannaiah on improving accuracy of his
   Research Paper "Content-Based Music Classification Using Ensemble
   of Classifiers".
@@ -29,31 +29,31 @@ While(Alive()){
   * Exposure: Machine Learning algorithms, Python Libraries - Numpy,
   Pandas, Sklearn.
    
-* #### Django Based Online Judge
+* ### Django Based Online Judge
   * A web-app that can accept and judge computer-programs, based on a
   given input and expected output set and users can also write blogs
   and add comments to other blogs..
   * Developed on Django and can currently handle C and C++ languages.
   * Exposure: Django, Python, SQL.
   
-* #### Sorting Algorithms Visualizer
+* ### Sorting Algorithms Visualizer
   * Online platform that visualizes various sorting algorithms.
   * Implemented Bubble Sort, Insertion Sort, Merge Sort, Selection Sort,
 Heap Sort, Quick Sort in JavaScript.
   * Exposure: HTML, CSS, JavaScript.
 
-* #### A Star Maze Solver
+* ### A Star Maze Solver
   * Game had 2D Grid having several obstacles and we start from a source
 cell to reach towards a goal cell.
   * Implemented A* Search Algorithm in C++.
   * Exposure : C++, Graph Search Algorithms.
   
   
-##  Achievements
+#  Achievements
  * [ACM ICPC Online Round 2019](https://www.codechef.com/public/rankings/ICPCIN19)
     * Member of team Underdogs (3 members) ranked 731 out of 4401 teams in India ( First rank in college ).
     
-##  Find me on
+#  Find me on
 
 * &nbsp; [Linkedin](https://www.linkedin.com/in/amitdu6ey/)
 * &nbsp; [Codechef](https://www.codechef.com/users/amitdu6ey)

@@ -4,4 +4,4 @@ I am passionate about algorithmic competitions, web development, machine learnin
 
 ##  Find me on
 
-*[Linkedin](https://www.linkedin.com/in/amitdu6ey/)
+  +[Linkedin](https://www.linkedin.com/in/amitdu6ey/)

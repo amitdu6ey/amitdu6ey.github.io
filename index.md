@@ -51,7 +51,7 @@ cell to reach towards a goal cell.
   
 #  Achievements
  * [ACM ICPC Online Round 2019](https://www.codechef.com/public/rankings/ICPCIN19)
-    * Member of team Underdogs (3 members) ranked 731 out of 4401 teams in India ( First rank in college ).
+    * Member of team Underdogs (3 members) qualified for both [Amritapuri](https://icpc.amrita.ac.in/2019/teams-selected-for-onsite-contest/) and [Gwalior-Pune](http://icpc-iiitm.com/docs/Short%20listed%20Teams%20for%20ICPC%20Gwalior-%202019.pdf) onsite regionals (First rank in college).
     
 #  Find me on
 

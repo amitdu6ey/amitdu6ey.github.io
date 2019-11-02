@@ -9,7 +9,7 @@ I am a Computer Geek who wants to be Programmer, Engineer, Problem Solver (Whate
 While(Alive()){
   eat();
   if(noAlgorithmicContestIsThere())
-    workOnSomePoject();
+    workOnSomeProject();
   else
     participateInAlgorithmicContest();
   sleep();

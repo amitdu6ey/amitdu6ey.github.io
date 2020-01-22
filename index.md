@@ -39,7 +39,8 @@ cell to reach towards a goal cell.
   
 #  Achievements
  * [ACM ICPC Online Round 2019](https://www.codechef.com/public/rankings/ICPCIN19)
-    * Member of team Underdogs (3 members) qualified for both [Amritapuri](https://icpc.amrita.ac.in/2019/teams-selected-for-onsite-contest/) and [Gwalior-Pune](http://icpc-iiitm.com/#results) onsite regionals (First rank in college).
+    * Represented Ramaiah Institute of Technology, Bangalore at ACM ICPC Asia Amritapuri
+    and Gwalior-Pune Regional after qualifying(1st in college) through the Preliminary Online round 2019. 
     
 #  Find me on
 

@@ -7,33 +7,27 @@ I am a Computer Geek who wants to be Programmer, Engineer & Problem Solver (What
 
 #  Projects
 
-* ### Ensemble of Machine Learning Models for predicting Music Genres
-  * Worked under Prof. Srinidhi Hiriyannaiah on improving accuracy of his
-  Research Paper "Content-Based Music Classification Using Ensemble
-  of Classifiers".
-  * Implemented Advanced Ensemble techniques on Final model of
-  Research Paper which helped in Increasing accuracy from 76% to 79% 
-  (increasing it by 3% ).
-  * Exposure: Machine Learning algorithms, Python Libraries - Numpy,
+* ### PUBG Finish Placement Predictions using Machine Learning
+ * I used both regression models and tree models to output a predicted final rank. After  predicting final ranks,
+   I perform an additional step to classify game strategies used by top players, which may give the players a choice
+   to adopt optimal strategies.
+ * Exposure: Machine Learning , Python Libraries - Numpy,
   Pandas, Sklearn.
    
-* ### Django Based Online Judge
-  * A web-app that can accept and judge computer-programs, based on a
-  given input and expected output set and users can also write blogs
-  and add comments to other blogs..
+* ### EatSleepCode : Online Judge for Coders.
+  * A web-app that can accept and judge computer-programs, based on a given input and expected output and users can
+    also write blogs and add comments to other blogs.
   * Developed on Django and can currently handle C and C++ languages.
   * Exposure: Django, Python, SQL.
   
 * ### Sorting Algorithms Visualizer
   * Online platform that visualizes various sorting algorithms.
-  * Implemented Bubble Sort, Insertion Sort, Merge Sort, Selection Sort,
-Heap Sort, Quick Sort in JavaScript.
+  * Implemented Bubble Sort, Insertion Sort, Merge Sort, Selection Sort, Heap Sort, Quick Sort in JavaScript.
   * Exposure: HTML, CSS, JavaScript.
 
-* ### A Star Maze Solver
-  * Game had 2D Grid having several obstacles and we start from a source
-cell to reach towards a goal cell.
-  * Implemented A* Search Algorithm in C++.
+* ### RIT Data Center
+  • Used third normal form to reduce redundancy in database and also added new relevent tables to database.
+  • Developed an API using Express.js to fetch data from database that is requested by user.
   * Exposure : C++, Graph Search Algorithms.
   
   

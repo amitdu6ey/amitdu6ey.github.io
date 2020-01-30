@@ -8,11 +8,11 @@ I am a Computer Geek who wants to be Programmer, Engineer & Problem Solver (What
 #  Projects
 
 * ### PUBG Finish Placement Predictions using Machine Learning
- * I have used  Random Forest Model to predict final rank of any player and after  predicting the final ranks,
-   I have performed an additional step to find the most important features or stats that were used by top players,
-   which may help new players to adopt optimal strategies.
- * Exposure: Machine Learning , Python Libraries - Numpy,
-  Pandas, Sklearn.
+  * I have used  Random Forest Model to predict final rank of any player and after  predicting the final ranks,
+    I have performed an additional step to find the most important features or stats that were used by top players,
+    which may help new players to adopt optimal strategies.
+  * Exposure: Machine Learning , Python Libraries - Numpy,
+    Pandas, Sklearn.
    
 * ### EatSleepCode : Online Judge for Coders.
   * A web-app that can accept and judge computer-programs, based on a given input and expected output and users can

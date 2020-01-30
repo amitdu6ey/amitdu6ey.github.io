@@ -1,7 +1,7 @@
 # About me
 Hi! I am Amit.
 
-A Junior (3rd Year) Computer Science Undergrad at Ramaiah Institute of Technology, Bangalore.
+A Junior (3rd Year) Computer Science Undergrad at [Ramaiah Institute of Technology, Bangalore](http://www.msrit.edu/).
 
 I am a Computer Geek who wants to be Programmer, Engineer & Problem Solver (Whatever that is..)
 

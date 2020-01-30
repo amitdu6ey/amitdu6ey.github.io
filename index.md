@@ -8,9 +8,9 @@ I am a Computer Geek who wants to be Programmer, Engineer & Problem Solver (What
 #  Projects
 
 * ### PUBG Finish Placement Predictions using Machine Learning
- * I used both regression models and tree models to output a predicted final rank. After  predicting final ranks,
-   I perform an additional step to classify game strategies used by top players, which may give the players a choice
-   to adopt optimal strategies.
+ * I have used  Random Forest Model to predict final rank of any player and after  predicting the final ranks,
+   I have performed an additional step to find the most important features or stats that were used by top players,
+   which may help new players to adopt optimal strategies.
  * Exposure: Machine Learning , Python Libraries - Numpy,
   Pandas, Sklearn.
    

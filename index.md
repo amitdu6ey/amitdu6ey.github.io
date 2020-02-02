@@ -22,12 +22,6 @@ I am a Computer Geek who wants to be Programmer, Engineer & Problem Solver (What
   * Online platform that visualizes various sorting algorithms.
   * Implemented Bubble Sort, Insertion Sort, Merge Sort, Selection Sort, Heap Sort, Quick Sort in JavaScript.
   * Exposure: HTML, CSS, JavaScript.
-
-* ### RIT Data Center
-  * Used third normal form to reduce redundancy in database and also added new relevent tables to database.
-  * Developed an API using Express.js to fetch data from database that is requested by user.
-  * Exposure : SQL, Express.js
-  
   
 #  Achievements
  * [ACM ICPC Online Round 2019](https://www.codechef.com/public/rankings/ICPCIN19)

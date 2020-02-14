@@ -1,7 +1,7 @@
 # About me
-* &nbsp;Programmer,
-* &nbsp;Engineer,
-* &nbsp;Problem Solver (Whatever that is..)
+Programmer,
+Engineer,
+Problem Solver (Whatever that is..)
 
 Hi! I am Amit.
 

@@ -1,5 +1,6 @@
 # About me
 Hi! I am Amit.
+
 I am currently pursuing a Bachelor’s degree in Computer Science at [Ramaiah Institute of Technology, Bangalore](http://www.msrit.edu/). In my free time I love solving alogithmic problems on online judges like codechef, codeforces and hackerrank.
 
 #  Projects

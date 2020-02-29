@@ -10,16 +10,15 @@ I am currently pursuing a Bachelor’s degree in Computer Science at [Ramaiah In
     used by top players, which may help new players to adopt optimal strategies.
   * Exposure: Machine Learning , Python Libraries - Numpy, Pandas, Sklearn.
    
-* ### EatSleepCode : Online Judge for Coders.
-  * A web-app that can accept and judge computer-programs, based on a given input and expected output and users can
-    also write blogs and add comments to other blogs.
-  * Developed on Django and can currently handle C and C++ languages.
+* ### Brainy : An Educational Blogging Website 
+  * A website in which users can log in/register, read blogs and add comments to blogs.
+  * DOnly registered users can write blogs and add comments to blogs to keep high content quality.
   * Exposure: Django, Python, SQL.
   
-* ### Sorting Algorithms Visualizer
-  * Online platform that visualizes various sorting algorithms.
-  * Implemented Bubble Sort, Insertion Sort, Merge Sort, Selection Sort, Heap Sort, Quick Sort in JavaScript.
-  * Exposure: HTML, CSS, JavaScript.
+* ### Vehicle Recognition Predictive Model 
+  * Built a vehicle recognition predictive model using Stanford Cars Dataset that contains a total of 196 classes of cars and model gave an accuracy of 84.2%.
+  * Explored Convolution Neural Networks, CNN architectures like ResNet34, ResNet50 and transfer learning concepts.
+  * Exposure: Pytorch, FastAI.
   
 #  Achievements
  * [ACM ICPC Online Round 2019](https://www.codechef.com/public/rankings/ICPCIN19)

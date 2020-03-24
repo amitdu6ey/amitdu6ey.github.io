@@ -34,3 +34,6 @@ I am pursuing my Bachelor’s degree in Computer Science at [Ramaiah Institute o
  * [ACM ICPC Online Round 2019](https://www.codechef.com/public/rankings/ICPCIN19)
     * Represented Ramaiah Institute of Technology, Bangalore at ACM ICPC Asia Amritapuri
     and Gwalior-Pune Regional after qualifying(1st in college) through the Preliminary Online round 2019. 
+ * ZS Data Science Contest India.
+    * Built a Machine Learning Model that predicted result of Cristiano Ronaldo’s attempts on the goal targets.
+    * Got top 10% rank among a total of 11K participants in India. 

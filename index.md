@@ -5,7 +5,7 @@ I am currently pursuing a Bachelor’s degree in Computer Science at [Ramaiah In
 
 #  Projects
   
-* ### Brainy : An Educational Blogging Website 
+* ### Online Pizza Ordering System 
   * A website in which users can log in/register then adds items to cart, place orders, review their orders.
   * The restaurant owner can see orders that have been placed and update their status also.
   * Tech Stack: Django, HTML 5 & CSS 

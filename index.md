@@ -2,7 +2,7 @@
 Hi! I am Amit.
 
 I am currently working at Samsung PRISM project under [Samsung R&D Institute Bangalore-India](https://www.linkedin.com/company/samsung-india/) at Samsung PRISM Lab.
-My Work is primarily on a NodeJS based scalable and responsive web application with multitenancy support.
+My Work is primarily on a NodeJS based web application with multitenancy support.
 
 I am pursuing my Bachelor’s degree in Computer Science at [Ramaiah Institute of Technology, Bangalore](http://www.msrit.edu/). In my free time I love solving alogithmic problems on online judges like codechef, codeforces and hackerrank.
 

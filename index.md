@@ -1,10 +1,10 @@
 # About me
 Hi! I am Amit.
 
-I am currently working at Samsung PRISM project under [Samsung R&D Institute Bangalore-India](https://www.linkedin.com/company/samsung-india/) at Samsung PRISM Lab.
+I am currently working on Samsung PRISM project under [Samsung R&D Institute Bangalore-India](https://www.linkedin.com/company/samsung-india/) at Samsung PRISM Lab.
 My Work is primarily on a NodeJS based web application with multitenancy support.
 
-I am pursuing my Bachelor’s degree in Computer Science at [Ramaiah Institute of Technology, Bangalore](http://www.msrit.edu/). In my free time I love solving alogithmic problems on online judges like codechef, codeforces and hackerrank.
+I am pursuing my Bachelor’s degree in Computer Science at [Ramaiah Institute of Technology, Bangalore](http://www.msrit.edu/). I love solving alogithmic problems on online judges like codechef, codeforces and hackerrank.
 
 #  Find me on
 
@@ -14,16 +14,16 @@ I am pursuing my Bachelor’s degree in Computer Science at [Ramaiah Institute o
 * &nbsp; [Codeforces](https://codeforces.com/profile/amitdu6ey)
 
 #  Projects
-  
-* ### Online Pizza Ordering System 
-  * A website in which users can log in/register then adds items to cart, place orders, review their orders.
-  * The restaurant owner can see orders that have been placed and update their status also.
-  * Tech Stack: Django, HTML 5 & CSS 
+
+* ### Online Book Store 
+  * A website in which users can log in/register then adds books to cart, order books, review their orders.
+  * The shop owner can see orders that have been placed and update their status also.
+  * Tech Stack: Node.js, Express.js, Javascript, HTML & CSS 
 
 * ### PUBG Final Rank Predictions using Machine Learning
-  * I have used  Random Forest Model to predict final rank of any player and most important features or strategies that were
-    used by top players, which may help new players to adopt optimal strategies.
-  * Tech Stack: Python Libraries - Numpy, Pandas, Sklearn.
+  * I have used  Random Forest Model to predict final rank of any player and most important features that 
+    help in predicting ranks of participants.
+  * Tech Stack: Numpy, Pandas, Sklearn.
 
 * ### Vehicle Recognition Predictive Model 
   * Built a vehicle recognition predictive model using Stanford Cars Dataset that contains a total of 196 classes of cars and model gave an accuracy of 84.2%.

@@ -16,7 +16,7 @@ I am pursuing my Bachelor’s degree in Computer Science at [Ramaiah Institute o
 
 * ### Intern @ Samsung PRISM Student Research Lab Bangalore-India
 
-  * Samsung PRISM is a student program offering students a chance to work on real-world projects, interact with Samsung’s top technical experts and provide hands-on experience in core technology domains.
+  * [Samsung PRISM](https://www.samsungprism.com/) is a student program offering students a chance to work on real-world projects, interact with Samsung’s top technical experts and provide hands-on experience in core technology domains.
 
   * As part of this program I am working on building an API using Express (with Node.js) and implementing authentication and CRUD functionality for web application.
  

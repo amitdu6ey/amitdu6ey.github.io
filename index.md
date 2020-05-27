@@ -1,10 +1,12 @@
 # About me
 Hi! I am Amit.
 
-I am currently working on Samsung PRISM project under [Samsung R&D Institute Bangalore-India](https://www.linkedin.com/company/samsung-india/) at Samsung PRISM Lab.
-My Work is primarily on a NodeJS based web application with multitenancy support.
+I am currently working on Samsung PRISM project under [Samsung R&D Institute Bangalore-India](https://www.linkedin.com/company/samsung-india/). Samsung PRISM is a student program offering students a chance to work on real-world projects, interact with Samsung’s top technical experts and provide hands-on experience in core technology domains.
 
-I am pursuing my Bachelor’s degree in Computer Science at [Ramaiah Institute of Technology, Bangalore](http://www.msrit.edu/). I love solving alogithmic problems on online judges like codechef, codeforces and hackerrank.
+As part of this program I am working on building an API using Express (with Node.js) and
+implementing authentication and CRUD functionality for web application.
+
+I am pursuing my Bachelor’s degree in Computer Science at [Ramaiah Institute of Technology, Bangalore](http://www.msrit.edu/). I am interested in web-dev, algorithms, machine learning and its applications.
 
 #  Find me on
 
@@ -15,20 +17,20 @@ I am pursuing my Bachelor’s degree in Computer Science at [Ramaiah Institute o
 
 #  Projects
 
-* ### Online Book Store 
-  * A website in which users can log in/register then adds books to cart, order books, review their orders.
-  * The shop owner can see orders that have been placed and update their status also.
-  * Tech Stack: Node.js, Express.js, Javascript, HTML & CSS 
-
-* ### PUBG Final Rank Predictions using Machine Learning
-  * I have used  Random Forest Model to predict final rank of any player and most important features that 
-    help in predicting ranks of participants.
+Project description
+* ### Guitar Tab Tracker
+  * Worked on web app in which users can adds songs, edit songs, watch others songs with guitar tabs.
+  * The user will be able to login or register and also search songs by song’s name, artist, album, or genre.
+  * Tech Stack : Express.js (Node.js), RDBMS (MySQL), HTML & CSS
+  
+* ### Blue books for Bulldozers
+  * Worked on Random Forest to predict prices of bulldozers and important features for deciding prices .000
   * Tech Stack: Numpy, Pandas, Sklearn.
 
 * ### Vehicle Recognition Predictive Model 
   * Built a vehicle recognition predictive model using Stanford Cars Dataset that contains a total of 196 classes of cars and model gave an accuracy of 84.2%.
   * Explored Convolution Neural Networks, CNN architectures like ResNet34, ResNet50 and transfer learning concepts.
-  * Tech Stack: FastAI.
+  * Tech Stack: FastAI-Pytorch.
   
 #  Achievements
  * [ACM ICPC Online Round 2019](https://www.codechef.com/public/rankings/ICPCIN19)

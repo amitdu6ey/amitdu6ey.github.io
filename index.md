@@ -1,4 +1,4 @@
-# About me
+#  About me
 Hi! I am Amit.
 
 I am currently working on Samsung PRISM project under [Samsung R&D Institute Bangalore-India](https://www.linkedin.com/company/samsung-india/).
@@ -12,10 +12,7 @@ I am pursuing my Bachelor’s degree in Computer Science at [Ramaiah Institute o
 * &nbsp; [Hackerrank](https://www.hackerrank.com/amitdu6ey)
 * &nbsp; [Codeforces](https://codeforces.com/profile/amitdu6ey)
 
-# Experience
-
-
-#  Projects
+#  Experience
 
 * ### Intern @ Samsung PRISM Student Research Lab Bangalore-India
 
@@ -26,7 +23,7 @@ I am pursuing my Bachelor’s degree in Computer Science at [Ramaiah Institute o
   * Tech Stack : Node.js, Express.js, mysql
 
 
-Project description
+#  Projects
 * ### Guitar Tab Tracker
   * Worked on web app in which users can adds songs, edit songs, watch others songs with guitar tabs.
   * The user will be able to login or register and also search songs by song’s name, artist, album, or genre.

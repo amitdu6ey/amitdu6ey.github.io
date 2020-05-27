@@ -1,12 +1,7 @@
 # About me
 Hi! I am Amit.
 
-I am currently working on Samsung PRISM project under [Samsung R&D Institute Bangalore-India](https://www.linkedin.com/company/samsung-india/). Samsung PRISM is a student program offering students a chance to work on real-world projects, interact with Samsung’s top technical experts and provide hands-on experience in core technology domains.
-
-As part of this program I am working on building an API using Express (with Node.js) and
-implementing authentication and CRUD functionality for web application.
-
-I am pursuing my Bachelor’s degree in Computer Science at [Ramaiah Institute of Technology, Bangalore](http://www.msrit.edu/). I am interested in web-dev, algorithms, machine learning and its applications.
+I am currently working on Samsung PRISM project under [Samsung R&D Institute Bangalore-India](https://www.linkedin.com/company/samsung-india/).I am pursuing my Bachelor’s degree in Computer Science at [Ramaiah Institute of Technology, Bangalore](http://www.msrit.edu/). I am interested in web-dev, algorithms, machine learning and its applications.
 
 #  Find me on
 
@@ -15,7 +10,19 @@ I am pursuing my Bachelor’s degree in Computer Science at [Ramaiah Institute o
 * &nbsp; [Hackerrank](https://www.hackerrank.com/amitdu6ey)
 * &nbsp; [Codeforces](https://codeforces.com/profile/amitdu6ey)
 
+# Experience
+
+
 #  Projects
+
+* ### Intern @ Samsung PRISM Student Research Lab Bangalore-India
+
+  *Samsung PRISM is a student program offering students a chance to work on real-world projects, interact with Samsung’s top technical experts and provide hands-on experience in core technology domains.
+
+  *As part of this program I am working on building an API using Express (with Node.js) and implementing authentication and CRUD functionality for web application.
+ 
+  * Tech Stack : Node.js, Express.js, mysql
+
 
 Project description
 * ### Guitar Tab Tracker

@@ -34,7 +34,7 @@ I am pursuing my Bachelor’s degree in Computer Science at [Ramaiah Institute o
   * Tech Stack: Numpy, Pandas, Sklearn.
 
 * ### Vehicle Recognition Predictive Model 
-  * Built a vehicle recognition predictive model using Stanford Cars Dataset that contains a total of 196 classes of cars and model gave an accuracy of 84.2%.
+  * Built a vehicle recognition predictive model using Stanford Cars Dataset that contains a total of 196 classes of cars and model gave an accuracy of 89%.
   * Explored Convolution Neural Networks, CNN architectures like ResNet34, ResNet50 and transfer learning concepts.
   * Tech Stack: FastAI-Pytorch.
   

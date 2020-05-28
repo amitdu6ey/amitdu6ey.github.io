@@ -39,7 +39,7 @@ I am pursuing my Bachelor’s degree in Computer Science at [Ramaiah Institute o
   * Tech Stack: FastAI-Pytorch.
   
 #  Achievements
- * [ACM ICPC Online Round 2019](https://www.codechef.com/public/rankings/ICPCIN19)
+ * [ACM ICPC 2019](https://www.codechef.com/public/rankings/ICPCIN19)
     * Represented Ramaiah Institute of Technology, Bangalore at ACM ICPC Asia Amritapuri
     and Gwalior-Pune Regional after qualifying(1st in college) through the Preliminary Online round 2019. 
  * [ZS Data Science Contest India](https://www.interviewbit.com/contest/zs-yds-2019/) (August 2019)

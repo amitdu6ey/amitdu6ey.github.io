@@ -24,9 +24,9 @@ I am pursuing my Bachelor’s degree in Computer Science at [Ramaiah Institute o
 
 
 #  Projects
-* ### Guitar Tab Tracker
-  * Worked on web app in which users can adds songs, edit songs, watch others songs with guitar tabs.
-  * The user will be able to login or register and also search songs by song’s name, artist, album, or genre.
+* ### DevConnector - Web Dev Project 
+  * Working on a social network web app in which the user can post blogs & like/comment on some blog.
+  * The user will be able to login or register and also update their profile.
   * Tech Stack : Express.js (Node.js), RDBMS (MySQL), HTML & CSS
   
 * ### Blue books for Bulldozers

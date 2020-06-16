@@ -14,7 +14,7 @@ I am pursuing my Bachelor’s degree in Computer Science at [Ramaiah Institute o
 
 #  Experience
 
-* ### Intern @ Samsung PRISM Student Research Lab Bangalore-India
+* ### Samsung PRISM Student Research Lab Bangalore-India
 
   * [Samsung PRISM](https://www.samsungprism.com/) is a student program offering students a chance to work on real-world projects, interact with Samsung’s top technical experts and provide hands-on experience in core technology domains.
 

@@ -29,11 +29,11 @@ I am pursuing my Bachelor’s degree in Computer Science at [Ramaiah Institute o
   * The user will be able to login or register and also update their profile.
   * Tech Stack : Express.js (Node.js), RDBMS (MySQL), HTML & CSS
   
-* ### Blue books for Bulldozers
-  * Worked on Random Forest to predict prices of bulldozers and important features for deciding prices .000
+* ### Blue books for Bulldozers - Machine learning project
+  * Worked on Random Forest to predict prices of bulldozers and important features for deciding prices.
   * Tech Stack: Numpy, Pandas, Sklearn.
 
-* ### Vehicle Recognition Predictive Model 
+* ### Vehicle Recognition Predictive Model - - Deep learning project
   * Built a vehicle recognition predictive model using Stanford Cars Dataset that contains a total of 196 classes of cars and model gave an accuracy of 89%.
   * Explored Convolution Neural Networks, CNN architectures like ResNet34, ResNet50 and transfer learning concepts.
   * Tech Stack: FastAI-Pytorch.

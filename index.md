@@ -24,7 +24,7 @@ I am pursuing my Bachelor’s degree in Computer Science at [Ramaiah Institute o
 
 
 #  Projects
-* ### DevConnector - Web Dev Project 
+* ### HackerStreet - Web Dev Project 
   * Working on a social network web app in which the user can post blogs & like/comment on some blog.
   * The user will be able to login or register and also update their profile.
   * Tech Stack : Express.js (Node.js), RDBMS (MySQL), HTML & CSS

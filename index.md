@@ -3,7 +3,7 @@ Hi! I am Amit.
 
 I am currently working on a Web App for Samsung PRISM to conducting surveys and create Judgement List for Search DCG Computation and Learning to Rank (LTR) Training as part of Samsung PRISM project under [Samsung R&D Institute Bangalore-India](https://www.linkedin.com/company/samsung-india/).
 
-I am pursuing my Bachelor’s degree in Computer Science at [Ramaiah Institute of Technology, Bangalore](http://www.msrit.edu/) and interested in web-dev, algorithms, machine learning and its applications.
+I am pursuing my Bachelor’s degree in Computer Science at [Ramaiah Institute of Technology, Bangalore](http://www.msrit.edu/) and I love web-dev, algorithms, machine learning and its applications.
 
 #  Find me on
 

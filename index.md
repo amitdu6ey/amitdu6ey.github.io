@@ -1,7 +1,7 @@
 #  About me
 Hi! I am Amit Dubey.
 
-I am currently working on Samsung PRISM Worklet (part of a project at [Samsung R&D Institute Bangalore-India](https://www.linkedin.com/company/samsung-india/)),in which I am workin on building Web App to conduct surveys and create Judgement List for Search DCG Computation and Learning to Rank (LTR) Training.
+I am currently working on Samsung PRISM Worklet (part of a project at [Samsung R&D Institute Bangalore-India](https://www.linkedin.com/company/samsung-india/), in which I am building a Web App to conduct surveys and create Judgement List for Search DCG Computation and Learning to Rank (LTR) Training.
 
 I am pursuing a Bachelor’s degree in Computer Science at MSRIT bangalore [2017 to 2021].
 
@@ -29,6 +29,10 @@ I am pursuing a Bachelor’s degree in Computer Science at MSRIT bangalore [2017
   * The user will be able to login or register and also update their profile.
   * Tech Stack: MERN Stack (MongoDB, Express, React, Node.js)
   
+* ### Chit-Chat - Web Dev Project
+  • Building a real-time chat application with different chat rooms.
+  • Tech Stack: Express(Node.js) and Socket.io  
+  
 * ### Blue books for Bulldozers - Machine learning project
   * Worked on Random Forest to predict prices of bulldozers.
   • Explored Decision Trees, Random Forests, Ensemble Techniques, Bagging and Boosting extensively.
@@ -41,7 +45,4 @@ I am pursuing a Bachelor’s degree in Computer Science at MSRIT bangalore [2017
 #  Most Proud of
  * [ACM ICPC 2019](https://www.codechef.com/public/rankings/ICPCIN19)
     * Represented Ramaiah Institute of Technology, Bangalore at ACM ICPC Asia Amritapuri
-    and Gwalior-Pune Regional after qualifying(1st in college) through the Preliminary Online round 2019. 
- * [ZS Data Science Contest India](https://www.interviewbit.com/contest/zs-yds-2019/) (August 2019)
-    * Built a Machine Learning Model that predicted result of Cristiano Ronaldo’s attempts on the goal targets.
-    * Got top 10% rank among a total of 11K participants in India.
+    and Gwalior-Pune Regionals.

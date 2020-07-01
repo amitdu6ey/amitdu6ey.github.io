@@ -17,9 +17,7 @@ I am pursuing a Bachelor’s degree in Computer Science at MSRIT bangalore [2017
 * ### Samsung PRISM Student Research Lab Bangalore-India
 
   * [Samsung PRISM](https://www.samsungprism.com/) is a student program offering students a chance to work on real-world projects, interact with Samsung’s top technical experts and provide hands-on experience in core technology domains.
-
   * I am developed a Web App with Express Backend for Samsung PRISM to conduct surveys and create Judgement List for Search DCG Computation and Learning to Rank (LTR) Training.
- 
   * Tech Stack : Node.js, Express.js, MongoDB
 
 

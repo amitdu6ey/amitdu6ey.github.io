@@ -28,8 +28,8 @@ I am pursuing a Bachelor’s degree in Computer Science at MSRIT bangalore [2017
   * Tech Stack: MERN Stack (MongoDB, Express, React, Node.js)
   
 * ### Chit-Chat - Web Dev Project
-  • Building a real-time chat application with different chat rooms.
-  • Tech Stack: Express(Node.js) and Socket.io  
+  * Building a real-time chat application with different chat rooms.
+  * Tech Stack: Express(Node.js) and Socket.io  
   
 * ### Blue books for Bulldozers - Machine learning project
   * Worked on Random Forest to predict prices of bulldozers.

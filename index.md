@@ -21,10 +21,9 @@ I am pursuing a Bachelor’s degree in Computer Science at MSRIT bangalore [2017
 
 
 #  Projects
-* #### HackerStreet - Web Dev Project 
-  * Working on a social network web app in which the user can post blogs & like/comment on some blog.
-  * The user will be able to login or register and also update their profile.
-  * Tech Stack: MERN Stack (MongoDB, Express, React, Node.js)
+* #### Good-Events - Web Dev Project (on going) 
+  * Working on a web app in which the user can post/edit/delete events and will be able to login using google Oauth.
+  * Tech Stack: Express, Node.js, MongoDB, HTML, CSS, Handlerbars 
   
 * #### Chit-Chat - Web Dev Project
   * Building a real-time chat application with different chat rooms.

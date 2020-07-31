@@ -3,7 +3,7 @@ Hi! I am Amit Dubey.
 
 I am currently working on Samsung PRISM Worklet (part of a project at [Samsung R&D Institute Bangalore-India](https://www.linkedin.com/company/samsung-india/)), in which I am building a Web App to conduct surveys and create Judgement List for Search DCG Computation and Learning to Rank (LTR) Training.
 
-I am pursuing a Bachelor’s degree in Computer Science at MSRIT bangalore [2017 to 2021].
+I am pursuing a Bachelor’s degree in Computer Science at Ramaiah Institute of Technology, Bangalore [2017 to 2021].
 
 #  Find me on
 

@@ -17,13 +17,13 @@ I am pursuing a Bachelor’s degree in Computer Science at Ramaiah Institute of 
 * ### Samsung PRISM Developer @ Samsung Research Institute India-Bangalore
   * [Samsung PRISM](https://www.samsungprism.com/) is a student program offering students a chance to work on real-world projects, interact with Samsung’s top technical experts and provide hands-on experience in core technology domains.
   * I am developing a Web App with Express Backend for Samsung PRISM to conduct surveys and create Judgement List for Search DCG Computation and Learning to Rank (LTR) Training.
-  * Tech Stack : Node.js, Express.js, MongoDB
+  * Tech Stack : Node.js, Express.js, MongoDB, EJS
 
 
 #  Projects
 * #### Good-Events - Web Dev Project (on going) 
   * Working on a web app in which the user can post/edit/delete events and will be able to login using google Oauth.
-  * Tech Stack: Express, Node.js, MongoDB, HTML, CSS, Handlerbars 
+  * Tech Stack: Express, Node.js, MongoDB, HTML, CSS, EJS 
   
 * #### Chit-Chat - Web Dev Project
   * Building a real-time chat application with different chat rooms.
@@ -32,7 +32,7 @@ I am pursuing a Bachelor’s degree in Computer Science at Ramaiah Institute of 
 * #### Blue books for Bulldozers - Machine learning project
   * Worked on Random Forest to predict prices of bulldozers.
   • Explored Decision Trees, Random Forests, Ensemble Techniques, Bagging and Boosting extensively.
-  * Tech Stack: Numpy, Pandas, Sklearn.
+  * Tech Stack: Numpy, Pandas, Sklearn, FastAI
 
 * #### Stanford Car Classification Model - Deep learning project
   * Built a vehicle recognition predictive model using Stanford Cars Dataset that contains a total of 196 classes of cars and model gave an accuracy of 89%.

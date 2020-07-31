@@ -21,20 +21,20 @@ I am pursuing a Bachelor’s degree in Computer Science at Ramaiah Institute of 
 
 
 #  Projects
-* #### Good-Events - Web Dev Project (on going) 
+* ### Good-Events - Web Dev Project (on going) 
   * Working on a web app in which the user can post/edit/delete events and will be able to login using google Oauth.
   * Tech Stack: Express, Node.js, MongoDB, HTML, CSS, EJS 
   
-* #### Chit-Chat - Web Dev Project
+* ### Chit-Chat - Web Dev Project
   * Building a real-time chat application with different chat rooms.
   * Tech Stack: Express(Node.js) and Socket.io  
   
-* #### Blue books for Bulldozers - Machine learning project
+* ### Blue books for Bulldozers - Machine learning project
   * Worked on Random Forest to predict prices of bulldozers.
   • Explored Decision Trees, Random Forests, Ensemble Techniques, Bagging and Boosting extensively.
   * Tech Stack: Numpy, Pandas, Sklearn, FastAI
 
-* #### Stanford Car Classification Model - Deep learning project
+* ### Stanford Car Classification Model - Deep learning project
   * Built a vehicle recognition predictive model using Stanford Cars Dataset that contains a total of 196 classes of cars and model gave an accuracy of 89%.
   * Tech Stack: FastAI 
    

@@ -1,9 +1,8 @@
 #  About me
 Hi! I am Amit Dubey.
 
-I am currently working on Samsung PRISM Worklet (part of a project at [Samsung R&D Institute Bangalore-India](https://www.linkedin.com/company/samsung-india/)), in which I am building a Web App to conduct surveys and create Judgement List for Search DCG Computation and Learning to Rank (LTR) Training.
 
-I am pursuing a Bachelor’s degree in Computer Science at Ramaiah Institute of Technology, Bangalore [2017 to 2021].
+I am currently pursuing a Bachelor’s degree in Computer Science at Ramaiah Institute of Technology, Bangalore (2017 to 2021).
 
 #  Find me on
 
@@ -16,29 +15,13 @@ I am pursuing a Bachelor’s degree in Computer Science at Ramaiah Institute of 
 
 * ### Samsung PRISM Developer @ Samsung Research Institute India-Bangalore
   * [Samsung PRISM](https://www.samsungprism.com/) is a student program offering students a chance to work on real-world projects, interact with Samsung’s top technical experts and provide hands-on experience in core technology domains.
-  * I am developing a Web App with Express Backend for Samsung PRISM to conduct surveys and create Judgement List for Search DCG Computation and Learning to Rank (LTR) Training.
+  * Working on worklet (part of a project at [Samsung R&D Institute Bangalore-India](https://www.linkedin.com/company/samsung-india/)), and developing a Web App for conducting surveys and create Judgement List for Search DCG Computation and Learning to Rank (LTR) Training.
   * Tech Stack : Node.js, Express.js, MongoDB, EJS
-
-
-#  Projects
-* ### Good-Events - Web Dev Project (on going) 
-  * Working on a web app in which the user can post/edit/delete events and will be able to login using google Oauth.
-  * Tech Stack: Express, Node.js, MongoDB, HTML, CSS, EJS 
-  
-* ### Chit-Chat - Web Dev Project
-  * Building a real-time chat application with different chat rooms.
-  * Tech Stack: Express(Node.js) and Socket.io  
-  
-* ### Blue books for Bulldozers - Machine learning project
-  * Worked on Random Forest to predict prices of bulldozers.
-  • Explored Decision Trees, Random Forests, Ensemble Techniques, Bagging and Boosting extensively.
-  * Tech Stack: Numpy, Pandas, Sklearn, FastAI
-
-* ### Stanford Car Classification Model - Deep learning project
-  * Built a vehicle recognition predictive model using Stanford Cars Dataset that contains a total of 196 classes of cars and model gave an accuracy of 89%.
-  * Tech Stack: FastAI 
    
 #  Most Proud of
  * [ACM ICPC 2019](https://www.codechef.com/public/rankings/ICPCIN19)
-    * Represented Ramaiah Institute of Technology, Bangalore at ACM ICPC Asia Amritapuri
-    and Gwalior-Pune Regionals.
+    * Qualified ACM ICPC '19 Amritapuri regionals and Gwalior-Pune regionals.
+    * Ranked 731 in ACM ICPC Online Round 2019 out of 4400+ teams (Ranked First in College).
+ * [Code for Good Hackathon 2020]()
+    * Built an end to end web app solution for Key Education Foundation.
+    * Offered Software Developer position at JP Morgan Chase & Co.

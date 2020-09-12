@@ -4,6 +4,8 @@ Hi! I am Amit Dubey.
 
 I am currently pursuing a Bachelor’s degree in Computer Science at Ramaiah Institute of Technology, Bangalore (2017 to 2021).
 
+I am interested Backend Web Development and love solving algorithmic problems on online judges like SPOJ & CodeForces.  
+
 #  Find me on
 
 * &nbsp; [Linkedin](https://www.linkedin.com/in/amitdu6ey/)

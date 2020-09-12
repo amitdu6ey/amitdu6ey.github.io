@@ -1,10 +1,7 @@
 #  About me
-Hi! I am Amit Dubey.
+Hi! I am Amit Dubey, Incoming Software Engineer Intern @ JP Morgan & Chase looking for opportunities in Software Engineering.
 
-
-I am currently pursuing a Bachelor’s degree in Computer Science at Ramaiah Institute of Technology, Bangalore (2017 to 2021).
-
-I am interested Backend Web Development and love solving algorithmic problems on online judges like SPOJ & CodeForces.  
+I am currently pursuing a Bachelor’s degree in Computer Science at Ramaiah Institute of Technology, Bangalore (2017 to 2021) and interested in Backend Web Development, solving problems using Machine Learning, Deep Learning or Deterministic approach. In my free time I love solving algorithmic problems on online judges like SPOJ, CodeChef & CodeForces.
 
 #  Find me on
 

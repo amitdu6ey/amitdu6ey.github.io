@@ -14,7 +14,7 @@ I am interested in Backend Web Development, Applications of Machine Learning & D
 ##  Experience
 
 * ### Samsung PRISM Developer @ Samsung Research Institute India-Bangalore
-  * Worked in a team of 3 for Data Intelligence Group under Samsung R&D India. My project involved building Web Application for conducting surveys and create Judgement List for Search DCG Computation and Learning to Rank (LTR) Training.[Link](https://www.samsungprism.com/)
+  * Worked in a team of 3 for Data Intelligence Group under Samsung R&D India. My project involved building Web Application for conducting surveys and create Judgement List for Search DCG Computation and Learning to Rank (LTR) Training. [[Link](https://www.samsungprism.com/)]
   * Tech Stack : Node.js, Express.js, MongoDB, EJS
    
 ##  Most Proud of

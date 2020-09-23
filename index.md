@@ -22,5 +22,5 @@ I am interested in Backend Web Development, Applications of Machine Learning & D
     * Qualified for ACM ICPC '19 Amritapuri regionals and Gwalior-Pune regionals.
     * Ranked 731 in ACM ICPC Online Round 2019 out of 4400+ teams (Ranked First in College).
  * [Code for Good Hackathon 2020]()
-    * Built an end to end web app solution for Key Education Foundation.
+    * Built an end to end web application solution for Key Education Foundation.
     * Offered Software Developer position at JP Morgan Chase & Co.

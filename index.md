@@ -1,7 +1,7 @@
 ##  About me
 Hi! I am Amit Dubey, Incoming SWE Intern @ [JP Morgan Chase & Co.](https://www.linkedin.com/company/jpmorganchase/)
 
-I am currently pursuing a Bachelor’s degree in Computer Science at Ramaiah Institute of Technology, Bangalore (2017 to 2021).
+I am currently pursuing my Bachelor’s degree in Computer Science & Engineering from Ramaiah Institute of Technology, Bangalore (2017 to 2021).
 
 I am Interested in Web, Machine Learning & Algorithmic coding. In my free time I love solving algorithmic problems on online judges like SPOJ, CodeChef & CodeForces.
 

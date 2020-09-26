@@ -24,4 +24,4 @@ I am Interested in Web, Machine Learning & Algorithmic coding. In my free time I
     * Ranked 731 in ACM ICPC Online Round 2019 out of 4400+ teams (Ranked First in College).
  * [Code for Good Hackathon 2020]()
     * Built an end to end web application solution for Key Education Foundation.
-    * Offered Software Developer position at JP Morgan Chase & Co.
+    * Seleced for 2021 Class of Software Engineer Program at JPMorgan Chase & Co.

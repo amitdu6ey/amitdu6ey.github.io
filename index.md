@@ -19,9 +19,9 @@ I am Interested in Web, Machine Learning & Algorithmic coding. In my free time I
   * Tech Stack : Node.js, Express.js, MongoDB, EJS
    
 ##  Most Proud of
- * ACM ICPC 2019 [Link](https://www.codechef.com/public/rankings/ICPCIN19)
+ * ACM ICPC 2019 [[Link](https://www.codechef.com/public/rankings/ICPCIN19)]
     * Qualified for ACM ICPC '19 Amritapuri regionals and Gwalior-Pune regionals.
     * Ranked 731 in ACM ICPC Online Round 2019 out of 4400+ teams (Ranked First in College).
- * Code for Good Hackathon 2020 [Link]()
+ * Code for Good Hackathon 2020 [[Link]()]
     * Built an end to end web application solution for Key Education Foundation.
     * Seleced for 2021 Class of Software Engineer Program at JPMorgan Chase & Co.

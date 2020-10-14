@@ -14,8 +14,8 @@ I am Interested in Web, Machine Learning & Algorithmic coding. In my free time I
 
 ##  Experience
 
-* ### Samsung PRISM Developer @ Samsung Research Institute India-Bangalore [[Demo Link](http://prism-ndgc.herokuapp.com/)]
-  * Worked on developing and deploying end-to-end web application for conducting surveys and creating Judgement List for Search DCG Computation and LTR (Learning to Rank) Training.
+* ### Samsung PRISM Developer @ Samsung Research Institute India-Bangalore 
+  * Worked on developing and deploying end-to-end web application for conducting surveys and creating Judgement List for Search DCG Computation and LTR (Learning to Rank) Training. [[Demo Link](http://prism-ndgc.herokuapp.com/)]
   * Tech Stack : Node.js, Express.js, MongoDB, EJS
    
 ##  Most Proud of

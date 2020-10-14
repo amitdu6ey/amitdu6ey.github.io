@@ -14,7 +14,7 @@ I am Interested in Web, Machine Learning & Algorithmic coding. In my free time I
 
 ##  Experience
 
-* ### Samsung PRISM Developer @ Samsung Research Institute India-Bangalore [[Link](https://www.samsungprism.com/)]
+* ### Samsung PRISM Developer @ Samsung Research Institute India-Bangalore [[Demo Link](http://prism-ndgc.herokuapp.com/)]
   * Worked on developing and deploying end-to-end web application for conducting surveys and creating Judgement List for Search DCG Computation and LTR (Learning to Rank) Training.
   * Tech Stack : Node.js, Express.js, MongoDB, EJS
    
@@ -22,4 +22,4 @@ I am Interested in Web, Machine Learning & Algorithmic coding. In my free time I
  * ACM ICPC 2019 [[Link](https://www.codechef.com/public/rankings/ICPCIN19)]
     * Qualified for ACM ICPC '19 Amritapuri regionals and Gwalior-Pune regionals.
  * Code for Good Hackathon 2020 [[Link]()]
-    * Finalist in Code for Good Hackathon and got eleced for 2021 SWE Program at JPMorgan Chase & Co.
+    * Finalist in Code for Good Hackathon and got seleced for 2021 SWE Program at JPMorgan Chase & Co.

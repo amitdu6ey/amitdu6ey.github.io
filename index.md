@@ -15,7 +15,7 @@ I am Interested in web, Machine learning & distributed systems. In my free time 
 ##  Experience
 
 * **Developer @ Samsung PRISM** <br />Samsung Research Institute India-Bangalore 
-  * Worked on developing and deploying web tool for creating Judgement List for Search DCG Computation and LTR (Learning to Rank) Training. [[Demo Link](http://prism-ndgc.herokuapp.com/)]
+  * Worked on developing and deploying web tool for creating Judgement List for Search DCG Computation and LTR (Learning to Rank) Training.
   * Tech Stack : Node.js, Express.js, MongoDB, EJS
    
 ##  Most Proud of

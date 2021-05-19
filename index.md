@@ -1,7 +1,8 @@
 ##  About me
 Hello! I am Amit Dubey,
 
-I am currently Software Engineer Intern at JPMorgan Chase & Co. woking with Experience APIs Team for Global technology Infrastructure LOB building and scaling internal products. I also have 6 months of work experience at Samsung PRISM as an Developer Intern, where I worked for Data Intelligence Group at Samsung PRISM and developed an end-to-end Web Tool for creating Judgement List for Search DCG Computation and LTR Training.
+I am currently Software Engineer Intern at JPMorgan Chase & Co. woking with Experience APIs Team for Global technology Infrastructure LOB building and scaling internal products. 
+I also have 6 months of work experience at Samsung PRISM as an Developer Intern, where I worked for Data Intelligence Group at Samsung PRISM and developed an end-to-end Web Tool for creating Judgement List for Search DCG Computation and LTR Training.
 
 My interests include Backend Dev, Machine Learning and Distributed Systems.
 

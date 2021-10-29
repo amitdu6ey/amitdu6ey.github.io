@@ -8,7 +8,7 @@ Hello! I am Amit Dubey ^_^
 
 [**wayy long back in time**]  I also have 6 months of work experience at Samsung PRISM as **Developer Intern**, where I worked for Data Intelligence Group at **Samsung PRISM** and developed an end-to-end Web Tool for creating Judgement List for Search DCG Computation and LTR Training.
 
-My interests include Backend Engineering, Distributed Systems and Algorithms. I have also represented my college at **ACM ICPC '19** Amritapuri regionals and Gwalior-Pune regionals.
+My interests include Backend Engineering, Distributed Systems and Algorithms, I have also represented my college at **ACM ICPC '19** Amritapuri regionals and Gwalior-Pune regionals.
 
   
 ##  Find me on

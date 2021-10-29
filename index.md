@@ -13,5 +13,5 @@ My interests include Backend Engineering, Distributed Systems and Algorithms. I 
   
 ##  Find me on
 
-* &nbsp; [Linkedin](https://www.linkedin.com/in/amitdu6ey/)    * &nbsp; [Codechef](https://www.codechef.com/users/amitdu6ey)
+* &nbsp; [Linkedin](https://www.linkedin.com/in/amitdu6ey/)       * &nbsp; [Codechef](https://www.codechef.com/users/amitdu6ey)
 * &nbsp; [Hackerrank](https://www.hackerrank.com/amitdu6ey)    * &nbsp; [Codeforces](https://codeforces.com/profile/amitdu6ey)

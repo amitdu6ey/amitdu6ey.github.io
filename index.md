@@ -2,7 +2,7 @@
 
 Hello! I am Amit Dubey ^_^
 
-[**Present**]  I am **Software Engineer** at **JPMorgan Chase & Co.** woking for Global Technology Infrastructure Line of Business. Working on building and operating scalable distributed API Platform handling millions of requests and computations on large (300M+) data sets for applications across LoBs deployed on the internal cloud using Java11, Kafka and CockroachDB.
+[**Present**]  I am a **Software Engineer** at **JPMorgan Chase & Co.** woking for Global Technology Infrastructure Line of Business. Working on building and operating scalable distributed API Platform handling millions of requests and computations on large (300M+) data sets for applications across LoBs deployed on the internal cloud using Java11, Kafka and CockroachDB.
 
 [**Past**]  I have worked at **JPMorgan Chase & Co.** as a **Software Engineer Intern** and worked on building ETL pipelines, PoC for Blue-green Deployment, collaborated with team on a SPIKE to improve performance of a query system by 10X and later continued with the same team as SWE.
 

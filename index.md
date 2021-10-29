@@ -10,19 +10,8 @@ Hello! I am Amit Dubey ^_^
 
 My interests include Backend Engineering, Distributed Systems and Algorithms. I have also represented my college at ACM ICPC '19 Amritapuri regionals and Gwalior-Pune regionals.
 
-
-##  Experience
-
-* **Software Engineer Intern** <br /> @ JPMorgan Chase & Co. Bangalore 
-  * Working with Experience API Team for Global Technology Infrastructure LOB building scalable products
-  
-* **Developer Intern @ Samsung PRISM** <br />Samsung Research Institute India-Bangalore 
-  * Developed and designed web tool for creating Judgement List for Search DCG Computation and LTR (Learning to Rank) Training using Express.js and MongoDB.
-  
   
 ##  Find me on
 
-* &nbsp; [Linkedin](https://www.linkedin.com/in/amitdu6ey/)
-* &nbsp; [Codechef](https://www.codechef.com/users/amitdu6ey)
-* &nbsp; [Hackerrank](https://www.hackerrank.com/amitdu6ey)
-* &nbsp; [Codeforces](https://codeforces.com/profile/amitdu6ey)
+* &nbsp; [Linkedin](https://www.linkedin.com/in/amitdu6ey/)    * &nbsp; [Codechef](https://www.codechef.com/users/amitdu6ey)
+* &nbsp; [Hackerrank](https://www.hackerrank.com/amitdu6ey)    * &nbsp; [Codeforces](https://codeforces.com/profile/amitdu6ey)

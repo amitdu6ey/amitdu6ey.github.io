@@ -8,11 +8,13 @@ I am currently working as a Software Engineer at JPMorgan Chase & Co. in the Ent
 
 - **Software Engineer, Enterprise Workplace & Products** (Aug '21 - Present)
   - Building and operating secure, business-critical services to enhance productivity, collaboration, and communication.
-  - Developed an Audience Management Service API suite, allowing the creation of dynamically adaptive groups for feature flagging, staggered rollouts, A/B testing, etc. The service performed computations on constantly changing memberships data of over 300 million users.
-  - Contributed to the Insights App, which provides productivity insights related to meetings, learnings, recognition, and more. Utilized micro-frontend architecture for detachable insights, continuous iteration, and feedback analysis, following a 'Lean Startup' approach.
-  - Integrated the Preferences App with the Insights App, enabling users to set their preferences across services via a central user interface. Facilitated the storage of user preferences efficiently for insights rolled out to over 100,000 users.
-  - Worked on the Employee Search Service, an enterprise-grade scalable and robust search API serving over 2 million requests per day. Utilized master-worker node architecture and sourced data from multiple ETLs on various data sources.
-  - Technologies Used: Java 11, JavaScript, Spring Boot, ReactJS, Kafka, MySQL, CockroachDB.
+  - Building & operating cross-cutting, performant & resilient API Platform focusing on productivity, personalisation & search
+  - Engineering Lead for Audience Management Service to create dynamically adaptive groups to perform lookups based on criterias for feature flagging, A/B testing, where audiences are kept updated by computation on large (300M+) data serving 1M+ requests/day, contributed to architectural reviews, ETL pipelines, Spring Boot 3 upgrade and production incidents RCAs
+  - Built Insights Desktop App with ‘A Lean Startup’ approach winning JPMC Impact Award ‘22 as a Product to enhance productivity, migrated core insights with sdk support for firm wide expansion and developed detachable insights using event driven micro-frontends utilising continuous iteration & feedback analysis of 250k users to improve value proposition of insight
+  - Developed Preferences App for users to set preferences across services via central user interface, contributed in enhancing the in app search , deploying multiple pilots for A/B Testing, client onboarding & integrations rolled out to 250k users
+  - Worked on Employee Search Service for fuzzy & phonetic search on employee data for consistent search experience across the firm with 2M+ requests/day, contributed to org-hierarchy boosting in Elasticsearch, migrations, ETL & client onboardings
+  - Led and reviewed 4 teams spring boot 3 upgrade and SRE initiatives by enabling blue-green deployment, resumable pipelines
+  - Technology Used: Java11, Javascript, Spring Boot, Kafka, CockroachDB, ElasticSearch, Node.js, React.js
 
 ## Past
 

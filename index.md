@@ -47,6 +47,10 @@ In addition to my current experience, here are my previous roles:
 
 My interests include Backend Engineering, Distributed Systems, and Algorithms. I have represented my college at ACM ICPC '19 Amritapuri regionals and Gwalior-Pune regionals.
 
+## Experiments
+
+Check out my [Experiments](/experiments/) - a collection of technical experiments, prototypes, and explorations across algorithms, distributed systems, and backend engineering.
+
 ## Find me on
 
 * &nbsp; [Linkedin/amitdu6ey](https://www.linkedin.com/in/amitdu6ey/)

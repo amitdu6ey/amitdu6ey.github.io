@@ -26,11 +26,29 @@ or archiving a knowledge base section without binary noise.
 ## Setup
 
 ```bash
-pip install requests beautifulsoup4
+pip install requests beautifulsoup4 browser_cookie3
+```
 
-# For private Confluence instances
+## Auth
+
+By default the crawler reuses your **local browser session** — if you're
+already signed in to Confluence in Chrome (or Firefox/Edge/Safari/Brave),
+it will read those cookies and crawl as you. No tokens, no manual login.
+
+```bash
+# Default: Chrome
+python confluence_crawler.py "https://your-org.atlassian.net/wiki/spaces/ENG/pages/12345/Home"
+
+# Or pick a different browser
+python confluence_crawler.py <url> --browser firefox
+```
+
+If you'd rather use an API token:
+
+```bash
 export CONFLUENCE_USER="you@example.com"
 export CONFLUENCE_TOKEN="your_atlassian_api_token"
+python confluence_crawler.py <url>
 ```
 
 ## Usage
@@ -39,8 +57,13 @@ export CONFLUENCE_TOKEN="your_atlassian_api_token"
 python confluence_crawler.py \
     "https://your-org.atlassian.net/wiki/spaces/ENG/pages/12345/Home" \
     --output eng_docs.txt \
-    --max-pages 500
+    --max-pages 500 \
+    --browser chrome
 ```
+
+> **Note:** On macOS, reading Chrome/Safari cookies may prompt for keychain
+> access the first time. On Linux, Chrome cookies are decrypted via the
+> Gnome keyring or KWallet.
 
 ## Notes & Future Work
 

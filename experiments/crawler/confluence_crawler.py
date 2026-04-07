@@ -7,10 +7,15 @@ of every page into a single output file.
 
 Usage:
     python confluence_crawler.py <confluence_url> [--output out.txt] [--max-pages N]
+                                  [--browser chrome|firefox|edge|safari|chromium|brave]
 
 Auth:
-    Set CONFLUENCE_USER and CONFLUENCE_TOKEN environment variables
-    (the token is an Atlassian API token).
+    By default the crawler reuses cookies from your local browser, so if
+    you're already signed in to Confluence in (e.g.) Chrome, the crawl
+    will use that session — no tokens required.
+
+    Alternatively, set CONFLUENCE_USER and CONFLUENCE_TOKEN env vars to
+    use HTTP basic auth with an Atlassian API token.
 """
 
 import argparse
@@ -23,6 +28,11 @@ from urllib.parse import urljoin, urlparse
 import requests
 from bs4 import BeautifulSoup
 
+try:
+    import browser_cookie3
+except ImportError:
+    browser_cookie3 = None
+
 
 FIGMA_HOSTS = ("figma.com", "www.figma.com")
 SKIP_TAGS = ("img", "picture", "svg", "video", "iframe", "object", "embed")
@@ -34,6 +44,32 @@ def get_auth():
     if not user or not token:
         return None
     return (user, token)
+
+
+def load_browser_cookies(browser, domain):
+    """Pull cookies for `domain` from the named local browser."""
+    if browser_cookie3 is None:
+        print(
+            "  ! browser_cookie3 not installed; run `pip install browser_cookie3`",
+            file=sys.stderr,
+        )
+        return None
+    loader = {
+        "chrome": browser_cookie3.chrome,
+        "chromium": browser_cookie3.chromium,
+        "firefox": browser_cookie3.firefox,
+        "edge": browser_cookie3.edge,
+        "safari": browser_cookie3.safari,
+        "brave": browser_cookie3.brave,
+    }.get(browser.lower())
+    if loader is None:
+        print(f"  ! unknown browser: {browser}", file=sys.stderr)
+        return None
+    try:
+        return loader(domain_name=domain)
+    except Exception as e:
+        print(f"  ! failed to read {browser} cookies: {e}", file=sys.stderr)
+        return None
 
 
 def is_same_confluence_space(url, base_netloc, base_path_prefix):
@@ -90,16 +126,34 @@ def extract_links(html, current_url, base_netloc, base_path_prefix):
     return links
 
 
-def crawl(start_url, output_path, max_pages):
+def crawl(start_url, output_path, max_pages, browser):
     parsed = urlparse(start_url)
     base_netloc = parsed.netloc
     # Use the directory of the start URL as the path prefix to stay in-space
     base_path_prefix = parsed.path.rsplit("/", 1)[0] + "/"
 
     session = requests.Session()
+    # Pretend to be a real browser so SSO/Cloudflare don't reject us
+    session.headers.update(
+        {
+            "User-Agent": (
+                "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+                "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+            )
+        }
+    )
+
     auth = get_auth()
     if auth:
         session.auth = auth
+        print(f"Auth: HTTP basic ({auth[0]})")
+    else:
+        cookies = load_browser_cookies(browser, base_netloc)
+        if cookies:
+            session.cookies.update(cookies)
+            print(f"Auth: reused {len(session.cookies)} cookies from {browser}")
+        else:
+            print("Auth: anonymous (no cookies, no token)")
 
     seen = set()
     queue = deque([start_url])
@@ -138,9 +192,14 @@ def main():
     parser.add_argument("url", help="Confluence page URL to start from")
     parser.add_argument("--output", default="confluence_dump.txt", help="Output file")
     parser.add_argument("--max-pages", type=int, default=200, help="Max pages to crawl")
+    parser.add_argument(
+        "--browser",
+        default="chrome",
+        help="Browser to pull session cookies from (chrome, firefox, edge, safari, chromium, brave)",
+    )
     args = parser.parse_args()
 
-    crawl(args.url, args.output, args.max_pages)
+    crawl(args.url, args.output, args.max_pages, args.browser)
 
 
 if __name__ == "__main__":

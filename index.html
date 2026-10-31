@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Amit Dubey — Software Engineer</title>
+<meta name="description" content="Amit Dubey, Software Engineer at JPMorgan Chase &amp; Co., Bangalore. Backend engineering, distributed systems and algorithms.">
+<meta name="theme-color" content="#f3eee2">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f3eee2;
+    --paper-deep: #eae3d2;
+    --ink: #24211c;
+    --muted: #6f6859;
+    --rule: #cdc3ac;
+    --accent: #a8432a;
+    --mark: #e7dcc0;
+    --measure: 72ch;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background-color: var(--paper);
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .3  0 0 0 0 .25  0 0 0 0 .15  0 0 0 .06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    color: var(--ink);
+    font-family: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+  ::selection { background: var(--ink); color: var(--paper); }
+  a { color: var(--accent); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+  a:hover { background: var(--accent); color: var(--paper); text-decoration: none; }
+
+  .page { max-width: calc(var(--measure) + 2rem); margin: 0 auto; padding: 2.5rem 16px 4rem; }
+
+  /* window chrome */
+  .window { border: 1.5px solid var(--ink); background: rgba(243,238,226,.6); box-shadow: 6px 6px 0 var(--ink); }
+  .titlebar {
+    display: flex; align-items: center; gap: .6rem;
+    border-bottom: 1.5px solid var(--ink); padding: .35rem .75rem;
+    background: var(--paper-deep); font-size: 12px; letter-spacing: .04em; color: var(--muted);
+  }
+  .titlebar .dots { display: flex; gap: 5px; }
+  .titlebar .dots i { width: 9px; height: 9px; border: 1.5px solid var(--ink); border-radius: 50%; display: block; }
+  .titlebar .path { margin-left: auto; margin-right: auto; padding-right: 40px; }
+  .body { padding: 1.5rem 1.5rem 1.75rem; }
+
+  /* hero */
+  .hero { display: flex; gap: 1.5rem; align-items: flex-start; }
+  .hero img {
+    width: 104px; height: 104px; object-fit: cover; flex: none;
+    border: 1.5px solid var(--ink); filter: grayscale(1) contrast(1.05); background: var(--paper-deep);
+  }
+  .prompt { color: var(--muted); font-size: 13px; margin: 0 0 .35rem; }
+  .prompt b { color: var(--accent); font-weight: 500; }
+  h1 { font-size: clamp(1.8rem, 6vw, 2.6rem); line-height: 1.1; margin: 0 0 .5rem; font-weight: 600; letter-spacing: -.02em; }
+  .cursor { display: inline-block; width: .55em; height: 1em; background: var(--accent); vertical-align: -.12em; margin-left: .15em; animation: blink 1.1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .tag { margin: 0; color: var(--muted); }
+  .tag strong { color: var(--ink); font-weight: 500; }
+
+  /* sections */
+  section { margin-top: 2.75rem; }
+  h2 {
+    display: flex; align-items: baseline; gap: .6rem;
+    font-size: 13px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
+    margin: 0 0 1.1rem; color: var(--ink);
+  }
+  h2 .n { color: var(--accent); }
+  h2::after { content: ""; flex: 1; border-bottom: 1.5px dashed var(--rule); transform: translateY(-3px); }
+  .cmd { font-size: 12px; color: var(--muted); text-transform: none; letter-spacing: 0; order: 3; }
+
+  .entry { margin: 0 0 2rem; }
+  .entry:last-child { margin-bottom: 0; }
+  .role { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .1rem 1rem; margin-bottom: .5rem; }
+  .role h3 { margin: 0; font-size: 15px; font-weight: 600; }
+  .role .when { color: var(--muted); font-size: 13px; white-space: nowrap; }
+  ul.log { list-style: none; margin: 0; padding: 0; }
+  ul.log li { position: relative; padding-left: 1.6rem; margin: 0 0 .55rem; }
+  ul.log li::before { content: ">"; position: absolute; left: 0; color: var(--accent); font-weight: 600; }
+  .stack { margin-top: .9rem; font-size: 13px; color: var(--muted); }
+  .stack span { color: var(--ink); background: var(--mark); padding: .05rem .4rem; margin-right: .2rem; white-space: nowrap; display: inline-block; line-height: 1.5; }
+
+  dl.kv { display: grid; grid-template-columns: max-content 1fr; gap: .35rem 1.25rem; margin: 0; }
+  dl.kv dt { color: var(--accent); }
+  dl.kv dt::after { content: ":"; color: var(--muted); }
+  dl.kv dd { margin: 0; }
+
+  .links { list-style: none; margin: 0; padding: 0; }
+  .links li { margin-bottom: .3rem; }
+  .links li::before { content: "->"; color: var(--muted); margin-right: .7rem; }
+  .links .site { color: var(--muted); }
+
+  footer { margin-top: 3rem; padding-top: 1rem; border-top: 1.5px dashed var(--rule); color: var(--muted); font-size: 12.5px; display: flex; flex-wrap: wrap; gap: .25rem 1.5rem; justify-content: space-between; }
+
+  @media (max-width: 560px) {
+    body { font-size: 14px; }
+    .page { padding-top: 1.25rem; }
+    .window { box-shadow: 4px 4px 0 var(--ink); }
+    .body { padding: 1.1rem 1rem 1.4rem; }
+    .hero { flex-direction: column; gap: 1rem; }
+    .titlebar .path { padding-right: 0; }
+    dl.kv { grid-template-columns: 1fr; gap: 0; }
+    dl.kv dd { margin-bottom: .6rem; }
+    .cmd { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .cursor { animation: none; } }
+  @media print {
+    body { background: #fff; font-size: 11pt; }
+    .window { box-shadow: none; border: 0; }
+    .titlebar, .cursor { display: none; }
+    a { color: var(--ink); }
+  }
+</style>
+</head>
+<body>
+<main class="page">
+  <div class="window">
+    <div class="titlebar" aria-hidden="true">
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="path">~/amit-dubey/about.txt</span>
+    </div>
+
+    <div class="body">
+      <header class="hero">
+        <img src="https://avatars.githubusercontent.com/u/35802447" alt="Portrait of Amit Dubey" width="104" height="104">
+        <div>
+          <p class="prompt"><b>guest@amitdu6ey</b>:~$ cat hello.txt</p>
+          <h1>Amit Dubey<span class="cursor" aria-hidden="true"></span></h1>
+          <p class="tag">Hello! I am Amit Dubey ^_^<br>
+          <strong>Software Engineer</strong> · Enterprise Workplace &amp; Products, JPMorgan Chase &amp; Co. · Bangalore, India</p>
+          <p class="tag">Mail: 19amitdubey[at]gmail.com</p>
+        </div>
+      </header>
+
+      <section id="present">
+        <h2><span class="n">01</span> Present <span class="cmd">$ ls ./now</span></h2>
+        <p>I am currently working as a Software Engineer at JPMorgan Chase &amp; Co. in the Enterprise Workplace &amp; Products team located in Bangalore, India.</p>
+        <article class="entry">
+          <div class="role">
+            <h3>Software Engineer, Enterprise Workplace &amp; Products</h3>
+            <span class="when">Aug '21 – Present</span>
+          </div>
+          <ul class="log">
+            <li>Building and operating secure, business-critical services to enhance productivity, collaboration, and communication.</li>
+            <li>Building &amp; operating cross-cutting, performant &amp; resilient API Platform focusing on productivity, personalisation &amp; search.</li>
+            <li>Engineering Lead for Audience Management Service to create dynamically adaptive groups to perform lookups based on criterias for feature flagging, A/B testing, where audiences are kept updated by computation on large (300M+) data serving 1M+ requests/day, contributed to architectural reviews, ETL pipelines, Spring Boot 3 upgrade and production incidents RCAs.</li>
+            <li>Built Insights Desktop App with ‘A Lean Startup’ approach winning JPMC Impact Award ‘22 as a Product to enhance productivity, migrated core insights with sdk support for firm wide expansion and developed detachable insights using event driven micro-frontends utilising continuous iteration &amp; feedback analysis of 250k users to improve value proposition of insight.</li>
+            <li>Developed Preferences App for users to set preferences across services via central user interface, contributed in enhancing the in app search, deploying multiple pilots for A/B Testing, client onboarding &amp; integrations rolled out to 250k users.</li>
+            <li>Worked on Employee Search Service for fuzzy &amp; phonetic search on employee data for consistent search experience across the firm with 2M+ requests/day, contributed to org-hierarchy boosting in Elasticsearch, migrations, ETL &amp; client onboardings.</li>
+            <li>Led and reviewed 4 teams spring boot 3 upgrade and SRE initiatives by enabling blue-green deployment, resumable pipelines.</li>
+          </ul>
+          <div class="stack">Technology used:
+            <span>Java11</span> <span>Javascript</span> <span>Spring Boot</span> <span>Kafka</span> <span>CockroachDB</span> <span>ElasticSearch</span> <span>Node.js</span> <span>React.js</span>
+          </div>
+        </article>
+      </section>
+
+      <section id="past">
+        <h2><span class="n">02</span> Past <span class="cmd">$ git log --roles</span></h2>
+        <p>In addition to my current experience, here are my previous roles:</p>
+
+        <article class="entry">
+          <div class="role">
+            <h3>Software Engineer Intern, Enterprise Workplace &amp; Products</h3>
+            <span class="when">Mar '21 – Jul '21</span>
+          </div>
+          <ul class="log">
+            <li>Built data pipelines for ETL workflow using batch processing, including a notification email service for critical alerts.</li>
+            <li>Automated Blue-Green deployments on the internal cloud to ensure zero downtime during deployments.</li>
+          </ul>
+          <div class="stack">Technologies used:
+            <span>Java 11</span> <span>Spring Boot</span> <span>Mockito</span> <span>JUnit</span> <span>CockroachDB</span>
+          </div>
+        </article>
+
+        <article class="entry">
+          <div class="role">
+            <h3>Developer Intern, PRISM, Samsung Research Institute Bangalore</h3>
+            <span class="when">Jan '20 – Aug '20</span>
+          </div>
+          <ul class="log">
+            <li>Developed a web application called "Judgement List for Search DCG Computation &amp; LTR Training" that allows tenants/admin to create and conduct surveys, assign surveys to specific users &amp; groups, and gather data to create a Judgement List.</li>
+            <li>Received a Certificate of Excellence for successful and timely completion of the project.</li>
+          </ul>
+          <div class="stack">Technologies used:
+            <span>JavaScript</span> <span>Express.js</span> <span>MongoDB</span>
+          </div>
+        </article>
+      </section>
+
+      <section id="skills">
+        <h2><span class="n">03</span> Technical Skills <span class="cmd">$ cat skills.conf</span></h2>
+        <dl class="kv">
+          <dt>Programming Languages</dt><dd>C++, Java 11, JavaScript, TypeScript, Python</dd>
+          <dt>Technologies</dt><dd>Spring Boot, ReactJS, Express.js, Kafka, CockroachDB, MySQL, Git</dd>
+        </dl>
+      </section>
+
+      <section id="education">
+        <h2><span class="n">04</span> Education <span class="cmd">$ cat edu.log</span></h2>
+        <article class="entry">
+          <div class="role">
+            <h3>Ramaiah Institute of Technology, Bangalore, India</h3>
+            <span class="when">Aug '17 – Jul '21</span>
+          </div>
+          <ul class="log">
+            <li>Bachelor of Engineering in Computer Science and Engineering.</li>
+            <li>Cumulative Grade Point Average (CGPA): 8.5 / 10.</li>
+            <li>Relevant Courses: Algorithms, Data Structures, Object-Oriented Programming, DBMS, Operating System, Computer Networks.</li>
+            <li>Represented the university at the 2019 ACM ICPC Gwalior-Pune Onsite Regional &amp; Amritapuri Onsite Regional.</li>
+          </ul>
+        </article>
+      </section>
+
+      <section id="interests">
+        <h2><span class="n">05</span> Interests <span class="cmd">$ echo $INTERESTS</span></h2>
+        <p>My interests include Backend Engineering, Distributed Systems, and Algorithms. I have represented my college at ACM ICPC '19 Amritapuri regionals and Gwalior-Pune regionals.</p>
+      </section>
+
+      <section id="find-me">
+        <h2><span class="n">06</span> Find me on <span class="cmd">$ finger amitdu6ey</span></h2>
+        <ul class="links">
+          <li><a href="https://www.linkedin.com/in/amitdu6ey/">Linkedin</a> <span class="site">/amitdu6ey</span></li>
+          <li><a href="https://www.codechef.com/users/amitdu6ey">Codechef</a> <span class="site">/amitdu6ey</span></li>
+          <li><a href="https://www.hackerrank.com/amitdu6ey">Hackerrank</a> <span class="site">/amitdu6ey</span></li>
+          <li><a href="https://codeforces.com/profile/amitdu6ey">Codeforces</a> <span class="site">/amitdu6ey</span></li>
+        </ul>
+      </section>
+
+      <footer>
+        <span>~$ exit</span>
+        <span>hand-written HTML &amp; CSS · no frameworks</span>
+      </footer>
+    </div>
+  </div>
+</main>
+</body>
+</html>

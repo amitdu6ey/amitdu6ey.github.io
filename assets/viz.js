@@ -277,7 +277,7 @@
 
       const L = leader(), up = nodes.filter(n => n.state !== 'down').length;
       const term = Math.max(...nodes.map(n => n.term)), committed = Math.max(...nodes.map(n => n.commit));
-      setText(out, `term ${term} · ${L ? 'leader n' + (L.id + 1) : 'electing…'} · ${committed} entries committed · ${up}/5 up` +
+      setText(out, `term ${term} · ${L ? 'leader n' + (L.id + 1) : 'electing…'} · ${committed} entr${committed === 1 ? 'y' : 'ies'} committed · ${up}/5 up` +
         (up < MAJ ? ' · no quorum: writes stall' : ''));
     }
 

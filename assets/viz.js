@@ -130,183 +130,7 @@
   }
 
   /* =====================================================================
-     1. Raft: leader election + log replication on a 5-node cluster
-     ===================================================================== */
-  function raft(root) {
-    const canvas = root.querySelector('canvas'), out = root.querySelector('[data-status]');
-    const N = 5, MAJ = 3, HB = 0.65, SLOTS = 10;
-    let nodes, msgs, writeIn, auto = true, autoT = 0, s;
-
-    const arm = n => { n.tmax = n.timer = rnd(1.7, 3.0); };
-    const leader = () => nodes.find(n => n.state === 'leader');
-    const send = (from, to, kind, d) => msgs.push({ from, to, kind, d, t: 0, dur: rnd(0.42, 0.6) });
-    const revive = n => { n.state = 'follower'; n.voted = -1; arm(n); };
-    const crash = n => { n.state = 'down'; n.votes = 0; };
-
-    function reset() {
-      msgs = []; writeIn = 1;
-      nodes = Array.from({ length: N }, (_, i) => ({
-        id: i, state: 'follower', term: 0, voted: -1, votes: 0, len: 0, commit: 0,
-        timer: 0, tmax: 1, hb: 0, match: Array(N).fill(0), x: 0, y: 0, pulse: 0
-      }));
-      nodes.forEach(n => { n.tmax = n.timer = rnd(0.8, 2.0); });
-    }
-
-    function deliver(m) {
-      const n = nodes[m.to], d = m.d;
-      if (n.state === 'down') { m.dropped = true; return; }
-      if (d.term > n.term) { n.term = d.term; n.voted = -1; n.state = 'follower'; }
-      if (m.kind === 'append') {
-        if (d.term < n.term) { send(n.id, m.from, 'ack', { term: n.term, len: n.len, ok: false }); return; }
-        n.state = 'follower'; arm(n);
-        n.len = d.len; n.commit = Math.min(d.commit, d.len);
-        send(n.id, m.from, 'ack', { term: n.term, len: n.len, ok: true });
-      } else if (m.kind === 'ack') {
-        if (n.state !== 'leader' || d.term !== n.term || !d.ok) return;
-        n.match[m.from] = d.len; n.match[n.id] = n.len;
-        const c = [...n.match].sort((a, b) => b - a)[MAJ - 1];
-        if (c > n.commit) n.commit = c;
-      } else if (m.kind === 'vote') {
-        // grant if same term, haven't voted for someone else, and candidate's log is at least as long
-        if (d.term === n.term && n.state === 'follower' && (n.voted === -1 || n.voted === m.from) && d.len >= n.len) {
-          n.voted = m.from; arm(n);
-          send(n.id, m.from, 'grant', { term: d.term });
-        }
-      } else if (m.kind === 'grant') {
-        if (n.state === 'candidate' && d.term === n.term && ++n.votes >= MAJ) {
-          n.state = 'leader'; n.hb = 0; n.pulse = 0.8;
-          n.match = Array(N).fill(0); n.match[n.id] = n.len;
-        }
-      }
-    }
-
-    function step(dt) {
-      if (auto) {
-        autoT += dt;
-        if (autoT > 9) {
-          autoT = 0;
-          const L = leader();
-          if (nodes.some(n => n.state === 'down')) nodes.forEach(n => { if (n.state === 'down') revive(n); });
-          else if (L) crash(L);
-        }
-      }
-      for (const n of nodes) {
-        n.pulse = Math.max(0, n.pulse - dt);
-        if (n.state === 'down') continue;
-        if (n.state === 'leader') {
-          if ((n.hb -= dt) <= 0) {
-            n.hb = HB;
-            for (const p of nodes) if (p !== n) send(n.id, p.id, 'append', { term: n.term, len: n.len, commit: n.commit });
-          }
-        } else if ((n.timer -= dt) <= 0) {
-          n.state = 'candidate'; n.term++; n.voted = n.id; n.votes = 1; n.pulse = 0.5; arm(n);
-          for (const p of nodes) if (p !== n) send(n.id, p.id, 'vote', { term: n.term, len: n.len });
-        }
-      }
-      const L = leader();
-      if (L && (writeIn -= dt) <= 0) {
-        writeIn = rnd(0.9, 1.6);
-        if (L.len - L.commit < 6) { L.len++; L.match[L.id] = L.len; } // client back-pressure when nothing commits
-      }
-      for (const m of msgs) {
-        m.t += dt / m.dur;
-        if (m.t >= 1 && !m.done) { m.done = true; deliver(m); }
-      }
-      msgs = msgs.filter(m => !m.done || (m.dropped && m.t < 1.8));
-    }
-
-    function render(st) {
-      const { ctx, w, h } = st;
-      ctx.clearRect(0, 0, w, h);
-      const R = clamp(w / 24, 17, 23);
-      const cx = w / 2, cy = h / 2 - 2, rx = Math.min(w / 2 - 50, 300), ry = h / 2 - R - 34;
-      nodes.forEach((n, i) => {
-        const a = -Math.PI / 2 + i * TAU / N;
-        n.x = cx + rx * Math.cos(a); n.y = cy + ry * Math.sin(a);
-      });
-
-      for (let i = 0; i < N; i++) for (let j = i + 1; j < N; j++) {
-        line(ctx, [nodes[i].x, nodes[i].y], [nodes[j].x, nodes[j].y], { dash: [3, 4], color: C.rule });
-      }
-
-      for (const m of msgs) {
-        const a = nodes[m.from], b = nodes[m.to];
-        const dx = b.x - a.x, dy = b.y - a.y, len = Math.hypot(dx, dy) || 1, ux = dx / len, uy = dy / len;
-        const px = -uy * 4, py = ux * 4; // request and response travel in separate lanes
-        const sx = a.x + ux * R + px, sy = a.y + uy * R + py, ex = b.x - ux * (R + 4) + px, ey = b.y - uy * (R + 4) + py;
-        if (m.dropped) { cross(ctx, ex, ey, 4, C.rust, 1 - (m.t - 1) / 0.8); continue; }
-        const t = Math.min(m.t, 1), x = lerp(sx, ex, t), y = lerp(sy, ey, t);
-        if (m.kind === 'append') dot(ctx, x, y, 3.6, C.blue);
-        else if (m.kind === 'ack') dot(ctx, x, y, 3, C.blue, true);
-        else if (m.kind === 'vote') diamond(ctx, x, y, 4.8, C.amber, true);
-        else diamond(ctx, x, y, 4.8, C.amber);
-      }
-
-      const top = Math.max(...nodes.map(n => n.len)), start = Math.max(0, top - SLOTS);
-      for (const n of nodes) {
-        const down = n.state === 'down';
-        if (n.pulse > 0) {
-          ctx.beginPath(); ctx.arc(n.x, n.y, R + 4 + (1 - n.pulse) * 26, 0, TAU);
-          ctx.lineWidth = 1.5; ctx.strokeStyle = n.state === 'leader' ? C.ink : C.amber;
-          ctx.globalAlpha = n.pulse; ctx.stroke(); ctx.globalAlpha = 1;
-        }
-        if (!down && n.state !== 'leader') {
-          ctx.beginPath();
-          ctx.arc(n.x, n.y, R + 5, -Math.PI / 2, -Math.PI / 2 + TAU * clamp(n.timer / n.tmax, 0, 1));
-          ctx.lineWidth = 2; ctx.strokeStyle = n.state === 'candidate' ? C.amber : C.blue;
-          ctx.globalAlpha = 0.6; ctx.stroke(); ctx.globalAlpha = 1;
-        }
-        ctx.beginPath(); ctx.arc(n.x, n.y, R, 0, TAU);
-        ctx.fillStyle = n.state === 'leader' ? C.ink : C.paper; ctx.fill();
-        ctx.lineWidth = n.state === 'candidate' ? 2.5 : 1.5;
-        ctx.strokeStyle = down ? C.muted : n.state === 'candidate' ? C.amber : C.ink;
-        ctx.setLineDash(down ? [3, 3] : []); ctx.stroke(); ctx.setLineDash([]);
-
-        const fg = n.state === 'leader' ? C.paper : down ? C.muted : C.ink;
-        text(ctx, 'n' + (n.id + 1), n.x, n.y - 5, { size: 12, weight: 600, color: fg });
-        text(ctx, down ? 'down' : 't' + n.term, n.x, n.y + 8, { size: 10, color: n.state === 'leader' ? C.paper : C.muted });
-        if (n.state === 'leader') text(ctx, 'leader', n.x, n.y - R - 12, { size: 10, weight: 600 });
-        else if (n.state === 'candidate') text(ctx, 'candidate', n.x, n.y - R - 12, { size: 10, color: C.muted });
-
-        // log tail: filled = committed, outlined = replicated but uncommitted, faint = missing
-        const sw = 5, sg = 2, lx = n.x - (SLOTS * (sw + sg) - sg) / 2, ly = n.y + R + 9;
-        ctx.globalAlpha = down ? 0.45 : 1;
-        for (let k = 0; k < SLOTS; k++) {
-          const idx = start + k, x = lx + k * (sw + sg);
-          if (idx >= top) break;
-          if (idx < n.commit) { ctx.fillStyle = C.ink; ctx.fillRect(x, ly, sw, 9); }
-          else if (idx < n.len) { ctx.lineWidth = 1.2; ctx.strokeStyle = C.ink; ctx.strokeRect(x + 0.6, ly + 0.6, sw - 1.2, 7.8); }
-          else { ctx.lineWidth = 1; ctx.strokeStyle = C.rule; ctx.strokeRect(x + 0.5, ly + 0.5, sw - 1, 8); }
-        }
-        ctx.globalAlpha = 1;
-      }
-
-      const L = leader(), up = nodes.filter(n => n.state !== 'down').length;
-      const term = Math.max(...nodes.map(n => n.term)), committed = Math.max(...nodes.map(n => n.commit));
-      setText(out, `term ${term} · ${L ? 'leader n' + (L.id + 1) : 'electing…'} · ${committed} entr${committed === 1 ? 'y' : 'ies'} committed · ${up}/5 up` +
-        (up < MAJ ? ' · no quorum: writes stall' : ''));
-    }
-
-    reset();
-    s = stage(canvas, { height: w => (w < 560 ? 280 : 300), step, render, warm: 7 });
-
-    function nodeAt(e) {
-      const r = canvas.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
-      return nodes.find(n => Math.hypot(n.x - x, n.y - y) < 30);
-    }
-    canvas.addEventListener('pointerdown', e => {
-      const n = nodeAt(e); if (!n) return;
-      auto = false;
-      if (n.state === 'down') revive(n); else crash(n);
-      s.poke();
-    });
-    canvas.addEventListener('pointermove', e => { canvas.style.cursor = nodeAt(e) ? 'pointer' : 'default'; });
-    root.querySelector('[data-act="crash"]').addEventListener('click', () => { auto = false; const L = leader(); if (L) crash(L); s.poke(); });
-    root.querySelector('[data-act="heal"]').addEventListener('click', () => { auto = false; nodes.forEach(n => { if (n.state === 'down') revive(n); }); s.poke(); });
-  }
-
-  /* =====================================================================
-     2. Kafka: partitions → consumer group → membership recompute
+     1. Kafka: partitions → consumer group → membership recompute
      ===================================================================== */
   function kafka(root) {
     const canvas = root.querySelector('canvas'), out = root.querySelector('[data-status]');
@@ -464,11 +288,10 @@
     const user = f => () => { auto = false; f(); s.poke(); };
     root.querySelector('[data-act="add"]').addEventListener('click', user(() => setK(k + 1)));
     root.querySelector('[data-act="remove"]').addEventListener('click', user(() => setK(k - 1)));
-    root.querySelector('[data-act="burst"]').addEventListener('click', user(() => { burst = 0.6; }));
   }
 
   /* =====================================================================
-     3. Notifications: idempotency + circuit breaker + digest
+     2. Notifications: idempotency + circuit breaker + digest
      ===================================================================== */
   function breaker(root) {
     const canvas = root.querySelector('canvas'), out = root.querySelector('[data-status]');
@@ -635,7 +458,7 @@
   }
 
   /* =====================================================================
-     4. Search: prefix + fuzzy (AUTO) + phonetic over fictional names
+     3. Search: prefix + fuzzy (AUTO) + phonetic over fictional names
      ===================================================================== */
   function search(root) {
     const input = root.querySelector('input'), list = root.querySelector('[data-results]'), meta = root.querySelector('[data-meta]');
@@ -740,74 +563,7 @@
   }
 
   /* =====================================================================
-     5. Dev harness: boot → simulate & test → review → ship
-     ===================================================================== */
-  function harness(root) {
-    const out = root.querySelector('[data-status]');
-    const stages = [...root.querySelectorAll('.stages li')], deps = [...root.querySelectorAll('.deps span')];
-    const cells = []; let n = 0;
-    root.querySelectorAll('.cells').forEach(boxEl => {
-      for (let i = 0; i < +boxEl.dataset.n; i++) {
-        const el = document.createElement('i'); el.className = 'cell';
-        const label = String(++n).padStart(2, '0'); el.textContent = label; el.title = 'svc-' + label;
-        boxEl.append(el); cells.push({ el, label, cls: 'cell', p: -1 });
-      }
-    });
-    const T = { boot: 0.8, test: 3.8, review: 8.6, ship: 10, end: 13 };
-    let t = 0, failIdx = 0;
-    function plan() {
-      t = 0; failIdx = (Math.random() * cells.length) | 0;
-      cells.forEach((c, i) => {
-        c.up = rnd(1.2, 3.4); c.start = i === failIdx ? 4.0 : rnd(T.test, 5.4); c.dur = i === failIdx ? 1.3 : rnd(1.0, 2.6);
-      });
-      deps.forEach((d, i) => { d.at = 0.9 + i * 0.12; });
-    }
-    function cellState(c, i) {
-      if (t < T.boot) return ['', 0];
-      if (t < c.up) return ['boot', 0];
-      if (t < c.start) return ['up', 0];
-      let p = (t - c.start) / c.dur;
-      if (i === failIdx) {
-        if (p < 1) return ['test', p];
-        const after = t - c.start - c.dur;
-        if (after < 1.2) return ['fail', 1];
-        p = (after - 1.2) / 1.0;
-        if (p < 1) return ['test', p];
-        return ['pass', 1];
-      }
-      return p < 1 ? ['test', p] : ['pass', 1];
-    }
-    function apply() {
-      let up = 0, pass = 0, failing = false;
-      cells.forEach((c, i) => {
-        const [st, p] = cellState(c, i), cls = 'cell' + (st ? ' ' + st : '');
-        if (cls !== c.cls) { c.el.className = cls; c.cls = cls; c.el.textContent = st === 'pass' ? '✓' : st === 'fail' ? '✕' : c.label; }
-        const pr = Math.round(p * 50) / 50;
-        if (pr !== c.p) { c.el.style.setProperty('--p', pr); c.p = pr; }
-        if (st && st !== 'boot') up++;
-        if (st === 'pass') pass++;
-        if (st === 'fail') failing = true;
-      });
-      deps.forEach(d => d.classList.toggle('up', t >= d.at));
-      const si = t < T.boot ? 0 : t < T.test ? 1 : t < T.review ? 2 : t < T.ship ? 3 : 4;
-      stages.forEach((el, i) => { el.classList.toggle('on', i === si); el.classList.toggle('done', i < si); });
-      const fl = cells[failIdx].label;
-      setText(out, [
-        'agent picks up a change and plans it across 20 services',
-        `spinning up local simulation · ${up}/20 containers ready`,
-        `simulate & test · ${pass}/20 green` + (failing ? ` · svc-${fl} failed → agent patching, re-running` : ''),
-        '20/20 green · PR opened with test evidence for review',
-        'released: commit → production inside 24h'
-      ][si]);
-    }
-    plan();
-    if (REDUCED) { t = T.review + 0.5; apply(); return; }
-    apply();
-    loop(root, dt => { t += dt; if (t > T.end) plan(); apply(); });
-  }
-
-  /* =====================================================================
-     6. Insights: build → measure → learn, then .NET → TypeScript
+     4. Insights: build → measure → learn, then .NET → TypeScript
      ===================================================================== */
   function insights(root) {
     const ins = root.querySelector('.ins'), out = root.querySelector('[data-status]');
@@ -854,7 +610,7 @@
   }
 
   /* ---------- boot ---------- */
-  const VIZ = { raft, kafka, breaker, search, harness, insights };
+  const VIZ = { kafka, breaker, search, insights };
   function boot() {
     document.querySelectorAll('[data-viz]').forEach(el => {
       const f = VIZ[el.dataset.viz];

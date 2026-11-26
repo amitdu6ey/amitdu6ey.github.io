@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Employee Search Service, design notes by Amit Dubey</title>
+<meta name="description" content="Design notes on the employee search service: indexing with Spring Batch, an analysis chain for exact, prefix, fuzzy and phonetic name matching, and ranking that keeps typos from outranking correct matches.">
+<meta name="theme-color" content="#ffffff">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;0,7..72,600;1,7..72,400;1,7..72,500&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/notes.css?v=20b8dd90">
+</head>
+<body>
+<main class="page">
+  <a class="home" href="../#work">Amit Dubey</a>
+
+  <header class="note">
+    <h1>Employee Search Service</h1>
+    <p class="meta">JPMorgan Chase, 2024 – 2025</p>
+    <p class="meta">Java, Spring Boot, Spring Batch, Elasticsearch</p>
+    <p class="lead">Fuzzy-phonetic search over employee data, so a misspelt or differently spelt name still finds the right person. It is the shared people-search API that more than 80 downstream systems call, which makes relevance, consistency and tail latency everyone's problem.</p>
+    <dl class="facts"><dt>Adoption</dt><dd>Used by 80+ downstream systems</dd><dt>Matching</dt><dd>Exact, prefix, fuzzy (typos) and phonetic (sounds-alike)</dd><dt>Stack</dt><dd>Elasticsearch, Spring Batch indexing, Spring Boot API</dd></dl>
+  </header>
+
+  <section>
+    <h2>Design</h2>
+    <figure>
+      <svg viewBox="0 0 720 300" role="img" aria-labelledby="e1t e1d">
+        <title id="e1t">Indexing and query path</title>
+        <desc id="e1d">Employee records are indexed by a Spring Batch job into Elasticsearch, where each name is analysed four ways. The search API combines exact, prefix, fuzzy and phonetic matches with decreasing weight and serves more than 80 downstream systems.</desc>
+        <defs><marker id="ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="d-head" d="M0 0 8 4 0 8z"/></marker></defs>
+        <rect class="d-box" x="10" y="40" width="130" height="70" rx="6"/><text class="d-h" x="22" y="64">Employee data</text><text class="d-s" x="22" y="84">source of record</text>
+        <rect class="d-box" x="170" y="40" width="140" height="70" rx="6"/><text class="d-h" x="182" y="64">Spring Batch</text><text class="d-s" x="182" y="84">full rebuild +</text><text class="d-s" x="182" y="100">incremental updates</text>
+
+        <rect class="d-box" x="340" y="20" width="370" height="150" rx="6"/>
+        <text class="d-h" x="352" y="42">Elasticsearch · name analysed four ways</text>
+        <rect class="d-soft" x="352" y="54" width="346" height="22" rx="4"/><path class="d-acc d-s3" d="M352 54v22"/><text class="d-s" x="362" y="69">name.exact    lowercase, accents folded      boost 4</text>
+        <rect class="d-soft" x="352" y="80" width="346" height="22" rx="4"/><path class="d-acc d-s1" d="M352 80v22"/><text class="d-s" x="362" y="95">name.prefix   edge n-grams, as-you-type      boost 3</text>
+        <rect class="d-soft" x="352" y="106" width="346" height="22" rx="4"/><path class="d-acc d-s2" d="M352 106v22"/><text class="d-s" x="362" y="121">name          fuzziness AUTO, typos          boost 2</text>
+        <rect class="d-soft" x="352" y="132" width="346" height="22" rx="4"/><path class="d-acc d-s4" d="M352 132v22"/><text class="d-s" x="362" y="147">name.phonetic sounds-alike encoding          boost 1</text>
+
+        <rect class="d-box" x="340" y="210" width="170" height="70" rx="6"/><text class="d-h" x="352" y="234">Search API</text><text class="d-s" x="352" y="254">one bool query,</text><text class="d-s" x="352" y="270">weighted should clauses</text>
+        <rect class="d-box" x="560" y="210" width="150" height="70" rx="6"/><text class="d-h" x="572" y="234">80+ systems</text><text class="d-s" x="572" y="254">downstream apps</text><text class="d-s" x="572" y="270">and services</text>
+
+        <path class="d-arrow" d="M140 75H166" marker-end="url(#ah)"/>
+        <path class="d-arrow" d="M310 75H336" marker-end="url(#ah)"/>
+        <path class="d-arrow" d="M425 206V174" marker-end="url(#ah)"/>
+        <path class="d-arrow" d="M556 245H514" marker-end="url(#ah)"/>
+      </svg>
+      <figcaption>Illustrative. One name field is indexed into several sub-fields with different analysers; one query asks all of them at once and weights the answers so the most precise match wins.</figcaption>
+    </figure>
+
+    <h3>Why names are hard</h3>
+    <p>People search for colleagues the way they heard or half-remember the name: a typo, a missing letter, a different transliteration, or just the first few characters. Each failure mode needs a different matching technique, and no single analyser covers them all without flooding the results with noise.</p>
+
+    <h3>One field, analysed four ways</h3>
+    <ul>
+      <li><b>Exact</b>: lowercased and accent-folded, so "José" and "jose" match.</li>
+      <li><b>Prefix</b>: edge n-grams, so "amit d" finds Amit Dubey while typing.</li>
+      <li><b>Fuzzy</b>: edit-distance matching with <code>fuzziness: AUTO</code>, which allows no edits for very short terms, one for medium terms and two for longer ones, so short names don't match everything.</li>
+      <li><b>Phonetic</b>: a sounds-alike encoding, so different spellings of the same name converge. Encoders such as Beider–Morse are designed specifically for personal names.</li>
+    </ul>
+
+    <h3>Ranking: precision first</h3>
+    <p>All four run in one <code>bool</code> query as weighted <code>should</code> clauses. Exact beats prefix, prefix beats fuzzy, and fuzzy beats phonetic. The weighting is what makes fuzziness safe: a typo-tolerant match can surface a result, but it can never outrank someone whose name was typed correctly.</p>
+
+    <h3>Indexing</h3>
+    <p>A Spring Batch job builds the index from the source of record, with incremental updates for changes. A full rebuild can go into a fresh index and be switched over with an alias. Callers keep querying the same name while the new index is built, and the switch is atomic.</p>
+
+    <h3>Serving 80+ systems</h3>
+    <p>When one API sits behind that many consumers, small regressions multiply. The contract stays stable and versioned, responses stay small, and tail latency matters more than average latency, because the slowest searches show up somewhere in someone's workflow. <a href="elasticsearch-capacity.html">How to size the cluster for that</a></p>
+  </section>
+
+  <section>
+    <h2>Decisions &amp; trade-offs</h2>
+    <table class="tradeoffs">
+      <thead><tr><th>Choice</th><th>Why</th><th>What it costs</th></tr></thead>
+      <tbody>
+        <tr><td>Multi-field analysis</td><td>Each failure mode gets the right technique</td><td>A larger index and more terms per query</td></tr>
+        <tr><td>Weighted should clauses</td><td>Fuzzy and phonetic recall without losing precision</td><td>Boosts need tuning against real queries</td></tr>
+        <tr><td>Alias-swapped rebuilds</td><td>Zero-downtime reindexing</td><td>Double the storage while a rebuild runs</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <nav class="pager" aria-label="Notes">
+    <a href="../#work">Back to work</a>
+    <a href="elasticsearch-capacity.html">Next: Elasticsearch capacity</a>
+  </nav>
+  <p class="disclaimer">Production numbers are real. Component names, sizes and diagrams are simplified and illustrative.</p>
+</main>
+</body>
+</html>

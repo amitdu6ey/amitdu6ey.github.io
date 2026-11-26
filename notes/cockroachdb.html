@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CockroachDB: ranges, Raft and key design, design notes by Amit Dubey</title>
+<meta name="description" content="How CockroachDB splits data into ranges replicated with Raft, why transactions retry, and how key design avoids hot ranges.">
+<meta name="theme-color" content="#ffffff">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;0,7..72,600;1,7..72,400;1,7..72,500&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/notes.css?v=20b8dd90">
+</head>
+<body>
+<main class="page">
+  <a class="home" href="../#work">Amit Dubey</a>
+
+  <header class="note">
+    <h1>CockroachDB: ranges, Raft and key design</h1>
+    <p class="meta">Used for the A/B testing platform and earlier platforms</p>
+    <p class="meta">CockroachDB, Flyway</p>
+    <p class="lead">CockroachDB holds the membership data behind the A/B testing platform, and I first worked with it migrating a service off MariaDB. It feels like ordinary SQL, but its behaviour under load comes from how it splits and replicates data. Those mechanics are what drive the design decisions.</p>
+    <dl class="facts"><dt>Used in</dt><dd>A/B testing platform (memberships); earlier services at JPMorgan Chase</dd><dt>Migration</dt><dd>Moved a service from MariaDB to CockroachDB, with zero-downtime blue-green releases</dd><dt>Schema</dt><dd>Versioned migrations with Flyway</dd></dl>
+  </header>
+
+  <section>
+    <h2>Design</h2>
+    <figure>
+      <svg viewBox="0 0 720 280" role="img" aria-labelledby="c1t c1d">
+        <title id="c1t">Ranges replicated with Raft</title>
+        <desc id="c1d">The keyspace is split into ranges. Each range has three replicas on different nodes, one of which holds the lease. A write is committed once a majority of replicas have it.</desc>
+        <defs><marker id="ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="d-head" d="M0 0 8 4 0 8z"/></marker></defs>
+        <text class="d-s" x="10" y="22">KEYSPACE · sorted, split into ranges</text>
+        <rect class="d-soft" x="10" y="32" width="220" height="26" rx="4"/><path class="d-acc d-s1" d="M10 32v26"/><text class="d-t" x="22" y="50">r1  [a … h)</text>
+        <rect class="d-soft" x="240" y="32" width="220" height="26" rx="4"/><path class="d-acc d-s2" d="M240 32v26"/><text class="d-t" x="252" y="50">r2  [h … q)</text>
+        <rect class="d-soft" x="470" y="32" width="240" height="26" rx="4"/><path class="d-acc d-s3" d="M470 32v26"/><text class="d-t" x="482" y="50">r3  [q … z]</text>
+
+        <rect class="d-box" x="10" y="90" width="220" height="110" rx="6"/><text class="d-h" x="22" y="112">node 1</text>
+        <rect class="d-box" x="250" y="90" width="220" height="110" rx="6"/><text class="d-h" x="262" y="112">node 2</text>
+        <rect class="d-box" x="490" y="90" width="220" height="110" rx="6"/><text class="d-h" x="502" y="112">node 3</text>
+
+        <rect class="d-soft" x="22" y="124" width="58" height="24" rx="4"/><path class="d-acc d-s1" d="M22 124v24"/><text class="d-s" x="30" y="140">r1 ★</text>
+        <rect class="d-soft" x="88" y="124" width="58" height="24" rx="4"/><path class="d-acc d-s2" d="M88 124v24"/><text class="d-s" x="96" y="140">r2</text>
+        <rect class="d-soft" x="154" y="124" width="58" height="24" rx="4"/><path class="d-acc d-s3" d="M154 124v24"/><text class="d-s" x="162" y="140">r3</text>
+
+        <rect class="d-soft" x="262" y="124" width="58" height="24" rx="4"/><path class="d-acc d-s1" d="M262 124v24"/><text class="d-s" x="270" y="140">r1</text>
+        <rect class="d-soft" x="328" y="124" width="58" height="24" rx="4"/><path class="d-acc d-s2" d="M328 124v24"/><text class="d-s" x="336" y="140">r2 ★</text>
+        <rect class="d-soft" x="394" y="124" width="58" height="24" rx="4"/><path class="d-acc d-s3" d="M394 124v24"/><text class="d-s" x="402" y="140">r3</text>
+
+        <rect class="d-soft" x="502" y="124" width="58" height="24" rx="4"/><path class="d-acc d-s1" d="M502 124v24"/><text class="d-s" x="510" y="140">r1</text>
+        <rect class="d-soft" x="568" y="124" width="58" height="24" rx="4"/><path class="d-acc d-s2" d="M568 124v24"/><text class="d-s" x="576" y="140">r2</text>
+        <rect class="d-soft" x="634" y="124" width="58" height="24" rx="4"/><path class="d-acc d-s3" d="M634 124v24"/><text class="d-s" x="642" y="140">r3 ★</text>
+        <text class="d-s" x="10" y="218">★ leaseholder: serves reads, proposes writes</text>
+
+        <text class="d-s" x="10" y="240">WRITE TO r1</text>
+        <text class="d-t" x="10" y="258">client → leaseholder (n1) → Raft log → n2 ack → committed (2 of 3)</text>
+        <text class="d-s" x="10" y="275">n3 catches up asynchronously · any one node can fail without losing committed writes</text>
+      </svg>
+      <figcaption>Illustrative. Three ranges, three replicas each, spread over three nodes. Each range is its own Raft group with its own leaseholder, so load and leadership spread across the cluster.</figcaption>
+    </figure>
+
+    <h3>Ranges</h3>
+    <p>A table and its indexes are stored as one sorted key-value space, split into contiguous ranges. Ranges split as they grow and are rebalanced across nodes automatically, which is how a table scales past any single machine. The practical consequence is that where a key sorts decides which range, and therefore which nodes, serve it.</p>
+
+    <h3>Raft per range</h3>
+    <p>Every range is replicated, three ways by default, and each range runs its own Raft consensus group. A write is committed once a majority of the range's replicas have appended it to their log, so with three replicas any single node can fail without losing committed data or availability. One replica holds the range lease: it serves consistent reads locally and proposes writes for that range.</p>
+
+    <h3>Serializable transactions and retries</h3>
+    <p>Transactions run at serializable isolation by default. When two transactions conflict, one of them is asked to retry, with error code <code>40001</code>, rather than silently reading stale data. Clients must therefore wrap transactions in retry logic, and keeping transactions small and short is the main lever against contention. In a read-heavy system the important rule is that bulk writes should never share a transaction, or hot keys, with the latency-sensitive read path.</p>
+
+    <h3>Key design and hot ranges</h3>
+    <p>Because ranges are sorted by key, sequential keys such as auto-increment IDs or timestamps send every new insert to the last range, which makes it a hotspot. Random UUIDs or hash-sharded indexes spread writes across ranges instead. The rule of thumb: choose primary keys so that the hottest read is a point lookup on one range, and the heaviest write pattern is spread across many.</p>
+
+    <h3>Moving from MariaDB</h3>
+    <p>The migration I worked on changes more than the connection string. Auto-increment primary keys become a hotspot risk and are better replaced. Transactions need retry handling that MariaDB code never had. The SQL dialect is PostgreSQL-compatible rather than MySQL-compatible, so queries and types need review. With schema changes versioned in Flyway and releases done blue-green, the cut-over could happen without downtime.</p>
+  </section>
+
+  <section>
+    <h2>Decisions &amp; trade-offs</h2>
+    <table class="tradeoffs">
+      <thead><tr><th>Choice</th><th>Why</th><th>What it costs</th></tr></thead>
+      <tbody>
+        <tr><td>Distributed SQL over a single primary</td><td>Scale out and survive node loss without manual failover</td><td>Higher write latency from consensus; contention needs design</td></tr>
+        <tr><td>Serializable by default</td><td>No anomalies to reason about</td><td>Client-side retries are mandatory</td></tr>
+        <tr><td>Non-sequential keys</td><td>Writes spread across ranges</td><td>Lose natural insert ordering; range scans by time need a separate index</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <nav class="pager" aria-label="Notes">
+    <a href="../#work">Back to work</a>
+    <a href="notifications.html">Next: Omnichannel notifications</a>
+  </nav>
+  <p class="disclaimer">Production numbers are real. Component names, sizes and diagrams are simplified and illustrative.</p>
+</main>
+</body>
+</html>

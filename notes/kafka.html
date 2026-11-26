@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kafka: partitions and mixed load on one common compute, design notes by Amit Dubey</title>
+<meta name="description" content="How partitions, keys, lanes and backpressure let one shared consumer fleet run both a live stream of small updates and large bulk recomputes.">
+<meta name="theme-color" content="#ffffff">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;0,7..72,600;1,7..72,400;1,7..72,500&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/notes.css?v=20b8dd90">
+</head>
+<body>
+<main class="page">
+  <a class="home" href="../#work">Amit Dubey</a>
+
+  <header class="note">
+    <h1>Kafka: partitions and mixed load on one common compute</h1>
+    <p class="meta">Applies to the A/B testing platform</p>
+    <p class="meta">Kafka, Java, Spring Boot</p>
+    <p class="lead">The membership platform runs two very different workloads on the same compute: a live stream of small updates and occasional bulk recomputes that touch millions of rows. Kafka partitions are what make that safe, provided the partitioning, the lanes and the backpressure are designed together.</p>
+    <dl class="facts"><dt>Load</dt><dd>10M+ membership updates a day</dd><dt>Workloads</dt><dd>Small incremental updates and large bulk recomputes</dd><dt>Compute</dt><dd>One shared consumer fleet for both</dd></dl>
+  </header>
+
+  <section>
+    <h2>Design</h2>
+    <figure>
+      <svg viewBox="0 0 720 300" role="img" aria-labelledby="k1t k1d">
+        <title id="k1t">Two lanes, one consumer fleet</title>
+        <desc id="k1d">A live topic and a bulk topic each have partitions. One consumer group reads both, gives the live lane most of its capacity, and pauses bulk partitions when live lag rises.</desc>
+        <defs><marker id="ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="d-head" d="M0 0 8 4 0 8z"/></marker></defs>
+        <text class="d-s" x="10" y="22">LIVE LANE · small, latency-sensitive</text>
+        <rect class="d-box" x="10" y="32" width="250" height="96" rx="6"/>
+        <text class="d-h" x="22" y="54">topic: membership-updates</text>
+        <rect class="d-soft" x="22" y="64" width="226" height="12" rx="3"/><rect class="d-c1" x="22" y="64" width="4" height="12"/>
+        <rect class="d-soft" x="22" y="80" width="226" height="12" rx="3"/><rect class="d-c2" x="22" y="80" width="4" height="12"/>
+        <rect class="d-soft" x="22" y="96" width="226" height="12" rx="3"/><rect class="d-c3" x="22" y="96" width="4" height="12"/>
+        <rect class="d-soft" x="22" y="112" width="226" height="12" rx="3"/><rect class="d-c4" x="22" y="112" width="4" height="12"/>
+        <text class="d-s" x="10" y="158">BULK LANE · large, throughput-oriented</text>
+        <rect class="d-box" x="10" y="168" width="250" height="96" rx="6"/>
+        <text class="d-h" x="22" y="190">topic: recompute-chunks</text>
+        <rect class="d-soft" x="22" y="200" width="226" height="12" rx="3"/><rect class="d-c1" x="22" y="200" width="4" height="12"/>
+        <rect class="d-soft" x="22" y="216" width="226" height="12" rx="3"/><rect class="d-c2" x="22" y="216" width="4" height="12"/>
+        <rect class="d-soft" x="22" y="232" width="226" height="12" rx="3"/><rect class="d-c3" x="22" y="232" width="4" height="12"/>
+        <text class="d-s" x="22" y="258">one message = one bounded chunk</text>
+
+        <rect class="d-box" x="320" y="32" width="226" height="232" rx="6"/>
+        <text class="d-h" x="332" y="54">Common compute</text>
+        <text class="d-s" x="332" y="72">one consumer group, N workers</text>
+        <text class="d-s" x="332" y="100">capacity budget</text>
+        <rect class="d-soft" x="332" y="108" width="176" height="14" rx="3"/>
+        <rect class="d-c1" x="332" y="108" width="124" height="14" rx="3" opacity=".85"/>
+        <text class="d-s" x="332" y="138">live first · bulk fills the rest</text>
+        <text class="d-s" x="332" y="170">live lag ↑ → pause(bulk)</text>
+        <text class="d-s" x="332" y="188">live lag ↓ → resume(bulk)</text>
+        <text class="d-s" x="332" y="220">bounded in-flight per partition</text>
+        <text class="d-s" x="332" y="238">commit offset after write</text>
+
+        <rect class="d-box" x="572" y="112" width="138" height="72" rx="6"/>
+        <text class="d-h" x="584" y="138">Membership</text>
+        <text class="d-h" x="584" y="156">store</text>
+        <text class="d-s" x="584" y="174">idempotent upsert</text>
+
+        <path class="d-arrow" d="M260 80H316" marker-end="url(#ah)"/>
+        <path class="d-arrow" d="M260 216H316" marker-end="url(#ah)"/>
+        <path class="d-arrow" d="M546 148H568" marker-end="url(#ah)"/>
+      </svg>
+      <figcaption>Illustrative. Live updates and bulk recompute chunks travel on separate topics. The same workers read both; the live lane is served first and bulk partitions are paused whenever live lag starts to climb.</figcaption>
+    </figure>
+
+    <h3>Partitions are the unit of ordering and parallelism</h3>
+    <p>Kafka only orders messages within a partition, and inside a consumer group each partition is read by exactly one consumer at a time. So the partition count is the ceiling on parallelism, and the message key decides what stays in order. Keying membership events by user keeps every change for one user in sequence and spreads users evenly across partitions. The thing to watch is skew: a single very hot key, or a key with low cardinality, turns one partition into the bottleneck no matter how many workers exist.</p>
+
+    <h3>Choosing a partition count</h3>
+    <p>The count has to cover peak throughput divided by what one consumer can sustain, plus headroom for catching up after an outage. It is worth getting roughly right up front: adding partitions later changes which partition a key hashes to, which breaks per-key ordering across the change. Too many partitions has a cost too, in rebalance time and per-partition overhead, so the target is enough for peak and catch-up, not as many as possible.</p>
+
+    <h3>Two lanes on one fleet</h3>
+    <p>Small live updates and bulk recomputes have opposite needs: one wants low latency, the other wants throughput. Putting them in separate topics lets the same consumers treat them differently without separate fleets. Bulk work is published as many bounded chunks, each small enough to finish quickly, safe to retry and restartable on its own, rather than as one giant job. Workers serve the live lane first and use the consumer's <code>pause</code> and <code>resume</code> on bulk partitions as a throttle: when live lag rises, bulk stops pulling; when it falls, bulk fills the spare capacity.</p>
+
+    <h3>Backpressure, scaling and rebalances</h3>
+    <p>Consumer lag per partition is the signal for everything: for the throttle above, for alerting, and for scaling the fleet out, which helps only up to the partition count. Capping records in flight per partition keeps each poll loop short, so a worker never misses its heartbeat on a slow batch and triggers an unnecessary rebalance. When the group does rebalance, incremental cooperative assignment moves only the partitions that need to move, instead of stopping every consumer.</p>
+
+    <h3>Failure handling</h3>
+    <p>Offsets are committed after the write, so delivery is at-least-once and every write is an idempotent upsert of final state; a replay changes nothing. A message that keeps failing is retried with backoff and then parked on a dead-letter topic, so one bad record cannot block its partition.</p>
+  </section>
+
+  <section>
+    <h2>Decisions &amp; trade-offs</h2>
+    <table class="tradeoffs">
+      <thead><tr><th>Choice</th><th>Why</th><th>What it costs</th></tr></thead>
+      <tbody>
+        <tr><td>Separate topics per lane</td><td>Independent throttling and lag per workload</td><td>Two topics to size and monitor</td></tr>
+        <tr><td>One common fleet</td><td>High utilisation, one thing to run and scale</td><td>Needs the pause/resume throttle to stay fair</td></tr>
+        <tr><td>Bounded bulk chunks</td><td>Fast, retryable units; no long-held partitions</td><td>A recompute becomes many messages to track</td></tr>
+        <tr><td>At-least-once + idempotent writes</td><td>Simple and correct under replays</td><td>Writes must be expressed as final state</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <nav class="pager" aria-label="Notes">
+    <a href="../#work">Back to work</a>
+    <a href="cockroachdb.html">Next: CockroachDB: ranges and Raft</a>
+  </nav>
+  <p class="disclaimer">Production numbers are real. Component names, sizes and diagrams are simplified and illustrative.</p>
+</main>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Omnichannel Notification Platform, design notes by Amit Dubey</title>
+<meta name="description" content="Design notes on the omnichannel notification platform: event intake, preferences and capabilities, scheduling and digests, and resiliency with circuit breakers and idempotency keys.">
+<meta name="theme-color" content="#ffffff">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;0,7..72,600;1,7..72,400;1,7..72,500&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/notes.css?v=20b8dd90">
+</head>
+<body>
+<main class="page">
+  <a class="home" href="../#work">Amit Dubey</a>
+
+  <header class="note">
+    <h1>Omnichannel Notification Platform</h1>
+    <p class="meta">JPMorgan Chase, 2026 – present</p>
+    <p class="meta">Java, Spring Boot, GraphQL, AWS (ECS, SQS, EventBridge), MongoDB, Pact</p>
+    <p class="lead">One platform delivers notifications to people on mobile and desktop. It knows what each person wants, what each device can render and when a message is worth interrupting someone for. I architected the platform, designed its GraphQL schemas and its resiliency layer, and set up contract testing so producers and consumers can ship independently.</p>
+    <dl class="facts"><dt>Scale</dt><dd>350K daily active users across mobile and desktop</dd><dt>Features</dt><dd>Smart scheduling, user preferences, capability-driven behaviour, summarised digests</dd><dt>Resiliency</dt><dd>Circuit breakers, idempotency keys</dd><dt>Stack</dt><dd>ECS services, SQS, EventBridge, MongoDB, GraphQL</dd></dl>
+  </header>
+
+  <section>
+    <h2>Design</h2>
+    <figure>
+      <svg viewBox="0 0 720 330" role="img" aria-labelledby="n1t n1d">
+        <title id="n1t">Notification pipeline</title>
+        <desc id="n1d">Producers publish events to EventBridge, which routes them to SQS queues. Services on ECS deduplicate, apply preferences and capabilities, schedule or batch into digests, and deliver through channel adapters guarded by circuit breakers. State lives in MongoDB and clients use a GraphQL API.</desc>
+        <defs><marker id="ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="d-head" d="M0 0 8 4 0 8z"/></marker></defs>
+        <rect class="d-box" x="10" y="40" width="120" height="70" rx="6"/><text class="d-h" x="22" y="64">Producers</text><text class="d-s" x="22" y="84">business events</text><text class="d-s" x="22" y="100">from many teams</text>
+        <rect class="d-box" x="160" y="40" width="110" height="70" rx="6"/><text class="d-h" x="172" y="64">EventBridge</text><text class="d-s" x="172" y="84">routing rules</text>
+        <rect class="d-box" x="296" y="40" width="100" height="70" rx="6"/><text class="d-h" x="308" y="64">SQS</text><text class="d-s" x="308" y="84">buffering,</text><text class="d-s" x="308" y="100">retries, DLQ</text>
+
+        <rect class="d-box" x="420" y="20" width="290" height="190" rx="6"/>
+        <text class="d-h" x="432" y="42">Delivery services on ECS</text>
+        <rect class="d-soft" x="432" y="54" width="266" height="24" rx="4"/><path class="d-acc d-s1" d="M432 54v24"/><text class="d-s" x="442" y="70">1 intake · idempotency key check</text>
+        <rect class="d-soft" x="432" y="84" width="266" height="24" rx="4"/><path class="d-acc d-s2" d="M432 84v24"/><text class="d-s" x="442" y="100">2 policy · preferences + capabilities</text>
+        <rect class="d-soft" x="432" y="114" width="266" height="24" rx="4"/><path class="d-acc d-s3" d="M432 114v24"/><text class="d-s" x="442" y="130">3 schedule · now / later / digest</text>
+        <rect class="d-soft" x="432" y="144" width="266" height="24" rx="4"/><path class="d-acc d-s4" d="M432 144v24"/><text class="d-s" x="442" y="160">4 deliver · channel adapters</text>
+        <text class="d-s" x="442" y="192">each adapter behind a circuit breaker</text>
+
+        <rect class="d-box" x="460" y="240" width="110" height="70" rx="6"/><text class="d-h" x="472" y="264">Mobile</text><text class="d-s" x="472" y="284">push</text>
+        <rect class="d-box" x="600" y="240" width="110" height="70" rx="6"/><text class="d-h" x="612" y="264">Desktop</text><text class="d-s" x="612" y="284">in-app</text>
+
+        <rect class="d-box" x="160" y="240" width="230" height="70" rx="6"/><text class="d-h" x="172" y="264">MongoDB + GraphQL API</text><text class="d-s" x="172" y="284">notification state, preferences,</text><text class="d-s" x="172" y="300">inbox and settings queries</text>
+        <rect class="d-box" x="10" y="240" width="120" height="70" rx="6"/><text class="d-h" x="22" y="264">Apps</text><text class="d-s" x="22" y="284">GraphQL clients</text>
+
+        <path class="d-arrow" d="M130 75H156" marker-end="url(#ah)"/>
+        <path class="d-arrow" d="M270 75H292" marker-end="url(#ah)"/>
+        <path class="d-arrow" d="M396 75H416" marker-end="url(#ah)"/>
+        <path class="d-arrow" d="M515 210V236" marker-end="url(#ah)"/>
+        <path class="d-arrow" d="M655 210V236" marker-end="url(#ah)"/>
+        <path class="d-dash" d="M420 190H330V236" marker-end="url(#ah)"/>
+        <path class="d-arrow" d="M130 275H156" marker-end="url(#ah)"/>
+      </svg>
+      <figcaption>Illustrative. Events are routed and buffered by managed AWS services; four small stages on ECS decide whether, when and how each notification reaches a person, and record the outcome in MongoDB.</figcaption>
+    </figure>
+
+    <h3>Intake: at-least-once in, deduplicated out</h3>
+    <p>EventBridge routes producer events by rule and SQS buffers them, which gives retries and a dead-letter queue for free, but also means delivery into the platform is at-least-once. Every notification therefore carries an idempotency key from its producer. Intake records the key before doing any work, so a redelivered or retried event is recognised and dropped instead of reaching someone twice.</p>
+
+    <h3>Policy: preferences and capabilities</h3>
+    <p>Two inputs decide what happens next. User preferences say which categories a person wants and on which channels. Device capabilities say what each client can actually do. The behaviour is capability-driven: the platform shapes the payload to what the receiving client supports instead of sending one format everywhere and hoping, so older clients degrade gracefully and new features roll out per capability.</p>
+
+    <h3>Scheduling and digests</h3>
+    <p>Not every event deserves an immediate interruption. The scheduler decides between delivering now, deferring to a better time, or folding the event into a summarised digest. Digests are the main tool against notification fatigue: many low-priority events become one useful summary.</p>
+
+    <h3>Resiliency: circuit breakers</h3>
+    <p>Each delivery channel sits behind its own circuit breaker. When a channel starts failing, the breaker opens and the platform stops hammering it. Messages stay safely queued instead of being dropped, and a half-open probe lets traffic resume once the channel recovers. One channel's outage never blocks the others, and because every message carries an idempotency key, the retries after recovery cannot create duplicates.</p>
+
+    <h3>GraphQL API and contracts</h3>
+    <p>Apps read their inbox and manage settings through a GraphQL API backed by MongoDB, whose flexible documents suit per-channel payloads and settings. The schema evolves additively and fields are deprecated before they are removed. Pact consumer-driven contracts enforce that rule automatically, so the platform can ship without coordinating releases with every client. <a href="contract-testing.html">How the contract testing works</a></p>
+  </section>
+
+  <section>
+    <h2>Decisions &amp; trade-offs</h2>
+    <table class="tradeoffs">
+      <thead><tr><th>Choice</th><th>Why</th><th>What it costs</th></tr></thead>
+      <tbody>
+        <tr><td>EventBridge + SQS for intake</td><td>Managed routing, buffering, retries and dead-letter queues</td><td>At-least-once delivery, so deduplication is the platform's job</td></tr>
+        <tr><td>Idempotency keys end to end</td><td>Retries and replays are safe everywhere</td><td>Producers must generate stable keys</td></tr>
+        <tr><td>Breaker per channel</td><td>Failures stay contained to one channel</td><td>Queued messages need expiry rules so stale alerts don't arrive late</td></tr>
+        <tr><td>Digests</td><td>Less fatigue, higher engagement per message</td><td>Delayed delivery for low-priority events by design</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <nav class="pager" aria-label="Notes">
+    <a href="../#work">Back to work</a>
+    <a href="contract-testing.html">Next: Contract testing with Pact</a>
+  </nav>
+  <p class="disclaimer">Production numbers are real. Component names, sizes and diagrams are simplified and illustrative.</p>
+</main>
+</body>
+</html>

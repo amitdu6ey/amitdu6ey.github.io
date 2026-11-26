@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A/B Testing &amp; Feature-Flag Platform, design notes by Amit Dubey</title>
+<meta name="description" content="Design notes on the A/B testing and feature-flag platform: event-driven membership compute on Kafka, a CockroachDB membership store, and what moves p99.99 latency.">
+<meta name="theme-color" content="#ffffff">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;0,7..72,600;1,7..72,400;1,7..72,500&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/notes.css?v=20b8dd90">
+</head>
+<body>
+<main class="page">
+  <a class="home" href="../#work">Amit Dubey</a>
+
+  <header class="note">
+    <h1>A/B Testing &amp; Feature-Flag Platform</h1>
+    <p class="meta">JPMorgan Chase, 2026 – present</p>
+    <p class="meta">Java, Spring Boot, Kafka, CockroachDB</p>
+    <p class="lead">The platform decides who sees what across the firm. Every feature flag, experiment and personalisation rule resolves to one question: is this user in this audience? I own its design, scaling and cost.</p>
+    <dl class="facts"><dt>Scale</dt><dd>100M+ audience memberships, 10M+ updates a day</dd><dt>Latency</dt><dd>p99.99 from 3s down to 300ms</dd><dt>Cost</dt><dd>Infra cost reduced by $50k a year</dd><dt>Shape</dt><dd>Event-driven compute on Kafka, memberships in CockroachDB</dd></dl>
+  </header>
+
+
+  <section>
+    <h2>Design</h2>
+    <figure>
+      <svg viewBox="0 0 720 330" role="img" aria-labelledby="d1t d1d">
+        <title id="d1t">Write path and read path</title>
+        <desc id="d1d">Change events flow through Kafka partitions to one shared consumer fleet, which upserts memberships into CockroachDB. Apps read memberships through an API with a single point lookup per user.</desc>
+        <defs><marker id="ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="d-head" d="M0 0 8 4 0 8z"/></marker></defs>
+
+        <text class="d-s" x="10" y="22">WRITE PATH · asynchronous</text>
+        <rect class="d-box" x="10" y="40" width="140" height="120" rx="6"/>
+        <text class="d-h" x="22" y="64">Change events</text>
+        <text class="d-s" x="22" y="88">user attributes</text>
+        <text class="d-s" x="22" y="106">audience rules</text>
+        <text class="d-s" x="22" y="124">bulk recomputes</text>
+
+        <rect class="d-box" x="190" y="40" width="160" height="120" rx="6"/>
+        <text class="d-h" x="202" y="64">Kafka</text>
+        <g>
+          <rect class="d-soft" x="202" y="76" width="136" height="14" rx="3"/><rect class="d-c1" x="202" y="76" width="4" height="14"/><text class="d-s" x="212" y="87">p0</text>
+          <rect class="d-soft" x="202" y="94" width="136" height="14" rx="3"/><rect class="d-c2" x="202" y="94" width="4" height="14"/><text class="d-s" x="212" y="105">p1</text>
+          <rect class="d-soft" x="202" y="112" width="136" height="14" rx="3"/><rect class="d-c3" x="202" y="112" width="4" height="14"/><text class="d-s" x="212" y="123">p2</text>
+          <rect class="d-soft" x="202" y="130" width="136" height="14" rx="3"/><rect class="d-c4" x="202" y="130" width="4" height="14"/><text class="d-s" x="212" y="141">p3</text>
+        </g>
+
+        <rect class="d-box" x="390" y="40" width="150" height="120" rx="6"/>
+        <text class="d-h" x="402" y="64">Common compute</text>
+        <text class="d-s" x="402" y="82">one consumer group</text>
+        <rect class="d-soft" x="402" y="94" width="38" height="22" rx="4"/><text class="d-s" x="410" y="109">w1</text>
+        <rect class="d-soft" x="446" y="94" width="38" height="22" rx="4"/><text class="d-s" x="454" y="109">w2</text>
+        <rect class="d-soft" x="490" y="94" width="38" height="22" rx="4"/><text class="d-s" x="498" y="109">w3</text>
+        <text class="d-s" x="402" y="140">idempotent upserts</text>
+
+        <rect class="d-box" x="580" y="40" width="130" height="200" rx="6"/>
+        <text class="d-h" x="592" y="64">CockroachDB</text>
+        <text class="d-s" x="592" y="82">memberships</text>
+        <g>
+          <rect class="d-soft" x="592" y="96" width="30" height="20" rx="3"/><rect class="d-soft" x="627" y="96" width="30" height="20" rx="3"/><rect class="d-soft" x="662" y="96" width="30" height="20" rx="3"/>
+          <rect class="d-soft" x="592" y="122" width="30" height="20" rx="3"/><rect class="d-soft" x="627" y="122" width="30" height="20" rx="3"/><rect class="d-soft" x="662" y="122" width="30" height="20" rx="3"/>
+          <rect class="d-soft" x="592" y="148" width="30" height="20" rx="3"/><rect class="d-soft" x="627" y="148" width="30" height="20" rx="3"/><rect class="d-soft" x="662" y="148" width="30" height="20" rx="3"/>
+          <path class="d-acc d-s1" d="M592 96v20"/><path class="d-acc d-s3" d="M627 122v20"/><path class="d-acc d-s2" d="M662 148v20"/>
+        </g>
+        <text class="d-s" x="592" y="188">3 replicas/range</text>
+        <text class="d-s" x="592" y="204">Raft per range</text>
+
+        <path class="d-arrow" d="M150 100H186" marker-end="url(#ah)"/>
+        <path class="d-arrow" d="M350 100H386" marker-end="url(#ah)"/>
+        <path class="d-arrow" d="M540 100H576" marker-end="url(#ah)"/>
+
+        <text class="d-s" x="10" y="232">READ PATH · on every request</text>
+        <rect class="d-box" x="10" y="250" width="140" height="64" rx="6"/>
+        <text class="d-h" x="22" y="276">Apps &amp; services</text>
+        <text class="d-s" x="22" y="298">flag / variant check</text>
+
+        <rect class="d-box" x="390" y="250" width="150" height="64" rx="6"/>
+        <text class="d-h" x="402" y="276">Membership API</text>
+        <text class="d-s" x="402" y="298">point read by user</text>
+
+        <path class="d-arrow" d="M150 282H386" marker-end="url(#ah)"/>
+        <text class="d-s" x="190" y="272">is user U in audience A?</text>
+        <path class="d-arrow" d="M540 282H600V244" marker-end="url(#ah)"/>
+      </svg>
+      <figcaption>Illustrative. Writes are asynchronous: events are partitioned on Kafka, processed by one shared consumer fleet and upserted idempotently, with offsets committed only after the write lands. Reads are synchronous and stay a single lookup per user, however many audiences exist.</figcaption>
+    </figure>
+
+    <h3>Precompute membership, don't evaluate it per request</h3>
+    <p>An audience is a rule over user attributes. Evaluating rules at request time makes every flag check as slow as its most complex audience, and it gets slower as audiences grow. The platform instead keeps membership materialised: when an attribute or a rule changes, an event goes onto Kafka and compute jobs recalculate only the memberships that change. The request path is left with one cheap question, answered by key.</p>
+
+    <h3>Write path: at-least-once, idempotent by design</h3>
+    <p>Events are keyed so that every change for the same user lands on the same partition, which keeps per-user ordering. Workers write the membership first and commit the offset second. A crash between the two replays the event, so every write is an upsert of the final state rather than an increment. Replays then change nothing, and the pipeline never needs exactly-once machinery to be correct.</p>
+
+    <h3>Heterogeneous load on one common compute</h3>
+    <p>The same fleet handles two very different shapes of work. One is a steady stream of small incremental updates: one user changes and a handful of memberships move. The other is bulk recompute: a new or edited audience can touch millions of rows at once. Running both on one common compute keeps utilisation high and the system simple, but bulk work must not starve the incremental stream. Bulk recomputes are broken into bounded, idempotent units, and the latency-sensitive stream gets its own lane so it never queues behind a backfill. <a href="kafka.html">How partitions, lanes and backpressure make that work</a></p>
+
+    <h3>Membership store on CockroachDB</h3>
+    <p>Memberships need strong consistency, a flag must not flip back and forth between reads, and they need to scale horizontally past 100M rows. CockroachDB splits the table into ranges and replicates each one with Raft, so a node can fail without losing writes or taking reads offline. Keys are chosen so that "which audiences is this user in?" is a point read on one range, and so that a big recompute spreads its writes rather than hammering one hot range. <a href="cockroachdb.html">Ranges, Raft and key design</a></p>
+  </section>
+
+  <section>
+    <h2>Decisions &amp; trade-offs</h2>
+    <table class="tradeoffs">
+      <thead><tr><th>Decision</th><th>Why</th><th>What it costs</th></tr></thead>
+      <tbody>
+        <tr><td>Materialised memberships</td><td>Request time stays constant as audiences grow</td><td>Freshness is eventual: a change shows up once its event is processed</td></tr>
+        <tr><td>At-least-once + idempotent upserts</td><td>Simple, safe replays after crashes and rebalances</td><td>Every write must be expressible as final state</td></tr>
+        <tr><td>One common compute fleet</td><td>High utilisation, one thing to operate and scale</td><td>Needs explicit isolation so bulk work can't starve live traffic</td></tr>
+        <tr><td>CockroachDB as the store</td><td>Consistent SQL that scales out; survives node loss</td><td>Key design and transaction size need care under contention</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Tail latency</h2>
+    <p>p99.99 went from 3 seconds to 300 milliseconds. At that percentile the problem is never the average request; it is the rare slow path that one request in ten thousand hits. The things that create those paths in a system like this are:</p>
+    <ul>
+      <li><b>Work that grows with data.</b> Any request-time evaluation or fan-out that scales with the number of audiences.</li>
+      <li><b>Hot keys and hot ranges.</b> One popular key or a sequential key pattern concentrates load on a single replica set.</li>
+      <li><b>Contention and retries.</b> Large write transactions overlapping with reads cause conflicts and retries, which surface only in the far tail.</li>
+      <li><b>Unbounded responses.</b> Payloads that grow with the number of memberships a user holds.</li>
+    </ul>
+    <p>Keeping the read path to a bounded point lookup, and keeping heavy writes small and spread out, is what keeps the tail close to the median.</p>
+  </section>
+
+
+  <nav class="pager" aria-label="Notes">
+    <a href="../#work">Back to work</a>
+    <a href="kafka.html">Next: Kafka: partitions and mixed load</a>
+  </nav>
+  <p class="disclaimer">Production numbers are real. Component names, sizes and diagrams are simplified and illustrative.</p>
+</main>
+</body>
+</html>

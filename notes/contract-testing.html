@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Consumer-driven contract testing with Pact, design notes by Amit Dubey</title>
+<meta name="description" content="How consumer-driven contracts let the notification platform and its clients release independently: pacts, provider verification and the can-i-deploy gate.">
+<meta name="theme-color" content="#ffffff">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;0,7..72,600;1,7..72,400;1,7..72,500&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/notes.css?v=20b8dd90">
+</head>
+<body>
+<main class="page">
+  <a class="home" href="../#work">Amit Dubey</a>
+
+  <header class="note">
+    <h1>Consumer-driven contract testing with Pact</h1>
+    <p class="meta">JPMorgan Chase, 2026 – present</p>
+    <p class="meta">Notification platform, Pact, GraphQL, Java, Spring Boot</p>
+    <p class="lead">The notification platform has several clients, and none of them should have to release in lockstep with it. Consumer-driven contracts make that possible. Each client records exactly which parts of the GraphQL API it relies on, and the platform is verified against every one of those contracts before it ships.</p>
+    <dl class="facts"><dt>Applies to</dt><dd>Omnichannel notification platform and its clients</dd><dt>Goal</dt><dd>Producers and consumers ship independently</dd><dt>Catches</dt><dd>Breaking API changes, at build time instead of in production</dd></dl>
+  </header>
+
+  <section>
+    <h2>Design</h2>
+    <figure>
+      <svg viewBox="0 0 720 260" role="img" aria-labelledby="p1t p1d">
+        <title id="p1t">Contract flow</title>
+        <desc id="p1d">Consumers publish pacts to a broker. The provider's build verifies itself against every consumer's latest pact and records the results. A can-i-deploy check reads the results matrix before any release.</desc>
+        <defs><marker id="ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="d-head" d="M0 0 8 4 0 8z"/></marker></defs>
+        <rect class="d-box" x="10" y="30" width="150" height="40" rx="6"/><path class="d-acc d-s1" d="M10 30v40"/><text class="d-t" x="22" y="55">mobile app</text>
+        <rect class="d-box" x="10" y="80" width="150" height="40" rx="6"/><path class="d-acc d-s2" d="M10 80v40"/><text class="d-t" x="22" y="105">desktop app</text>
+        <rect class="d-box" x="10" y="130" width="150" height="40" rx="6"/><path class="d-acc d-s3" d="M10 130v40"/><text class="d-t" x="22" y="155">other consumers</text>
+        <text class="d-s" x="10" y="196">each consumer's tests</text>
+        <text class="d-s" x="10" y="212">record the queries it makes</text>
+        <text class="d-s" x="10" y="228">and the fields it reads</text>
+
+        <rect class="d-box" x="230" y="60" width="150" height="80" rx="6"/><text class="d-h" x="242" y="84">Pact Broker</text><text class="d-s" x="242" y="104">pacts per consumer</text><text class="d-s" x="242" y="120">verification results</text>
+
+        <rect class="d-box" x="450" y="30" width="260" height="70" rx="6"/><text class="d-h" x="462" y="54">Provider build</text><text class="d-s" x="462" y="74">replay every consumer's interactions</text><text class="d-s" x="462" y="90">against the real API</text>
+        <rect class="d-box" x="450" y="130" width="260" height="70" rx="6"/><text class="d-h" x="462" y="154">can-i-deploy</text><text class="d-s" x="462" y="174">is this version compatible with</text><text class="d-s" x="462" y="190">what is deployed in the target env?</text>
+
+        <path class="d-arrow" d="M160 50H200V90H226" marker-end="url(#ah)"/>
+        <path class="d-arrow" d="M160 100H226" marker-end="url(#ah)"/>
+        <path class="d-arrow" d="M160 150H200V110H226" marker-end="url(#ah)"/>
+        <path class="d-arrow" d="M380 85H446" marker-end="url(#ah)"/>
+        <path class="d-dash" d="M580 100V126" marker-end="url(#ah)"/>
+        <path class="d-arrow" d="M580 200V236H520" marker-end="url(#ah)"/>
+        <text class="d-s" x="590" y="226">deploy, or block</text>
+      </svg>
+      <figcaption>Illustrative. Consumers publish what they need; the provider proves it still supplies it; the gate refuses any release that would break a version running in that environment.</figcaption>
+    </figure>
+
+    <h3>Why contracts instead of more integration tests</h3>
+    <p>End-to-end tests across every client are slow, flaky and need everything deployed together, which is exactly the coupling we wanted to remove. A schema check alone knows what the API offers but not what clients actually use. A consumer-driven contract fills that gap: it is a precise record of the queries each client sends and the fields it depends on, and nothing more.</p>
+
+    <h3>Making a pact</h3>
+    <p>A consumer's own unit tests run against a Pact mock of the API. Each interaction — the GraphQL query and the shape of the response the client expects — is recorded into a pact file and published to the broker, tagged with the consumer's version and branch. Because the pact comes from the client's own tests, it stays as narrow as the client's real usage.</p>
+
+    <h3>Verifying the provider</h3>
+    <p>In the platform's build, every relevant consumer pact is replayed against the real API, with provider states setting up the data each interaction assumes. The results go back to the broker, which builds a matrix of which provider versions work with which consumer versions.</p>
+
+    <h3>Gating deploys</h3>
+    <p>Before any release, of the platform or a client, <code>can-i-deploy</code> asks the broker whether the version about to ship is compatible with everything already running in that environment. If any pact fails, the release is blocked in the pipeline, not discovered by users.</p>
+
+    <h3>Evolving the API safely</h3>
+    <p>Renaming a field is the classic break: the provider's tests pass, and every client that reads the old name fails. With contracts, that change fails verification immediately. The safe sequence is additive: add the new field alongside the old one, ship, let clients move over, and remove the old field only when no pact references it any more.</p>
+  </section>
+
+  <section>
+    <h2>Decisions &amp; trade-offs</h2>
+    <table class="tradeoffs">
+      <thead><tr><th>Choice</th><th>Why</th><th>What it costs</th></tr></thead>
+      <tbody>
+        <tr><td>Consumer-driven, not provider-driven</td><td>Contracts reflect real usage, so unused fields can change freely</td><td>Every consumer team has to write and publish pacts</td></tr>
+        <tr><td>can-i-deploy as a hard gate</td><td>Breaks are caught before release, every time</td><td>A stale or wrong pact can block a release until fixed</td></tr>
+        <tr><td>Contracts alongside schema checks</td><td>Contracts cover shape and usage</td><td>They don't cover semantics, auth or performance; those need their own tests</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <nav class="pager" aria-label="Notes">
+    <a href="../#work">Back to work</a>
+    <a href="agentic-harness.html">Next: Agentic dev harness</a>
+  </nav>
+  <p class="disclaimer">Production numbers are real. Component names, sizes and diagrams are simplified and illustrative.</p>
+</main>
+</body>
+</html>

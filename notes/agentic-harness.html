@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agentic Dev Harness, design notes by Amit Dubey</title>
+<meta name="description" content="Design notes on an agentic development harness: a containerised, production-like loop on a laptop where a coding agent runs the tests, reads the logs, patches and re-runs before a human reviews.">
+<meta name="theme-color" content="#ffffff">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;0,7..72,600;1,7..72,400;1,7..72,500&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/notes.css?v=20b8dd90">
+</head>
+<body>
+<main class="page">
+  <a class="home" href="../#work">Amit Dubey</a>
+
+  <header class="note">
+    <h1>Agentic Dev Harness</h1>
+    <p class="meta">JPMorgan Chase, 2026 – present</p>
+    <p class="meta">Claude Code, Docker, Java, Spring Boot, Gherkin</p>
+    <p class="lead">Coding agents are only as good as the feedback loop they run in. The harness gives an agent a production-like loop on a laptop. It starts Docker-based simulations of a service's dependencies, then runs unit, contract and end-to-end suites. When something fails, the agent reads the logs, patches the code and runs again, so changes reach human review already green.</p>
+    <dl class="facts"><dt>Adoption</dt><dd>Used by 20 microservices across 3 platforms</dd><dt>Outcome</dt><dd>Makes 24-hour production releases possible</dd><dt>Loop</dt><dd>Simulate dependencies → test → read logs → patch → re-run</dd></dl>
+  </header>
+
+  <section>
+    <h2>Design</h2>
+    <figure>
+      <svg viewBox="0 0 720 290" role="img" aria-labelledby="h1t h1d">
+        <title id="h1t">The harness loop</title>
+        <desc id="h1d">An agent works inside a local sandbox of containerised dependencies. It runs unit, contract and end-to-end tests, reads failures from logs, patches, and repeats until green, then hands a pull request to a human reviewer.</desc>
+        <defs><marker id="ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="d-head" d="M0 0 8 4 0 8z"/></marker></defs>
+        <rect class="d-box" x="10" y="20" width="470" height="250" rx="8"/>
+        <text class="d-s" x="22" y="40">LOCAL SANDBOX · same config shape as production</text>
+        <rect class="d-soft" x="22" y="52" width="100" height="26" rx="4"/><text class="d-s" x="32" y="69">broker</text>
+        <rect class="d-soft" x="130" y="52" width="100" height="26" rx="4"/><text class="d-s" x="140" y="69">database</text>
+        <rect class="d-soft" x="238" y="52" width="100" height="26" rx="4"/><text class="d-s" x="248" y="69">cache</text>
+        <rect class="d-soft" x="346" y="52" width="122" height="26" rx="4"/><text class="d-s" x="356" y="69">cloud emulators</text>
+        <text class="d-s" x="22" y="96">containerised dependencies with seeded data</text>
+
+        <rect class="d-box" x="40" y="120" width="110" height="44" rx="6"/><path class="d-acc d-s1" d="M40 120v44"/><text class="d-t" x="52" y="147">1 plan</text>
+        <rect class="d-box" x="190" y="120" width="120" height="44" rx="6"/><path class="d-acc d-s3" d="M190 120v44"/><text class="d-t" x="202" y="147">2 run tests</text>
+        <rect class="d-box" x="190" y="204" width="120" height="44" rx="6"/><path class="d-acc d-s2" d="M190 204v44"/><text class="d-t" x="202" y="231">3 read logs</text>
+        <rect class="d-box" x="40" y="204" width="110" height="44" rx="6"/><path class="d-acc d-s4" d="M40 204v44"/><text class="d-t" x="52" y="231">4 patch</text>
+        <text class="d-s" x="330" y="140">unit</text><text class="d-s" x="330" y="156">contract</text><text class="d-s" x="330" y="172">end-to-end</text>
+
+        <path class="d-arrow" d="M150 142H186" marker-end="url(#ah)"/>
+        <path class="d-arrow" d="M250 164V200" marker-end="url(#ah)"/>
+        <path class="d-arrow" d="M190 226H154" marker-end="url(#ah)"/>
+        <path class="d-arrow" d="M95 204V168" marker-end="url(#ah)"/>
+        <text class="d-s" x="258" y="188">fail</text>
+
+        <rect class="d-box" x="530" y="100" width="180" height="64" rx="6"/><text class="d-h" x="542" y="126">Pull request</text><text class="d-s" x="542" y="146">green, with test evidence</text>
+        <rect class="d-box" x="530" y="200" width="180" height="64" rx="6"/><text class="d-h" x="542" y="226">Human review</text><text class="d-s" x="542" y="246">then normal CI/CD release</text>
+        <path class="d-arrow" d="M310 132H526" marker-end="url(#ah)"/><text class="d-s" x="318" y="124">all green</text>
+        <path class="d-arrow" d="M620 164V196" marker-end="url(#ah)"/>
+      </svg>
+      <figcaption>Illustrative. Everything inside the box runs on a developer laptop. The agent iterates against real (simulated) dependencies until the suites pass; only then does a person review the change.</figcaption>
+    </figure>
+
+    <h3>Why a harness</h3>
+    <p>An agent that can only run unit tests will confidently produce code that breaks at the first real integration. Shared test environments are too slow and too contended to loop on dozens of times. The harness closes that gap by giving the agent a fast, deterministic, production-shaped environment it can run as often as it needs.</p>
+
+    <h3>The sandbox</h3>
+    <p>A service's dependencies — broker, databases, cache, cloud-service emulators — start as Docker containers with seeded data and configuration of the same shape as production. Because the environment is rebuilt from scratch for each run, a failure means the code is wrong, not that someone else's test data drifted.</p>
+
+    <h3>The test ladder</h3>
+    <p>Suites run from cheapest to most realistic: unit tests, then contract tests against consumer expectations, then end-to-end scenarios written in Gherkin. Failing fast at the cheapest level keeps each loop short, and the Gherkin scenarios double as readable acceptance criteria for the reviewer.</p>
+
+    <h3>Logs the agent can act on</h3>
+    <p>The agent fixes what it can see, so the harness turns failures into evidence: the failing step, the relevant service logs around it, and the assertion that broke. With that, a failed run becomes a specific patch rather than a guess. Retries are bounded, and the agent stops and asks when it is not converging.</p>
+
+    <h3>Guardrails</h3>
+    <p>The agent works only in the sandbox and on a branch. It never touches production credentials or shared environments. Every change arrives as a pull request with its test evidence, and a human reviews it before the normal CI/CD pipeline takes over. Speed comes from removing the waiting, not from removing the review.</p>
+  </section>
+
+  <section>
+    <h2>Decisions &amp; trade-offs</h2>
+    <table class="tradeoffs">
+      <thead><tr><th>Choice</th><th>Why</th><th>What it costs</th></tr></thead>
+      <tbody>
+        <tr><td>Local containers over shared environments</td><td>Fast, deterministic, unlimited reruns</td><td>Simulations drift from real services unless kept in step</td></tr>
+        <tr><td>Contract + end-to-end tests in the loop</td><td>Integration breaks surface before review</td><td>Longer loops than unit tests alone</td></tr>
+        <tr><td>Human review stays mandatory</td><td>Accountability and design judgement stay with engineers</td><td>Review is the remaining bottleneck</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <nav class="pager" aria-label="Notes">
+    <a href="../#work">Back to work</a>
+    <a href="insights.html">Next: Assistant Insights</a>
+  </nav>
+  <p class="disclaimer">Production numbers are real. Component names, sizes and diagrams are simplified and illustrative.</p>
+</main>
+</body>
+</html>

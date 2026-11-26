@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Elasticsearch capacity planning, design notes by Amit Dubey</title>
+<meta name="description" content="A sizing method for an Elasticsearch search cluster: data volume, shard sizing, replicas for read capacity, memory and benchmarking — and why a small index with many callers is a concurrency problem, not a storage one.">
+<meta name="theme-color" content="#ffffff">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;0,7..72,600;1,7..72,400;1,7..72,500&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/notes.css?v=20b8dd90">
+</head>
+<body>
+<main class="page">
+  <a class="home" href="../#work">Amit Dubey</a>
+
+  <header class="note">
+    <h1>Elasticsearch capacity planning</h1>
+    <p class="meta">Applies to the employee search service</p>
+    <p class="meta">Elasticsearch</p>
+    <p class="lead">Capacity planning for search starts from a question people often skip: is this a data problem or a traffic problem? A directory of the firm's people is small by search standards. With more than 80 systems calling it, though, the constraint is concurrent queries and tail latency, not storage. That changes the whole shape of the cluster.</p>
+    <dl class="facts"><dt>Data</dt><dd>One document per person, on the order of the firm's 350K+ employees</dd><dt>Traffic</dt><dd>80+ downstream systems, interactive lookups</dd><dt>Constraint</dt><dd>Query concurrency and tail latency, not storage</dd></dl>
+  </header>
+
+  <section>
+    <h2>Design</h2>
+    <figure>
+      <svg viewBox="0 0 720 270" role="img" aria-labelledby="s1t s1d">
+        <title id="s1t">Small index, many readers</title>
+        <desc id="s1d">One primary shard with replicas on every data node, so any node can answer any search. Queries from many callers are spread across all copies.</desc>
+        <defs><marker id="ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="d-head" d="M0 0 8 4 0 8z"/></marker></defs>
+        <text class="d-s" x="10" y="22">MANY CALLERS</text>
+        <rect class="d-soft" x="10" y="34" width="120" height="22" rx="4"/><text class="d-s" x="20" y="49">system A</text>
+        <rect class="d-soft" x="10" y="62" width="120" height="22" rx="4"/><text class="d-s" x="20" y="77">system B</text>
+        <rect class="d-soft" x="10" y="90" width="120" height="22" rx="4"/><text class="d-s" x="20" y="105">system C</text>
+        <text class="d-s" x="10" y="132">… 80+ callers</text>
+
+        <rect class="d-box" x="180" y="50" width="120" height="60" rx="6"/><text class="d-h" x="192" y="74">Search API</text><text class="d-s" x="192" y="94">load balanced</text>
+
+        <rect class="d-box" x="360" y="20" width="350" height="56" rx="6"/><text class="d-h" x="372" y="42">data node 1</text>
+        <rect class="d-soft" x="560" y="32" width="138" height="32" rx="4"/><path class="d-acc d-s1" d="M560 32v32"/><text class="d-s" x="572" y="52">primary P0</text>
+        <rect class="d-box" x="360" y="88" width="350" height="56" rx="6"/><text class="d-h" x="372" y="110">data node 2</text>
+        <rect class="d-soft" x="560" y="100" width="138" height="32" rx="4"/><path class="d-acc d-s3" d="M560 100v32"/><text class="d-s" x="572" y="120">replica R0</text>
+        <rect class="d-box" x="360" y="156" width="350" height="56" rx="6"/><text class="d-h" x="372" y="178">data node 3</text>
+        <rect class="d-soft" x="560" y="168" width="138" height="32" rx="4"/><path class="d-acc d-s3" d="M560 168v32"/><text class="d-s" x="572" y="188">replica R0</text>
+        <text class="d-s" x="372" y="60">index fits in page cache</text>
+
+        <path class="d-arrow" d="M130 80H176" marker-end="url(#ah)"/>
+        <path class="d-arrow" d="M300 70H356" marker-end="url(#ah)"/>
+        <path class="d-arrow" d="M300 80Q330 116 356 116" marker-end="url(#ah)"/>
+        <path class="d-arrow" d="M300 90Q320 184 356 184" marker-end="url(#ah)"/>
+        <text class="d-s" x="360" y="244">any copy can serve any search · lose a node, keep serving</text>
+      </svg>
+      <figcaption>Illustrative. For a small index the right shape is few shards and many copies: one primary, replicas on every data node, and enough memory that the whole index stays in the page cache.</figcaption>
+    </figure>
+
+    <h3>1. Estimate data volume</h3>
+    <p>Documents × average document size, then add room for index structures and multiply by the number of copies. For a people directory the answer is small. For example, half a million documents at a couple of kilobytes each comes to around a gigabyte per copy, which settles the storage question quickly. It also hints at where the real work is.</p>
+
+    <h3>2. Size shards to the data, not the node count</h3>
+    <p>Every search fans out to one copy of every shard, so extra shards add work to every query without adding capacity. Elastic's own guidance is to aim for shards in the tens of gigabytes. A directory index is far below that, so one primary shard is the natural choice. More primaries would only make each query more expensive.</p>
+
+    <h3>3. Add read capacity with replicas</h3>
+    <p>Any copy of a shard can serve a search, so replicas are how read throughput scales. With a replica on every data node, every node can answer every query locally, load spreads evenly, and losing a node costs capacity rather than availability. Indexing pays for each extra copy, which is cheap for a slowly changing directory.</p>
+
+    <h3>4. Size for concurrency and the tail</h3>
+    <p>Each search holds a search thread for as long as it runs, so a node's throughput is roughly its search threads divided by query latency. Size the cluster so that the expected peak query rate from all callers uses only a fraction of that, leaving headroom for bursts. When search thread pools fill, queries queue and then get rejected, and the tail shows that first.</p>
+
+    <h3>5. Memory</h3>
+    <p>Give the JVM heap no more than about half of the node's RAM, and keep it below the threshold where compressed object pointers stop working, around 32 GB. The rest belongs to the operating system's page cache. For a small index, the whole thing then lives in memory and searches never wait on disk.</p>
+
+    <h3>6. Prove it with a benchmark</h3>
+    <p>Estimates set a starting point; a benchmark with the real query mix sets the answer. Elastic's Rally replays representative queries at increasing rates. The numbers to watch are p99 latency, search thread pool rejections, garbage-collection pauses and cache hit rates. Capacity is the highest rate where all four stay healthy, minus headroom.</p>
+  </section>
+
+  <section>
+    <h2>Decisions &amp; trade-offs</h2>
+    <table class="tradeoffs">
+      <thead><tr><th>Choice</th><th>Why</th><th>What it costs</th></tr></thead>
+      <tbody>
+        <tr><td>One primary shard</td><td>No fan-out overhead for a small index</td><td>Indexing throughput limited to one shard (fine for a directory)</td></tr>
+        <tr><td>Replica on every data node</td><td>Reads scale with nodes; survives node loss</td><td>Every write is applied on every node</td></tr>
+        <tr><td>Index in page cache</td><td>Predictable, low tail latency</td><td>Memory sized to the index, not just the heap</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <nav class="pager" aria-label="Notes">
+    <a href="../#work">Back to work</a>
+    <a href="ab-testing.html">Next: A/B testing platform</a>
+  </nav>
+  <p class="disclaimer">Production numbers are real. Component names, sizes and diagrams are simplified and illustrative.</p>
+</main>
+</body>
+</html>

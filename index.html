@@ -3,96 +3,92 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Amit Dubey — Software Engineer</title>
-<meta name="description" content="Amit Dubey, Software Engineer 3 at JPMorgan Chase &amp; Co., Bangalore. Event-driven platforms on Java, Spring Boot and Kafka: A/B testing, notifications, search.">
-<meta property="og:title" content="Amit Dubey — Software Engineer">
-<meta property="og:description" content="Event-driven platforms at JPMorgan Chase: A/B testing at 100M+ memberships, omnichannel notifications for 350K daily users, fuzzy-phonetic search for 80+ systems.">
-<meta property="og:image" content="https://avatars.githubusercontent.com/u/35802447">
-<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0e0e0f" media="(prefers-color-scheme: dark)">
-<script>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<title>Amit Dubey, software engineer</title>
+<meta name="description" content="Amit Dubey builds cross-cutting API platforms behind firm-wide search, productivity, notifications and personalisation at JPMorgan Chase.">
+<meta name="theme-color" content="#ffffff">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;0,7..72,600;1,7..72,400;1,7..72,500&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #ffffff; --bg-2: #f7f7f6; --fg: #111111; --muted: #5e5e5e;
-    --rule: #e8e8e8; --line: #d4d4d4; --mark: #f0f0ef;
+    --paper: #ffffff; --ink: #17181d; --graphite: #5c5e66; --hair: #e7e7ea;
+    /* tokens the simulations read */
+    --bg: var(--paper); --bg-2: #f6f6f7; --fg: var(--ink); --muted: var(--graphite);
+    --rule: var(--hair); --line: #d3d4d8; --mark: #efeff1;
     --c1: #2a78d6; --c2: #eb6834; --c3: #1baf7a; --c4: #eda100;
     --ok: #0ca30c; --bad: #d03b3b; --warn: #fab219;
+    --serif: "Literata", Georgia, "Times New Roman", serif;
     --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
     --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
     color-scheme: light;
   }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #0e0e0f; --bg-2: #151517; --fg: #ececec; --muted: #9d9d9d;
-      --rule: #232325; --line: #3a3a3d; --mark: #222224;
-      --c1: #3987e5; --c2: #d95926; --c3: #199e70; --c4: #c98500; --ok: #0ca30c; --bad: #d03b3b; --warn: #fab219;
-      color-scheme: dark;
-    }
-  }
-  :root[data-theme="dark"] {
-    --bg: #0e0e0f; --bg-2: #151517; --fg: #ececec; --muted: #9d9d9d;
-    --rule: #232325; --line: #3a3a3d; --mark: #222224;
-    --c1: #3987e5; --c2: #d95926; --c3: #199e70; --c4: #c98500; --ok: #0ca30c; --bad: #d03b3b; --warn: #fab219;
-    color-scheme: dark;
-  }
-
   * { box-sizing: border-box; }
-  html { -webkit-text-size-adjust: 100%; }
-  body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 16px; line-height: 1.65; }
-  ::selection { background: var(--fg); color: var(--bg); }
-  a { color: var(--fg); text-decoration: underline; text-decoration-color: var(--line); text-decoration-thickness: 1px; text-underline-offset: 3px; }
-  a:hover { text-decoration-color: var(--fg); }
-  :focus-visible { outline: 2px solid var(--c1); outline-offset: 2px; }
+  html { -webkit-text-size-adjust: 100%; scroll-padding-top: 1.5rem; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--serif); font-size: 18px; line-height: 1.6; font-optical-sizing: auto; -webkit-tap-highlight-color: transparent; }
+  ::selection { background: var(--ink); color: var(--paper); }
+  a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--line); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+  a:hover { text-decoration-color: var(--ink); }
+  :focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 2px; }
+  .skip { position: absolute; left: -9999px; }
+  .skip:focus { left: 1rem; top: 1rem; background: var(--paper); padding: .3rem .6rem; }
 
-  .page { max-width: 860px; margin: 0 auto; padding: 1.25rem 24px 4rem; }
+  .page { max-width: 640px; margin: 0 auto; padding: 4.5rem 24px 4rem; }
+  h1 { font-size: 46px; line-height: 1.05; font-weight: 500; font-style: italic; letter-spacing: -.01em; margin: 0; }
+  .role { margin: .6rem 0 0; color: var(--graphite); }
+  .intro { margin: 1.75rem 0 0; }
+  .intro p { margin: 0 0 1rem; text-wrap: pretty; }
+  .contact { margin: 1.25rem 0 0; display: flex; flex-wrap: wrap; gap: .25rem 1.4rem; }
 
-  .topbar { display: flex; align-items: center; gap: .5rem 1.25rem; flex-wrap: wrap; font-size: 14px; }
-  .topbar nav { display: flex; flex-wrap: wrap; gap: .25rem 1.25rem; margin-right: auto; }
-  .topbar nav a { text-decoration: none; color: var(--muted); }
-  .topbar nav a:hover { color: var(--fg); }
-  .theme-toggle { font: inherit; font-size: 13px; color: var(--muted); background: transparent; border: 0; padding: .2rem 0; display: inline-flex; align-items: center; gap: .4rem; cursor: pointer; }
-  .theme-toggle:hover { color: var(--fg); }
-  .theme-toggle svg { width: 14px; height: 14px; }
+  section { margin-top: 4.25rem; }
+  h2 { font-size: 24px; font-weight: 600; line-height: 1.25; margin: 0 0 1.25rem; letter-spacing: -.005em; }
+  .when { color: var(--graphite); font-size: 15.5px; white-space: nowrap; font-variant-numeric: tabular-nums lining-nums; }
 
-  .hero { display: flex; gap: 1.5rem; align-items: center; padding: 3.5rem 0 0; }
-  .hero img { width: 88px; height: 88px; object-fit: cover; flex: none; border-radius: 50%; filter: grayscale(1); background: var(--bg-2); }
-  h1 { font-size: 30px; line-height: 1.2; margin: 0 0 .2rem; font-weight: 600; letter-spacing: -.015em; }
-  .tag { margin: 0; color: var(--muted); }
-  .lead { margin: 1.5rem 0 1rem; font-size: 17px; max-width: 62ch; }
-  .lead + .lead { margin-top: 0; }
-  .contact { margin: 0; display: flex; flex-wrap: wrap; gap: .25rem 1.25rem; font-size: 15px; }
+  /* experience: a compact timeline */
+  .org { margin: 0 0 1.75rem; }
+  .org h3 { font-size: 18px; font-weight: 600; margin: 0 0 .35rem; }
+  .roles { list-style: none; margin: 0; padding: 0; }
+  .roles li { display: flex; justify-content: space-between; align-items: baseline; gap: .25rem 1.5rem; flex-wrap: wrap; padding: .3rem 0; border-top: 1px solid var(--hair); }
+  .roles li:first-child { border-top: 0; }
 
-  section { margin-top: 4rem; }
-  h2 { font-size: 13px; font-weight: 500; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); margin: 0 0 1.5rem; }
-
-  /* experience */
-  .co { margin: 0 0 2.5rem; }
-  .co:last-child { margin-bottom: 0; }
-  .co > h3 { margin: 0 0 1rem; font-size: 17px; font-weight: 600; }
-  .co > h3 span { color: var(--muted); font-weight: 400; }
-  .entry { margin: 0 0 1.75rem; }
-  .entry:last-child { margin-bottom: 0; }
-  .role { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 1rem; margin-bottom: .4rem; }
-  .role h4 { margin: 0; font-size: 16px; font-weight: 500; }
-  .role .when { color: var(--muted); font-size: 14px; white-space: nowrap; font-variant-numeric: tabular-nums; }
-  ul.log { margin: 0; padding-left: 1.1rem; }
-  ul.log li { margin: 0 0 .45rem; padding-left: .2rem; }
-  ul.log li::marker { color: var(--muted); }
-  .stack { margin: .5rem 0 0; color: var(--muted); font-size: 14px; }
+  /* the window: the one highlight */
+  .window { margin: 0 -110px 3rem; border: 1px solid var(--line); border-radius: 12px; background: var(--paper); overflow: hidden;
+             box-shadow: 0 1px 2px rgba(23,24,29,.05), 0 12px 32px -12px rgba(23,24,29,.18); }
+  .bar { display: flex; align-items: center; gap: 1rem; padding: 0 .9rem; border-bottom: 1px solid var(--hair); background: #fafafa; }
+  .tabs { display: flex; gap: .1rem; overflow-x: auto; scrollbar-width: none; flex: 1; min-width: 0; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tabs button { font: inherit; font-family: var(--sans); font-size: 13.5px; color: var(--graphite); background: none; border: 0; border-bottom: 2px solid transparent;
+                  padding: .75rem .6rem .65rem; white-space: nowrap; cursor: pointer; touch-action: manipulation; }
+  .tabs button:hover { color: var(--ink); }
+  .tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--ink); font-weight: 500; }
+  .bar .note { font-family: var(--sans); font-size: 12px; color: var(--graphite); white-space: nowrap; }
+  .pane { font-family: var(--sans); font-size: 14px; line-height: 1.55; }
+  .pane[hidden] { display: none; }
 
   /* projects */
-  .proj { margin: 0 0 4rem; }
-  .proj:last-child { margin-bottom: 0; }
-  .proj h3 { font-size: 19px; line-height: 1.35; margin: 0 0 .25rem; font-weight: 600; letter-spacing: -.01em; }
-  .proj .meta { margin: 0 0 .9rem; color: var(--muted); font-size: 14px; }
-  .proj p.what { margin: 0 0 .8rem; max-width: 68ch; }
-  .proj p.outcome { margin: 0 0 1.4rem; max-width: 68ch; }
-  .proj p.outcome b { font-weight: 600; }
+  .work { padding: 1.4rem 0; border-top: 1px solid var(--hair); }
+  .work:first-of-type { border-top: 0; padding-top: 0; }
+  .work-head { display: flex; justify-content: space-between; align-items: baseline; gap: .25rem 1.25rem; flex-wrap: wrap; }
+  .work h3 { font-size: 21px; font-weight: 600; line-height: 1.3; margin: 0; letter-spacing: -.005em; }
+  .work h3 a { text-decoration-color: var(--line); }
+  .work p { margin: .5rem 0 0; text-wrap: pretty; }
+  .work .impact { color: var(--graphite); font-variant-numeric: lining-nums; }
+  .open { margin-top: .75rem; font: inherit; font-family: var(--sans); font-size: 13.5px; color: var(--ink); background: none; border: 1px solid var(--line);
+           border-radius: 999px; padding: .35rem .8rem .35rem .65rem; display: inline-flex; align-items: center; gap: .45rem; cursor: pointer; min-height: 32px; touch-action: manipulation; }
+  .open:hover { border-color: var(--ink); }
+  .open svg { width: 14px; height: 14px; }
 
-  figure { margin: 0; border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; background: var(--bg); }
+  ul.plain { list-style: none; margin: 0; padding: 0; }
+  ul.plain li { margin: 0 0 .6rem; }
+  dl.kv { display: grid; grid-template-columns: 10.5rem 1fr; gap: .45rem 1.5rem; margin: 0; }
+  dl.kv dt { color: var(--graphite); }
+  dl.kv dd { margin: 0; }
+
+  footer { margin-top: 4.5rem; padding-top: 1.25rem; border-top: 1px solid var(--hair); color: var(--graphite); font-size: 16px; display: flex; flex-wrap: wrap; gap: .4rem 1.4rem; }
+  footer span:first-child { margin-right: auto; }
+  footer a { color: var(--graphite); }
+
+  /* ---- simulations (unchanged) ---- */
+  figure { margin: 0; background: var(--bg); }
   .screen canvas { display: block; width: 100%; height: 250px; touch-action: manipulation; }
   .foot { border-top: 1px solid var(--rule); padding: .7rem .9rem .8rem; display: grid; gap: .5rem; font-size: 13px; }
   .controls { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
@@ -174,126 +170,69 @@
   .term .l-bad .g { color: var(--bad); }
   @media (max-width: 720px) { .hx { grid-template-columns: minmax(0, 1fr); } .term { border-left: 0; border-top: 1px solid var(--rule); height: 220px; } }
 
-  dl.kv { display: grid; grid-template-columns: 11rem 1fr; gap: .45rem 1.5rem; margin: 0; }
-  dl.kv dt { color: var(--muted); }
-  dl.kv dd { margin: 0; }
-
-  footer { margin-top: 4.5rem; padding-top: 1.25rem; border-top: 1px solid var(--rule); color: var(--muted); font-size: 14px; display: flex; flex-wrap: wrap; gap: .4rem 1.25rem; }
-  footer span:first-child { margin-right: auto; }
-  footer a { color: var(--muted); }
-  footer a:hover { color: var(--fg); }
-
+  @media (max-width: 880px) { .window { margin-left: 0; margin-right: 0; } }
   @media (max-width: 600px) {
-    body { font-size: 15px; }
-    .page { padding: 1rem 16px 3rem; }
-    .hero { padding-top: 2.25rem; gap: 1rem; }
-    .hero img { width: 64px; height: 64px; }
-    h1 { font-size: 26px; }
-    .lead { font-size: 16px; }
+    body { font-size: 17px; }
+    .page { padding: 2.5rem 16px 3rem; }
+    h1 { font-size: 38px; }
+    .window { margin-left: -8px; margin-right: -8px; border-radius: 10px; }
+    .bar .note { display: none; }
     .icards { grid-template-columns: minmax(0, 1fr); }
     .icard { min-height: 0; }
     dl.kv { grid-template-columns: 1fr; gap: 0; }
     dl.kv dd { margin-bottom: .7rem; }
   }
-  @media (prefers-reduced-motion: reduce) { .v2, .v3, .loop li { transition: none; } }
-  @media print { .topbar, figure { display: none; } }
+  @media (prefers-reduced-motion: reduce) { .v2, .v3, .loop li { transition: none; } html { scroll-behavior: auto; } }
+  @media print { .window, .open { display: none; } }
 </style>
 </head>
 <body>
-<main class="page">
-  <div class="topbar">
-    <nav aria-label="Sections">
-      <a href="#experience">Experience</a>
-      <a href="#work">Work</a>
-      <a href="#skills">Skills</a>
-    </nav>
-    <button class="theme-toggle" type="button" aria-label="Toggle dark mode">
-      <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13Z" fill="currentColor"/></svg>
-      <span data-theme-label>theme</span>
-    </button>
-  </div>
-
-  <header class="hero">
-    <img src="https://avatars.githubusercontent.com/u/35802447" alt="Portrait of Amit Dubey" width="88" height="88">
-    <div>
-      <h1>Amit Dubey</h1>
-      <p class="tag">Software Engineer 3 (Senior Associate), JPMorgan Chase &amp; Co. · Bangalore</p>
+<a class="skip" href="#main">Skip to content</a>
+<main class="page" id="main">
+  <header>
+    <h1>Amit Dubey</h1>
+    <p class="role">Software Engineer 3 (Senior Associate) at JPMorgan Chase &amp; Co., Bangalore</p>
+    <div class="intro">
+      <p>Building cross-cutting API platforms behind firm-wide search, productivity, notifications and personalisation at JPMorgan Chase.</p>
+      <p>Most recently I have owned the A/B testing platform behind the firm's feature flags and personalisation. It holds over 100 million audience memberships, kept current by more than 10 million event-driven updates a day, and I brought its p99.99 latency down from 3 seconds to 300 milliseconds while reducing infrastructure cost by $50k a year. I also architected the omnichannel notification platform used by 350K people daily, and earlier built the employee search service that more than 80 downstream systems rely on.</p>
     </div>
+    <p class="contact"><a href="mailto:dev.amitdubey@gmail.com">dev.amitdubey@gmail.com</a><a href="https://github.com/amitdu6ey">GitHub</a><a href="https://www.linkedin.com/in/amitdu6ey/">LinkedIn</a></p>
   </header>
-  <p class="lead">Building cross-cutting API platforms behind firm-wide search, productivity, notifications and personalisation at JPMorgan Chase.</p>
-  <p class="lead">Most recently I have owned the A/B testing platform behind the firm's feature flags and personalisation. It holds over 100 million audience memberships, kept current by more than 10 million event-driven updates a day, and I brought its p99.99 latency down from 3 seconds to 300 milliseconds while reducing infrastructure cost by $50k a year. I also architected the omnichannel notification platform used by 350K people daily, and earlier built the employee search service that more than 80 downstream systems rely on.</p>
-  <p class="contact">
-    <a href="mailto:dev.amitdubey@gmail.com">dev.amitdubey@gmail.com</a>
-    <a href="https://github.com/amitdu6ey">GitHub</a>
-    <a href="https://www.linkedin.com/in/amitdu6ey/">LinkedIn</a>
-  </p>
 
-  <section id="experience">
-    <h2>Experience</h2>
-
-    <div class="co">
-      <h3>JPMorgan Chase &amp; Co. <span>· Bangalore</span></h3>
-
-      <article class="entry">
-        <div class="role"><h4>Software Engineer 3 (Senior Associate)</h4><span class="when">Jan 2026 – Present</span></div>
-        <ul class="log">
-          <li>Building mission-critical, cross-cutting API platforms powering firm-wide Search, Productivity and Personalisation systems.</li>
-          <li>Owned and scaled the A/B Testing Platform for feature flagging and personalisation, with 100M+ memberships and 10M+ daily updates driven by event-driven compute jobs on Kafka. Cut p99.99 service latency from 3s to 300ms and reduced infra cost by $50k a year.</li>
-          <li>Architected the Omnichannel Notification Platform (350K DAU) across mobile and desktop, with smart scheduling, user preferences, capability-driven behaviour and summarised notifications. Designed the GraphQL schemas, the resiliency patterns (circuit breakers, idempotency) and Pact contract testing.</li>
-          <li>Built an agentic dev harness used by 20 services across 3 platforms: containerised local simulation and tests that enable 24-hour prod releases.</li>
-        </ul>
-        <p class="stack">Java, Spring Boot, GraphQL, Kafka, Pact, MongoDB, CockroachDB, Redis, AWS (ECS, Lambda, SQS), Claude Code</p>
-      </article>
-
-      <article class="entry">
-        <div class="role"><h4>Software Engineer 2 (Associate)</h4><span class="when">Jan 2024 – Dec 2025</span></div>
-        <ul class="log">
-          <li>Developed the Digital Assistant Insights App with a Lean Startup approach, which won the JPMC Impact Award. Built productivity insights for meetings, learning and recognition, and migrated the core insights from .NET to TypeScript for firm-wide expansion to 350K+ employees.</li>
-          <li>Led and reviewed the Spring Boot 2 → 3 migration across 3 teams, enhanced agentic workflows and automations, and mentored engineers.</li>
-          <li>Developed the Employee Search Service (80+ downstream systems) for fuzzy-phonetic search on employee data using Elasticsearch.</li>
-        </ul>
-        <p class="stack">Java, JavaScript, Spring Boot, Spring Batch, ElectronJS, Elasticsearch, AWS, Terraform, Claude Code</p>
-      </article>
-
-      <article class="entry">
-        <div class="role"><h4>Software Engineer 1 (Analyst)</h4><span class="when">Aug 2021 – Dec 2023</span></div>
-        <ul class="log">
-          <li>Developed the Centralized Preference System, enhancing in-app search and rapid client integration for a firm-wide rollout in 2 sprints.</li>
-          <li>Built a CLI that scaffolds client insights with flows and TypeScript contracts, cutting development time by 50% on the ElectronJS platform.</li>
-        </ul>
-        <p class="stack">Java, JavaScript, Spring Boot, ReactJS, Kafka, CockroachDB, MySQL</p>
-      </article>
-
-      <article class="entry">
-        <div class="role"><h4>Software Engineer Intern</h4><span class="when">Mar 2021 – Jul 2021</span></div>
-        <ul class="log">
-          <li>Built data pipelines, migrated from MariaDB to CockroachDB, and automated blue-green deployment for zero-downtime releases.</li>
-        </ul>
-        <p class="stack">Java, Spring Boot, Spring Batch, Flyway, MariaDB, CockroachDB, Jenkins, Cloud Foundry</p>
-      </article>
+  <section id="experience" aria-labelledby="h-exp">
+    <h2 id="h-exp">Experience</h2>
+    <div class="org">
+      <h3>JPMorgan Chase &amp; Co., Bangalore</h3>
+      <ul class="roles">
+        <li><span>Software Engineer 3 (Senior Associate)</span><span class="when">Jan 2026 – present</span></li>
+        <li><span>Software Engineer 2 (Associate)</span><span class="when">Jan 2024 – Dec 2025</span></li>
+        <li><span>Software Engineer 1 (Analyst)</span><span class="when">Aug 2021 – Dec 2023</span></li>
+        <li><span>Software Engineer Intern</span><span class="when">Mar 2021 – Jul 2021</span></li>
+      </ul>
     </div>
-
-    <div class="co">
-      <h3>Samsung Research Institute <span>· Bangalore</span></h3>
-      <article class="entry">
-        <div class="role"><h4>PRISM Developer / Research Intern</h4><span class="when">Jan 2020 – Aug 2020</span></div>
-        <ul class="log">
-          <li>Developed a data-collection web tool that generates judgement lists for search DCG computation and Learning-to-Rank (LTR) training.</li>
-        </ul>
-        <p class="stack">JavaScript, Node.js, Express.js, MongoDB</p>
-      </article>
+    <div class="org">
+      <h3>Samsung Research Institute, Bangalore</h3>
+      <ul class="roles">
+        <li><span>PRISM Developer / Research Intern</span><span class="when">Jan 2020 – Aug 2020</span></li>
+      </ul>
     </div>
   </section>
 
-  <section id="work">
-    <h2>Selected work</h2>
-
-    <article class="proj">
-      <h3>A/B Testing &amp; Feature-Flag Platform</h3>
-      <p class="meta">2026 – present · Java, Spring Boot, Kafka, MongoDB, Redis, AWS</p>
-      <p class="what">The platform that decides who sees what across the firm: audience memberships for feature flags, experiments and personalisation. Memberships are kept fresh by event-driven compute jobs consuming Kafka. I own its design, scaling and cost.</p>
-      <p class="outcome"><b>100M+</b> memberships, <b>10M+</b> updates a day. p99.99 latency down from <b>3s to 300ms</b>, and infra cost reduced by <b>$50k a year</b>.</p>
-      <figure data-viz="kafka">
+  <section id="work" aria-labelledby="h-work">
+    <h2 id="h-work">Work</h2>
+    <div class="window" id="window">
+      <div class="bar">
+        <div class="tabs" role="tablist" aria-label="Simulations">
+        <button role="tab" id="tab-kafka" aria-controls="sim-kafka" aria-selected="true" tabindex="0">Memberships on Kafka</button>
+        <button role="tab" id="tab-breaker" aria-controls="sim-breaker" aria-selected="false" tabindex="-1">Notifications</button>
+        <button role="tab" id="tab-pact" aria-controls="sim-pact" aria-selected="false" tabindex="-1">Contracts</button>
+        <button role="tab" id="tab-harness" aria-controls="sim-harness" aria-selected="false" tabindex="-1">Agent harness</button>
+        <button role="tab" id="tab-insights" aria-controls="sim-insights" aria-selected="false" tabindex="-1">Insights</button>
+        <button role="tab" id="tab-search" aria-controls="sim-search" aria-selected="false" tabindex="-1">People search</button>
+        </div>
+      </div>
+      <div class="pane" role="tabpanel" id="sim-kafka" aria-labelledby="tab-kafka">
+        <figure data-viz="kafka">
         <div class="screen"><canvas id="kafka-canvas" role="img" aria-label="Animated Kafka pipeline: change events are hashed onto four partitions, a consumer group splits the partitions between workers, and each processed event updates an audience membership grid."></canvas></div>
         <figcaption class="foot">
           <div class="controls">
@@ -309,14 +248,9 @@
           <p class="caption">Illustrative. Events are hashed onto partitions and a consumer group divides those partitions between workers. With fewer consumers lag builds, and adding one triggers a rebalance that drains it. Offsets are committed only after the membership write, so delivery is at-least-once and the compute is idempotent.</p>
         </figcaption>
       </figure>
-    </article>
-
-    <article class="proj">
-      <h3>Omnichannel Notification Platform</h3>
-      <p class="meta">2026 – present · Java, Spring Boot, GraphQL, Kafka, Pact, AWS SQS &amp; Lambda</p>
-      <p class="what">Notifications for mobile and desktop with smart scheduling, user preferences, capability-driven behaviour and summarised notifications. I architected the platform, designed its GraphQL schemas and the resiliency layer (circuit breakers, idempotency keys), and set up Pact contract tests so producers and consumers can ship independently.</p>
-      <p class="outcome"><b>350K</b> daily active users across mobile and desktop.</p>
-      <figure data-viz="breaker">
+      </div>
+      <div class="pane" role="tabpanel" id="sim-breaker" aria-labelledby="tab-breaker" hidden>
+        <figure data-viz="breaker">
         <div class="screen"><canvas id="breaker-canvas" role="img" aria-label="Animated notification pipeline: duplicate requests are dropped by an idempotency store; when the mobile provider fails, its circuit breaker opens, holds notifications, probes in half-open state, and sends one summary once it closes."></canvas></div>
         <figcaption class="foot">
           <div class="controls">
@@ -334,13 +268,9 @@
           <p class="caption">Illustrative. Every request carries an idempotency key, and a retry whose key is already in the store is dropped. When a provider fails, its breaker opens and holds notifications. After a cool-down a single probe tests the provider, and once it succeeds the held notifications go out as one summary.</p>
         </figcaption>
       </figure>
-    </article>
-
-    <article class="proj">
-      <h3>Consumer-Driven Contract Testing</h3>
-      <p class="meta">2026 – present · Notification platform · Pact, Java, Spring Boot, GraphQL</p>
-      <p class="what">I worked on Pact contract testing for the notification platform. Each consumer records the parts of the GraphQL API it actually relies on, and the provider is verified against every consumer's contract before it ships. A change that would break a client fails the build instead of failing in production, so the platform and its clients can release independently.</p>
-      <figure data-viz="pact">
+      </div>
+      <div class="pane" role="tabpanel" id="sim-pact" aria-labelledby="tab-pact" hidden>
+        <figure data-viz="pact">
         <div class="screen"><canvas id="pact-canvas" role="img" aria-label="Animated Pact workflow: consumers publish contracts to a broker, each provider build replays every consumer's interactions and records pass or fail in a compatibility matrix, and can-i-deploy blocks a release that would break a consumer."></canvas></div>
         <figcaption class="foot">
           <div class="controls">
@@ -356,14 +286,9 @@
           <p class="caption">Illustrative, not the real services. Consumers publish contracts to a broker. Each provider build fetches them, replays every interaction and records the result in the compatibility matrix. can-i-deploy lets a version ship only if every consumer passes. Rename a field that the mobile and desktop apps depend on and the release is blocked until the change is made backward-compatible.</p>
         </figcaption>
       </figure>
-    </article>
-
-    <article class="proj">
-      <h3>Agentic Dev Harness</h3>
-      <p class="meta">2026 – present · Claude Code, containers, Java, Spring Boot, Gherkin</p>
-      <p class="what">An agentic development harness that gives a coding agent a production-like loop on a laptop. It runs a containerised simulation of a service's dependencies, then unit, contract and end-to-end suites. When something fails, the agent reads the logs, patches and re-runs, so changes reach review already green.</p>
-      <p class="outcome">Used by <b>20 services</b> across <b>3 platforms</b>, and it is what makes <b>24-hour</b> production releases possible.</p>
-      <figure data-viz="harness">
+      </div>
+      <div class="pane" role="tabpanel" id="sim-harness" aria-labelledby="tab-harness" hidden>
+        <figure data-viz="harness">
         <div class="hx-top"><ol class="loop" aria-label="Harness loop"><li>plan</li><li>spin up</li><li>test</li><li>fix</li><li>re-test</li><li>ship</li></ol></div>
         <div class="hx">
           <div class="screen"><canvas id="harness-canvas" role="img" aria-label="Animated dev harness: an agent plans a change, containers for Kafka, MongoDB, Redis and an AWS simulator start, test traffic flows through the service, a failing dependency is traced from the logs, patched and re-tested, and the service joins the fleet of twenty."></canvas></div>
@@ -380,14 +305,9 @@
           <p class="caption">Illustrative, with made-up services and logs. Each cycle takes one service from plan to a green pull request, and the strip along the bottom fills as services across the three platforms pass through the harness.</p>
         </figcaption>
       </figure>
-    </article>
-
-    <article class="proj">
-      <h3>Digital Assistant Insights App</h3>
-      <p class="meta">2024 – 2025 · TypeScript, ElectronJS, Java, Spring Boot</p>
-      <p class="what">Productivity insights for meetings, learning and recognition, built the Lean Startup way: ship the smallest useful insight, measure real usage, iterate. Once the insights were proven, I migrated the core from .NET to TypeScript so it could expand firm-wide.</p>
-      <p class="outcome">Won the <b>JPMC Impact Award</b>. Rolled out to <b>350K+</b> employees.</p>
-      <figure data-viz="insights">
+      </div>
+      <div class="pane" role="tabpanel" id="sim-insights" aria-labelledby="tab-insights" hidden>
+        <figure data-viz="insights">
         <div class="ins" data-v="1">
           <div class="ins-top">
             <ol class="loop" aria-label="Lean Startup loop"><li>build</li><li>measure</li><li>learn</li></ol>
@@ -424,14 +344,9 @@
           <p class="caption">Illustrative, with sample data. Each turn of the loop ships a better insight (a number, then context, then a suggestion) and keeps what people actually use. Once the insights are proven, the core moves from .NET to TypeScript.</p>
         </figcaption>
       </figure>
-    </article>
-
-    <article class="proj">
-      <h3>Employee Search Service</h3>
-      <p class="meta">2024 – 2025 · Java, Spring Boot, Elasticsearch, Spring Batch</p>
-      <p class="what">Fuzzy-phonetic search over employee data, so a misspelt or differently spelt name still finds the right person.</p>
-      <p class="outcome">Used by <b>80+</b> downstream systems.</p>
-      <figure data-viz="search">
+      </div>
+      <div class="pane" role="tabpanel" id="sim-search" aria-labelledby="tab-search" hidden>
+        <figure data-viz="search">
         <div class="search">
           <label class="q"><span>Search</span><input type="search" value="kathrine" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Search fictional names"></label>
           <div class="try">Try:
@@ -448,24 +363,72 @@
           <p class="caption">A toy version of the matching, not the production analyzer. It combines prefix matching, edit distance with Elasticsearch-style AUTO fuzziness and a phonetic key, run over made-up names.</p>
         </figcaption>
       </figure>
-    </article>
+      </div>
+    </div>
+      <article class="work">
+        <div class="work-head"><h3><a href="notes/ab-testing.html">A/B testing and feature-flag platform</a></h3><span class="when">2026 – present</span></div>
+        <p>Decides who sees what across the firm: audience memberships for feature flags, experiments and personalisation, kept fresh by event-driven compute on Kafka and stored in CockroachDB. I own its design, scaling and cost.</p>
+        <p class="impact">100M+ memberships and 10M+ updates a day; p99.99 latency down from 3s to 300ms; infra cost down $50k a year.</p>
+        <button class="open" type="button" data-open="kafka" aria-controls="sim-kafka"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="2.5" width="13" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M1.5 5.5h13" stroke="currentColor" stroke-width="1.2"/></svg>Open simulation</button>
+      </article>
+      <article class="work">
+        <div class="work-head"><h3><a href="notes/notifications.html">Omnichannel notification platform</a></h3><span class="when">2026 – present</span></div>
+        <p>Notifications for mobile and desktop with smart scheduling, preferences, capability-driven behaviour and digests. I architected it, designed the GraphQL schemas and the resiliency layer of circuit breakers and idempotency keys, on AWS ECS, SQS and EventBridge with MongoDB.</p>
+        <p class="impact">350K daily active users.</p>
+        <button class="open" type="button" data-open="breaker" aria-controls="sim-breaker"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="2.5" width="13" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M1.5 5.5h13" stroke="currentColor" stroke-width="1.2"/></svg>Open simulation</button>
+      </article>
+      <article class="work">
+        <div class="work-head"><h3><a href="notes/contract-testing.html">Consumer-driven contract testing</a></h3><span class="when">2026 – present</span></div>
+        <p>Pact contracts for the notification platform: every client records the parts of the GraphQL API it relies on, and the platform is verified against all of them before it ships.</p>
+        <p class="impact">Breaking changes fail the build, so producers and consumers release independently.</p>
+        <button class="open" type="button" data-open="pact" aria-controls="sim-pact"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="2.5" width="13" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M1.5 5.5h13" stroke="currentColor" stroke-width="1.2"/></svg>Open simulation</button>
+      </article>
+      <article class="work">
+        <div class="work-head"><h3><a href="notes/agentic-harness.html">Agentic dev harness</a></h3><span class="when">2026 – present</span></div>
+        <p>A production-like loop on a laptop for a coding agent: Docker-simulated dependencies, then unit, contract and end-to-end suites. The agent reads the logs, patches and re-runs, so changes reach review already green.</p>
+        <p class="impact">Used by 20 microservices across 3 platforms; makes 24-hour production releases possible.</p>
+        <button class="open" type="button" data-open="harness" aria-controls="sim-harness"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="2.5" width="13" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M1.5 5.5h13" stroke="currentColor" stroke-width="1.2"/></svg>Open simulation</button>
+      </article>
+      <article class="work">
+        <div class="work-head"><h3><a href="notes/insights.html">Digital Assistant Insights</a></h3><span class="when">2024 – 2025</span></div>
+        <p>Productivity insights for meetings, learning and recognition, built the Lean Startup way, then migrated from .NET to TypeScript to expand firm-wide.</p>
+        <p class="impact">Won the JPMC Impact Award; rolled out to 350K+ employees.</p>
+        <button class="open" type="button" data-open="insights" aria-controls="sim-insights"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="2.5" width="13" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M1.5 5.5h13" stroke="currentColor" stroke-width="1.2"/></svg>Open simulation</button>
+      </article>
+      <article class="work">
+        <div class="work-head"><h3><a href="notes/employee-search.html">Employee search service</a></h3><span class="when">2024 – 2025</span></div>
+        <p>Fuzzy-phonetic search over employee data on Elasticsearch, so a misspelt or differently spelt name still finds the right person.</p>
+        <p class="impact">Used by 80+ downstream systems.</p>
+        <button class="open" type="button" data-open="search" aria-controls="sim-search"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="2.5" width="13" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M1.5 5.5h13" stroke="currentColor" stroke-width="1.2"/></svg>Open simulation</button>
+      </article>
   </section>
 
-  <section id="skills">
-    <h2>Skills</h2>
+  <section id="notes" aria-labelledby="h-notes">
+    <h2 id="h-notes">Engineering notes</h2>
+    <ul class="plain">
+      <li><a href="notes/kafka.html">Kafka: partitions and mixed load on one common compute</a></li>
+      <li><a href="notes/cockroachdb.html">CockroachDB: ranges, Raft and key design</a></li>
+      <li><a href="notes/elasticsearch-capacity.html">Elasticsearch capacity planning</a></li>
+      <li><a href="notes/contract-testing.html">Consumer-driven contract testing with Pact</a></li>
+    </ul>
+  </section>
+
+  <section id="skills" aria-labelledby="h-skills">
+    <h2 id="h-skills">Skills</h2>
     <dl class="kv">
-      <dt>Languages</dt><dd>Java, TypeScript, JavaScript, C++, C, Python, Gherkin</dd>
-      <dt>Frameworks &amp; tools</dt><dd>Spring Boot, Spring Batch, GraphQL, Pact, Node.js, Electron.js, Django, Flask, Jenkins, Git, Claude</dd>
-      <dt>Infrastructure</dt><dd>Kafka, CockroachDB, MongoDB, Elasticsearch, Redis, Cloud Foundry, AWS (API Gateway, ECS, Lambda, SQS, EventBridge)</dd>
+      <dt>Languages</dt><dd>Java, TypeScript, JavaScript, Python, SQL, C++, C, Gherkin</dd>
+      <dt>Frameworks and tools</dt><dd>Spring Boot, Spring Batch, REST, GraphQL, Pact, Node.js, Electron, Git, Claude Code</dd>
+      <dt>Data and messaging</dt><dd>Kafka, MongoDB, CockroachDB, MySQL, Redis, Elasticsearch</dd>
+      <dt>Cloud and delivery</dt><dd>AWS (ECS, Lambda, SQS, EventBridge), Docker, Kubernetes, CI/CD with Jenkins and Jules</dd>
     </dl>
   </section>
 
-  <section id="education">
-    <h2>Education &amp; recognition</h2>
+  <section id="education" aria-labelledby="h-edu">
+    <h2 id="h-edu">Education and recognition</h2>
     <dl class="kv">
-      <dt>2017 – 2021</dt><dd>B.E. Computer Science and Engineering, Ramaiah Institute of Technology, Bangalore. CGPA 8.5 / 10. Core member of CodeRIT, running coding contests and algorithm sessions for 200+ participants.</dd>
+      <dt>2017 – 2021</dt><dd>B.E. Computer Science and Engineering, Ramaiah Institute of Technology, Bangalore. CGPA 8.5/10. Core member of CodeRIT, running coding contests for 200+ participants.</dd>
       <dt>2023</dt><dd>SEP Scroll recognition for initiative and cross-team contributions, JPMorgan Chase &amp; Co.</dd>
-      <dt>2020</dt><dd>Certificate of Excellence, Samsung PRISM, Samsung Research Institute Bangalore</dd>
+      <dt>2020</dt><dd>Certificate of Excellence, Samsung PRISM</dd>
       <dt>2019</dt><dd>ACM ICPC onsite regionals, Gwalior-Pune and Amritapuri</dd>
     </dl>
   </section>
@@ -481,24 +444,40 @@
 <pre id="viz-errors" hidden></pre>
 <script>
 (function () {
-  var root = document.documentElement, btn = document.querySelector('.theme-toggle');
-  if (!btn) return;
-  var label = btn.querySelector('[data-theme-label]');
-  var mq = window.matchMedia ? matchMedia('(prefers-color-scheme: dark)') : null;
-  function current() { return root.getAttribute('data-theme') || (mq && mq.matches ? 'dark' : 'light'); }
-  function sync() {
-    var next = current() === 'dark' ? 'light' : 'dark';
-    if (label) label.textContent = next === 'dark' ? 'Dark' : 'Light';
-    btn.setAttribute('aria-label', 'Switch to ' + next + ' mode');
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tabs [role="tab"]'));
+  if (!tabs.length) return;
+  var win = document.getElementById('window');
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function select(key, opts) {
+    opts = opts || {};
+    tabs.forEach(function (t) {
+      var on = t.id === 'tab-' + key;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+      if (on && opts.focus) t.focus();
+      if (on) t.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    });
+    if (opts.url !== false) history.replaceState(null, '', '#sim-' + key);
   }
-  btn.addEventListener('click', function () {
-    var next = current() === 'dark' ? 'light' : 'dark';
-    root.setAttribute('data-theme', next);
-    try { localStorage.setItem('theme', next); } catch (e) {}
-    sync();
+  tabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { select(t.id.slice(4)); });
+    t.addEventListener('keydown', function (e) {
+      var j = e.key === 'ArrowRight' ? i + 1 : e.key === 'ArrowLeft' ? i - 1 : e.key === 'Home' ? 0 : e.key === 'End' ? tabs.length - 1 : null;
+      if (j === null) return;
+      e.preventDefault();
+      j = (j + tabs.length) % tabs.length;
+      select(tabs[j].id.slice(4), { focus: true });
+    });
   });
-  if (mq) { if (mq.addEventListener) mq.addEventListener('change', sync); else if (mq.addListener) mq.addListener(sync); }
-  sync();
+  document.querySelectorAll('[data-open]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      select(b.getAttribute('data-open'), { focus: true });
+      win.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    });
+  });
+  var m = /^#sim-([a-z]+)$/.exec(location.hash);
+  if (m && document.getElementById('tab-' + m[1])) select(m[1], { url: false });
 })();
 </script>
 <script src="assets/viz.js?v=51450aa6" defer></script>

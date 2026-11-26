@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Digital Assistant Insights App, design notes by Amit Dubey</title>
+<meta name="description" content="Design notes on the Digital Assistant Insights app: building productivity insights the Lean Startup way, the insight architecture, and migrating the core from .NET to TypeScript for a firm-wide rollout.">
+<meta name="theme-color" content="#ffffff">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;0,7..72,600;1,7..72,400;1,7..72,500&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/notes.css?v=20b8dd90">
+</head>
+<body>
+<main class="page">
+  <a class="home" href="../#work">Amit Dubey</a>
+
+  <header class="note">
+    <h1>Digital Assistant Insights App</h1>
+    <p class="meta">JPMorgan Chase, 2024 – 2025</p>
+    <p class="meta">TypeScript, Electron, Java, Spring Boot</p>
+    <p class="lead">Productivity insights for meetings, learning and recognition, built the Lean Startup way: ship the smallest useful insight, measure real usage, iterate. Once the insights had proven themselves, I migrated the core from .NET to TypeScript so it could expand firm-wide.</p>
+    <dl class="facts"><dt>Recognition</dt><dd>Won the JPMC Impact Award</dd><dt>Reach</dt><dd>Rolled out firm-wide to 350K+ employees</dd><dt>Migration</dt><dd>Core insights moved from .NET to TypeScript</dd></dl>
+  </header>
+
+  <section>
+    <h2>Design</h2>
+    <figure>
+      <svg viewBox="0 0 720 250" role="img" aria-labelledby="i1t i1d">
+        <title id="i1t">Insight architecture</title>
+        <desc id="i1d">Data sources for meetings, learning and recognition feed insight modules. Each module returns a typed insight that the desktop client renders as a card. Usage data flows back to decide which insights to grow or retire.</desc>
+        <defs><marker id="ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="d-head" d="M0 0 8 4 0 8z"/></marker></defs>
+        <text class="d-s" x="10" y="22">SOURCES</text>
+        <rect class="d-box" x="10" y="32" width="140" height="40" rx="6"/><path class="d-acc d-s1" d="M10 32v40"/><text class="d-t" x="22" y="57">meetings</text>
+        <rect class="d-box" x="10" y="82" width="140" height="40" rx="6"/><path class="d-acc d-s2" d="M10 82v40"/><text class="d-t" x="22" y="107">learning</text>
+        <rect class="d-box" x="10" y="132" width="140" height="40" rx="6"/><path class="d-acc d-s3" d="M10 132v40"/><text class="d-t" x="22" y="157">recognition</text>
+
+        <rect class="d-box" x="210" y="32" width="200" height="140" rx="6"/><text class="d-h" x="222" y="56">Insight modules</text>
+        <text class="d-s" x="222" y="78">one small module per insight</text>
+        <text class="d-s" x="222" y="96">compute → typed result</text>
+        <rect class="d-soft" x="222" y="110" width="176" height="24" rx="4"/><text class="d-s" x="232" y="126">shared TypeScript contract</text>
+        <text class="d-s" x="222" y="158">add or retire one alone</text>
+
+        <rect class="d-box" x="470" y="32" width="240" height="140" rx="6"/><text class="d-h" x="482" y="56">Desktop client</text>
+        <text class="d-s" x="482" y="78">Electron · renders insight cards</text>
+        <rect class="d-soft" x="482" y="92" width="100" height="56" rx="4"/><rect class="d-c1" x="482" y="92" width="100" height="3"/>
+        <rect class="d-soft" x="596" y="92" width="100" height="56" rx="4"/><rect class="d-c3" x="596" y="92" width="100" height="3"/>
+        <text class="d-s" x="482" y="164">usage events → measure</text>
+
+        <path class="d-arrow" d="M150 52H206" marker-end="url(#ah)"/>
+        <path class="d-arrow" d="M150 102H206" marker-end="url(#ah)"/>
+        <path class="d-arrow" d="M150 152H206" marker-end="url(#ah)"/>
+        <path class="d-arrow" d="M410 102H466" marker-end="url(#ah)"/>
+        <path class="d-dash" d="M590 172V214H310V176" marker-end="url(#ah)"/>
+        <text class="d-s" x="330" y="234">learn: grow what people use, retire what they don't</text>
+      </svg>
+      <figcaption>Illustrative. Each insight is a small, independent module behind one typed contract, so it can be built, measured and retired on its own. Usage data closes the build–measure–learn loop.</figcaption>
+    </figure>
+
+    <h3>Lean Startup in practice</h3>
+    <p>Instead of designing a full productivity suite up front, each insight started as the smallest version that could be useful. It shipped to real users with usage instrumented from day one. The numbers decided what happened next: insights people came back to were deepened, and the ones they ignored were retired. The product grew from evidence rather than from a roadmap of guesses.</p>
+
+    <h3>Insights as independent modules</h3>
+    <p>That way of working needs an architecture where adding or removing an insight is cheap. Each insight is a small module that takes its source data and returns a typed result. The desktop client renders any result that matches the shared contract as a card. A new insight never touches the others, which is what made fast experiments practical.</p>
+
+    <h3>Migrating the core to TypeScript</h3>
+    <p>To expand firm-wide, the core insights moved from .NET to TypeScript. That put the insight logic in the same language as the Electron client and its typed contracts, so one team could change an insight end to end and the compiler would catch contract mismatches across the boundary. The migration could go insight by insight behind the same contract, which kept the app working throughout.</p>
+
+    <h3>Rolling out to 350K+ employees</h3>
+    <p>Going from early adopters to the whole firm changes the priorities from feature speed to reliability and consistency. Proven insights, a single language and typed contracts made that step manageable. The app now reaches more than 350,000 employees.</p>
+  </section>
+
+  <section>
+    <h2>Decisions &amp; trade-offs</h2>
+    <table class="tradeoffs">
+      <thead><tr><th>Choice</th><th>Why</th><th>What it costs</th></tr></thead>
+      <tbody>
+        <tr><td>Smallest useful insight first</td><td>Real usage decides what to build</td><td>Early versions look modest by design</td></tr>
+        <tr><td>One module per insight</td><td>Cheap to add, measure and retire</td><td>Shared contract has to stay stable</td></tr>
+        <tr><td>.NET → TypeScript</td><td>One language with the client; typed contracts across the boundary</td><td>A migration effort while still shipping features</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <nav class="pager" aria-label="Notes">
+    <a href="../#work">Back to work</a>
+    <a href="employee-search.html">Next: Employee search</a>
+  </nav>
+  <p class="disclaimer">Production numbers are real. Component names, sizes and diagrams are simplified and illustrative.</p>
+</main>
+</body>
+</html>

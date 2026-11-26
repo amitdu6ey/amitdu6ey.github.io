@@ -4,10 +4,15 @@
 (() => {
   'use strict';
 
-  const C = {
-    paper: '#f3eee2', deep: '#eae3d2', ink: '#24211c', muted: '#6f6859', rule: '#cdc3ac',
-    mark: '#e7dcc0', rust: '#a8432a', blue: '#2b64a6', amber: '#9a8010'
-  };
+  // Colours come from the page's CSS custom properties, so light and dark themes stay in sync.
+  const C = {};
+  const VARS = { paper: '--bg', deep: '--bg-2', ink: '--fg', muted: '--muted', rule: '--line', mark: '--mark', rust: '--rust', blue: '--blue', amber: '--amber' };
+  function readTheme() {
+    const cs = getComputedStyle(document.documentElement);
+    for (const k in VARS) C[k] = cs.getPropertyValue(VARS[k]).trim() || C[k] || '#888';
+  }
+  readTheme();
+  const redraws = [];
   const MONO = '"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace';
   const REDUCED = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
   const TAU = Math.PI * 2;
@@ -113,6 +118,7 @@
     const tick = dt => { if (s.w) opts.step(dt, s); };
     const lp = loop(canvas, dt => { tick(dt); draw(); });
     s.draw = draw;
+    redraws.push(draw);
     s.advance = sec => { for (let i = 0; i < sec * 30; i++) tick(1 / 30); draw(); };
     s.poke = () => { if (REDUCED) s.advance(2.5); else { lp.kick(); draw(); } };
     if ('ResizeObserver' in window) new ResizeObserver(resize).observe(canvas.parentElement);
@@ -800,14 +806,73 @@
     loop(root, dt => { t += dt; if (t > T.end) plan(); apply(); });
   }
 
+  /* =====================================================================
+     6. Insights: build → measure → learn, then .NET → TypeScript
+     ===================================================================== */
+  function insights(root) {
+    const ins = root.querySelector('.ins'), out = root.querySelector('[data-status]');
+    const loopEls = [...root.querySelectorAll('.loop li')], ver = root.querySelector('[data-ver]'), learnEl = root.querySelector('[data-learn]');
+    const meters = [...root.querySelectorAll('.meter i')], tiles = [...root.querySelectorAll('.mig i')];
+    const IT = [
+      { m: [0.78, 0.22, 0.5], learn: 'learned: the meetings number lands; learning needs a nudge, not a count' },
+      { m: [0.84, 0.64, 0.56], learn: 'learned: people act on suggestions, not just numbers' },
+      { m: [0.9, 0.82, 0.86], learn: 'learned: proven, so move the core to TypeScript and roll it out firm-wide' }
+    ];
+    const STEP = ['build: ship the smallest insight that could help', 'measure: watch how people actually use it', 'learn: keep, change or drop'];
+    const PH = 1.8, ITER = PH * 3, MIG = IT.length * ITER, DONE = MIG + 3.6, END = DONE + 3;
+    let t = 0;
+    function apply() {
+      const mig = t >= MIG, it = mig ? IT.length - 1 : Math.floor(t / ITER), local = mig ? ITER : t - it * ITER;
+      const stg = mig ? -1 : Math.min(2, Math.floor(local / PH)), v = String(it + 1);
+      if (ins.dataset.v !== v) ins.dataset.v = v;
+      setText(ver, 'v' + v);
+      loopEls.forEach((el, i) => el.classList.toggle('on', i === stg));
+      const prev = it ? IT[it - 1].m : [0, 0, 0];
+      const f = mig || stg === 2 ? 1 : stg === 1 ? ease(clamp((local - PH) / PH, 0, 1)) : 0;
+      meters.forEach((el, i) => el.style.setProperty('--m', lerp(prev[i], IT[it].m[i], f).toFixed(3)));
+      setText(learnEl, mig || stg === 2 ? IT[it].learn : stg === 1 ? `measuring how people use v${v}…` : `building v${v}…`);
+      const done = mig ? Math.min(tiles.length, Math.floor((t - MIG) / 0.8)) : 0;
+      tiles.forEach((el, i) => {
+        const ts = i < done;
+        if (el.classList.contains('ts') !== ts) { el.classList.toggle('ts', ts); el.querySelector('b').textContent = ts ? 'TS' : '.NET'; }
+      });
+      setText(out, t >= DONE ? 'shipped firm-wide: 350K+ employees · JPMC Impact Award'
+        : mig ? `migrating core insights .NET → TypeScript · ${done}/${tiles.length}`
+        : `v${v} · ${STEP[stg]}`);
+    }
+    if (REDUCED) { t = DONE + 0.1; apply(); return; }
+    apply();
+    loop(root, dt => { t += dt; if (t > END) t = 0; apply(); });
+  }
+
+  /* ---------- theme toggle: explicit choice persists; otherwise follow the OS ---------- */
+  function themeToggle() {
+    const btn = document.querySelector('.theme-toggle'), label = btn && btn.querySelector('[data-theme-label]');
+    const mq = window.matchMedia ? matchMedia('(prefers-color-scheme: dark)') : null;
+    const current = () => document.documentElement.getAttribute('data-theme') || (mq && mq.matches ? 'dark' : 'light');
+    const sync = () => {
+      readTheme(); redraws.forEach(d => d());
+      if (label) { const next = current() === 'dark' ? 'light' : 'dark'; label.textContent = next; btn.setAttribute('aria-label', 'Switch to ' + next + ' mode'); }
+    };
+    if (btn) btn.addEventListener('click', () => {
+      const next = current() === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) { /* private mode: still switches for this visit */ }
+      sync();
+    });
+    if (mq) { if (mq.addEventListener) mq.addEventListener('change', sync); else if (mq.addListener) mq.addListener(sync); }
+    sync();
+  }
+
   /* ---------- boot ---------- */
-  const VIZ = { raft, kafka, breaker, search, harness };
+  const VIZ = { raft, kafka, breaker, search, harness, insights };
   function boot() {
     document.querySelectorAll('[data-viz]').forEach(el => {
       const f = VIZ[el.dataset.viz];
       if (!f) return;
       try { f(el); } catch (e) { report(el.dataset.viz, e); }
     });
+    try { themeToggle(); } catch (e) { report('theme', e); }
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
 })();

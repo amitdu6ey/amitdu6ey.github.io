@@ -18,7 +18,8 @@
   :root {
     --bg: #ffffff; --bg-2: #f7f7f6; --fg: #111111; --muted: #5e5e5e;
     --rule: #e8e8e8; --line: #d4d4d4; --mark: #f0f0ef;
-    --rust: #a8432a; --blue: #2b64a6; --amber: #9a8010;
+    --c1: #2a78d6; --c2: #eb6834; --c3: #1baf7a; --c4: #eda100;
+    --ok: #0ca30c; --bad: #d03b3b; --warn: #fab219;
     --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
     --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
     color-scheme: light;
@@ -27,14 +28,14 @@
     :root:not([data-theme="light"]) {
       --bg: #0e0e0f; --bg-2: #151517; --fg: #ececec; --muted: #9d9d9d;
       --rule: #232325; --line: #3a3a3d; --mark: #222224;
-      --rust: #e5587a; --blue: #4b8de0; --amber: #a09628;
+      --c1: #3987e5; --c2: #d95926; --c3: #199e70; --c4: #c98500; --ok: #0ca30c; --bad: #d03b3b; --warn: #fab219;
       color-scheme: dark;
     }
   }
   :root[data-theme="dark"] {
     --bg: #0e0e0f; --bg-2: #151517; --fg: #ececec; --muted: #9d9d9d;
     --rule: #232325; --line: #3a3a3d; --mark: #222224;
-    --rust: #e5587a; --blue: #4b8de0; --amber: #a09628;
+    --c1: #3987e5; --c2: #d95926; --c3: #199e70; --c4: #c98500; --ok: #0ca30c; --bad: #d03b3b; --warn: #fab219;
     color-scheme: dark;
   }
 
@@ -44,7 +45,7 @@
   ::selection { background: var(--fg); color: var(--bg); }
   a { color: var(--fg); text-decoration: underline; text-decoration-color: var(--line); text-decoration-thickness: 1px; text-underline-offset: 3px; }
   a:hover { text-decoration-color: var(--fg); }
-  :focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+  :focus-visible { outline: 2px solid var(--c1); outline-offset: 2px; }
 
   .page { max-width: 860px; margin: 0 auto; padding: 1.25rem 24px 4rem; }
 
@@ -101,9 +102,9 @@
   .legend { display: flex; flex-wrap: wrap; gap: .1rem 1rem; margin: 0; padding: 0; list-style: none; color: var(--muted); font-size: 12.5px; }
   .legend svg { width: 11px; height: 11px; vertical-align: -1px; margin-right: .35rem; overflow: visible; }
   .caption { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
-  .f-blue { fill: var(--blue); } .s-blue { fill: none; stroke: var(--blue); }
-  .f-amber { fill: var(--amber); } .f-rust { fill: var(--rust); } .s-rust { fill: none; stroke: var(--rust); }
-  .f-fg { fill: var(--fg); }
+  .f-c1 { fill: var(--c1); } .f-c2 { fill: var(--c2); } .f-c3 { fill: var(--c3); } .f-c4 { fill: var(--c4); }
+  .f-ok { fill: var(--ok); } .f-bad { fill: var(--bad); } .f-warn { fill: var(--warn); } .s-bad { fill: none; stroke: var(--bad); }
+  .f-fg { fill: var(--fg); } .s-fg { fill: none; stroke: var(--fg); } .s-rule { fill: none; stroke: var(--line); }
 
   /* search figure */
   .search { padding: .9rem .9rem .6rem; }
@@ -119,10 +120,14 @@
   .results li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .1rem 1rem; padding: .4rem 0; border-top: 1px solid var(--rule); font-size: 15px; }
   .results li:first-child { border-top: 0; }
   .results .nm { overflow-wrap: anywhere; }
-  .results mark { background: var(--mark); color: var(--fg); box-shadow: inset 0 -1px 0 var(--fg); padding: 0 .1rem; }
+  .results mark { background: color-mix(in srgb, var(--c4) 32%, transparent); color: var(--fg); padding: 0 .15rem; border-radius: 2px; }
   .results .sc { color: var(--muted); font-family: var(--mono); font-size: 12px; text-align: right; }
   .results .why { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: .5rem; font-family: var(--mono); font-size: 11.5px; color: var(--muted); }
-  .results .why i { font-style: normal; }
+  .results .why i { font-style: normal; border: 1px solid var(--line); border-radius: 4px; padding: 0 .35rem; }
+  .results .why i[data-kind="exact"] { border-color: var(--ok); background: color-mix(in srgb, var(--ok) 12%, transparent); }
+  .results .why i[data-kind="prefix"] { border-color: var(--c1); background: color-mix(in srgb, var(--c1) 12%, transparent); }
+  .results .why i[data-kind="fuzzy"] { border-color: var(--c2); background: color-mix(in srgb, var(--c2) 12%, transparent); }
+  .results .why i[data-kind="phonetic"] { border-color: var(--c3); background: color-mix(in srgb, var(--c3) 12%, transparent); }
   .results .why i b { color: var(--fg); font-weight: 500; }
   .results .empty { color: var(--muted); font-size: 13px; border: 0; display: block; }
 
@@ -131,33 +136,43 @@
   .ins-top { display: flex; align-items: center; gap: .6rem; justify-content: space-between; flex-wrap: wrap; }
   .loop { list-style: none; margin: 0; padding: 0; display: flex; gap: 1rem; font-size: 13px; color: var(--muted); }
   .loop li { transition: color .2s; }
-  .loop li + li::before { content: "→"; margin-right: 1rem; color: var(--line); }
-  .loop li.on { color: var(--fg); font-weight: 600; }
+  .loop li + li::before { content: "→"; display: inline-block; margin-right: 1rem; color: var(--line); }
+  .loop li.on { color: var(--fg); font-weight: 600; text-decoration: underline; text-decoration-color: var(--c1); text-decoration-thickness: 2px; text-underline-offset: 5px; }
   .ver { font-family: var(--mono); font-size: 12px; color: var(--muted); }
   .icards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; }
-  .icard { border: 1px solid var(--rule); border-radius: 6px; padding: .65rem .75rem .6rem; display: flex; flex-direction: column; gap: .4rem; min-height: 166px; }
+  .icard { border: 1px solid var(--rule); border-top: 3px solid var(--acc, var(--line)); border-radius: 6px; padding: .65rem .75rem .6rem; display: flex; flex-direction: column; gap: .4rem; min-height: 166px; }
   .icard h5 { margin: 0; font-size: 12px; font-weight: 500; color: var(--muted); }
   .icard .big { margin: 0; font-size: 21px; font-weight: 600; line-height: 1.15; }
   .icard .big small { display: block; font-size: 12.5px; font-weight: 400; color: var(--muted); margin-top: .1rem; }
   .wk { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; height: 38px; }
   .wk span { display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 2px; font-size: 9.5px; color: var(--muted); }
-  .wk i { display: block; width: 100%; height: calc(var(--h) * 24px); background: var(--fg); opacity: .85; border-radius: 1px 1px 0 0; }
+  .wk i { display: block; width: 100%; height: calc(var(--h) * 24px); background: var(--acc, var(--fg)); border-radius: 1px 1px 0 0; }
   .prog { height: 5px; background: var(--mark); border-radius: 3px; overflow: hidden; }
-  .prog i { display: block; height: 100%; width: calc(var(--w) * 100%); background: var(--fg); }
+  .prog i { display: block; height: 100%; width: calc(var(--w) * 100%); background: var(--acc, var(--fg)); }
   .act { margin: 0; font-size: 13px; font-weight: 500; }
   .note { margin: 0; font-size: 12.5px; color: var(--muted); }
   .v2, .v3 { opacity: 0; transition: opacity .45s; }
   .ins[data-v="2"] .v2, .ins[data-v="3"] .v2, .ins[data-v="3"] .v3 { opacity: 1; }
   .meter { margin-top: auto; display: flex; align-items: center; gap: .45rem; font-size: 11px; color: var(--muted); padding-top: .2rem; }
   .meter b { flex: 1; height: 4px; background: var(--mark); border-radius: 2px; overflow: hidden; }
-  .meter i { display: block; height: 100%; width: calc(var(--m, 0) * 100%); background: var(--blue); }
+  .meter i { display: block; height: 100%; width: calc(var(--m, 0) * 100%); background: var(--acc, var(--c1)); }
   .learn { margin: 0; font-size: 14px; min-height: 1.6em; }
   .mig { display: flex; flex-wrap: wrap; gap: .35rem; align-items: center; font-size: 13px; }
   .mig .lbl { color: var(--muted); margin-right: .2rem; }
   .mig i { font-style: normal; border: 1px dashed var(--line); border-radius: 4px; padding: 0 .45rem; display: inline-flex; gap: .45rem; align-items: center; transition: border-color .3s; }
   .mig i b { font-family: var(--mono); font-size: 10.5px; font-weight: 500; color: var(--muted); }
   .mig i.ts { border-style: solid; border-color: var(--fg); }
-  .mig i.ts b { color: var(--fg); }
+  .mig i.ts b { color: #fff; background: var(--c1); padding: 0 .3rem; border-radius: 3px; }
+
+  /* harness figure */
+  .hx-top { padding: .75rem .9rem 0; }
+  .hx { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); }
+  .term { margin: 0; border-left: 1px solid var(--rule); background: var(--bg-2); font-family: var(--mono); font-size: 11px; line-height: 1.65; padding: .7rem .8rem; height: 300px; overflow: hidden; white-space: pre-wrap; overflow-wrap: anywhere; color: var(--fg); display: flex; flex-direction: column; justify-content: flex-end; }
+  .term .g { display: inline-block; width: 1.4em; color: var(--muted); }
+  .term .l-agent { color: var(--muted); }
+  .term .l-ok .g { color: var(--ok); }
+  .term .l-bad .g { color: var(--bad); }
+  @media (max-width: 720px) { .hx { grid-template-columns: minmax(0, 1fr); } .term { border-left: 0; border-top: 1px solid var(--rule); height: 220px; } }
 
   dl.kv { display: grid; grid-template-columns: 11rem 1fr; gap: .45rem 1.5rem; margin: 0; }
   dl.kv dt { color: var(--muted); }
@@ -287,11 +302,11 @@
             <p class="status" data-status>&nbsp;</p>
           </div>
           <ul class="legend" aria-label="Legend">
-            <li><svg viewBox="0 0 12 12"><rect class="f-fg" x="3" y="2" width="6" height="8"/></svg>queued event</li>
-            <li><svg viewBox="0 0 12 12"><circle class="f-blue" cx="6" cy="6" r="3"/></svg>membership update</li>
-            <li><svg viewBox="0 0 12 12"><rect class="f-fg" x="1.5" y="1.5" width="9" height="9"/></svg>member</li>
+            <li><svg viewBox="0 0 46 12" style="width:38px"><rect class="f-c1" x="0" y="2" width="9" height="8"/><rect class="f-c2" x="12" y="2" width="9" height="8"/><rect class="f-c3" x="24" y="2" width="9" height="8"/><rect class="f-c4" x="36" y="2" width="9" height="8"/></svg>partitions p0–p3 (events and the memberships they write)</li>
+            <li><svg viewBox="0 0 12 12"><rect class="s-rule" x="1.5" y="1.5" width="9" height="9"/></svg>not a member</li>
+            <li><svg viewBox="0 0 12 12"><rect class="s-fg" x="1" y="1" width="10" height="10" stroke-width="1.5"/></svg>just recomputed</li>
           </ul>
-          <p class="caption">Illustrative. Events are hashed onto partitions and a consumer group divides those partitions between workers. With fewer consumers lag builds, and adding one triggers a rebalance that drains it. Delivery is at-least-once, so the compute is idempotent.</p>
+          <p class="caption">Illustrative. Events are hashed onto partitions and a consumer group divides those partitions between workers. With fewer consumers lag builds, and adding one triggers a rebalance that drains it. Offsets are committed only after the membership write, so delivery is at-least-once and the compute is idempotent.</p>
         </figcaption>
       </figure>
     </article>
@@ -309,12 +324,60 @@
             <p class="status" data-status>&nbsp;</p>
           </div>
           <ul class="legend" aria-label="Legend">
-            <li><svg viewBox="0 0 12 12"><circle class="f-blue" cx="6" cy="6" r="4"/></svg>notification</li>
-            <li><svg viewBox="0 0 12 12"><path class="f-amber" d="M6 1.2 10.8 6 6 10.8 1.2 6Z"/></svg>half-open probe</li>
-            <li><svg viewBox="0 0 12 12"><rect class="f-blue" x="1" y="1" width="10" height="10"/></svg>summary</li>
-            <li><svg viewBox="0 0 12 12"><path class="s-rust" d="M2.5 2.5 9.5 9.5M9.5 2.5 2.5 9.5" stroke-width="2"/></svg>failed delivery</li>
+            <li><svg viewBox="0 0 12 12"><circle class="f-c1" cx="6" cy="6" r="4"/></svg>mobile</li>
+            <li><svg viewBox="0 0 12 12"><circle class="f-c2" cx="6" cy="6" r="4"/></svg>desktop</li>
+            <li><svg viewBox="0 0 12 12"><path class="f-warn" d="M6 1.2 10.8 6 6 10.8 1.2 6Z"/></svg>half-open probe</li>
+            <li><svg viewBox="0 0 12 12"><rect class="f-c1" x="1" y="1" width="10" height="10"/></svg>digest summary (Σ)</li>
+            <li><svg viewBox="0 0 22 12" style="width:18px"><rect class="f-ok" x="1" y="3" width="6" height="6"/><rect class="f-bad" x="10" y="3" width="6" height="6"/></svg>breaker window ok / fail</li>
+            <li><svg viewBox="0 0 12 12"><path class="s-bad" d="M2.5 2.5 9.5 9.5M9.5 2.5 2.5 9.5" stroke-width="2"/></svg>failed delivery</li>
           </ul>
-          <p class="caption">Illustrative. Retries that carry the same idempotency key are dropped. When a provider fails, its breaker opens and holds notifications. After a cool-down a single probe tests the provider, and once it succeeds the held notifications go out as one summary.</p>
+          <p class="caption">Illustrative. Every request carries an idempotency key, and a retry whose key is already in the store is dropped. When a provider fails, its breaker opens and holds notifications. After a cool-down a single probe tests the provider, and once it succeeds the held notifications go out as one summary.</p>
+        </figcaption>
+      </figure>
+    </article>
+
+    <article class="proj">
+      <h3>Consumer-Driven Contract Testing</h3>
+      <p class="meta">2026 – present · Notification platform · Pact, Java, Spring Boot, GraphQL</p>
+      <p class="what">I worked on Pact contract testing for the notification platform. Each consumer records the parts of the GraphQL API it actually relies on, and the provider is verified against every consumer's contract before it ships. A change that would break a client fails the build instead of failing in production, so the platform and its clients can release independently.</p>
+      <figure data-viz="pact">
+        <div class="screen"><canvas id="pact-canvas" role="img" aria-label="Animated Pact workflow: consumers publish contracts to a broker, each provider build replays every consumer's interactions and records pass or fail in a compatibility matrix, and can-i-deploy blocks a release that would break a consumer."></canvas></div>
+        <figcaption class="foot">
+          <div class="controls">
+            <button class="btn" type="button" data-act="break" aria-pressed="false">ship a breaking change</button>
+            <p class="status" data-status>&nbsp;</p>
+          </div>
+          <ul class="legend" aria-label="Legend">
+            <li><svg viewBox="0 0 34 12" style="width:28px"><rect class="f-c1" x="0" y="2" width="8" height="8"/><rect class="f-c2" x="12" y="2" width="8" height="8"/><rect class="f-c3" x="24" y="2" width="8" height="8"/></svg>consumers and their contracts</li>
+            <li><svg viewBox="0 0 12 12"><rect class="f-ok" x="1" y="1" width="10" height="10" rx="2"/></svg>verified</li>
+            <li><svg viewBox="0 0 12 12"><rect class="f-bad" x="1" y="1" width="10" height="10" rx="2"/></svg>breaks a consumer</li>
+            <li><svg viewBox="0 0 12 12"><circle class="f-warn" cx="6" cy="6" r="3.5"/></svg>verifying</li>
+          </ul>
+          <p class="caption">Illustrative, not the real services. Consumers publish contracts to a broker. Each provider build fetches them, replays every interaction and records the result in the compatibility matrix. can-i-deploy lets a version ship only if every consumer passes. Rename a field that the mobile and desktop apps depend on and the release is blocked until the change is made backward-compatible.</p>
+        </figcaption>
+      </figure>
+    </article>
+
+    <article class="proj">
+      <h3>Agentic Dev Harness</h3>
+      <p class="meta">2026 – present · Claude Code, containers, Java, Spring Boot, Gherkin</p>
+      <p class="what">An agentic development harness that gives a coding agent a production-like loop on a laptop. It runs a containerised simulation of a service's dependencies, then unit, contract and end-to-end suites. When something fails, the agent reads the logs, patches and re-runs, so changes reach review already green.</p>
+      <p class="outcome">Used by <b>20 services</b> across <b>3 platforms</b>, and it is what makes <b>24-hour</b> production releases possible.</p>
+      <figure data-viz="harness">
+        <div class="hx-top"><ol class="loop" aria-label="Harness loop"><li>plan</li><li>spin up</li><li>test</li><li>fix</li><li>re-test</li><li>ship</li></ol></div>
+        <div class="hx">
+          <div class="screen"><canvas id="harness-canvas" role="img" aria-label="Animated dev harness: an agent plans a change, containers for Kafka, MongoDB, Redis and an AWS simulator start, test traffic flows through the service, a failing dependency is traced from the logs, patched and re-tested, and the service joins the fleet of twenty."></canvas></div>
+          <pre class="term" data-term aria-label="Harness log"></pre>
+        </div>
+        <figcaption class="foot">
+          <p class="status" data-status>&nbsp;</p>
+          <ul class="legend" aria-label="Legend">
+            <li><svg viewBox="0 0 12 12"><circle class="f-fg" cx="6" cy="6" r="3"/></svg>request</li>
+            <li><svg viewBox="0 0 46 12" style="width:38px"><circle class="f-c1" cx="5" cy="6" r="3.5"/><circle class="f-c2" cx="17" cy="6" r="3.5"/><circle class="f-c3" cx="29" cy="6" r="3.5"/><circle class="f-c4" cx="41" cy="6" r="3.5"/></svg>response from kafka · mongodb · redis · aws</li>
+            <li><svg viewBox="0 0 12 12"><path class="s-bad" d="M2.5 2.5 9.5 9.5M9.5 2.5 2.5 9.5" stroke-width="2"/></svg>failing dependency</li>
+            <li><svg viewBox="0 0 12 12"><rect class="f-ok" x="1.5" y="1.5" width="9" height="9"/></svg>service through the harness</li>
+          </ul>
+          <p class="caption">Illustrative, with made-up services and logs. Each cycle takes one service from plan to a green pull request, and the strip along the bottom fills as services across the three platforms pass through the harness.</p>
         </figcaption>
       </figure>
     </article>
@@ -331,21 +394,21 @@
             <span class="ver" data-ver>v1</span>
           </div>
           <div class="icards">
-            <div class="icard">
+            <div class="icard" style="--acc: var(--c1)">
               <h5>Meetings</h5>
               <p class="big">18h <small>in meetings this week</small></p>
               <div class="wk v2" aria-hidden="true"><span><i style="--h:.55"></i>M</span><span><i style="--h:.9"></i>T</span><span><i style="--h:.7"></i>W</span><span><i style="--h:1"></i>T</span><span><i style="--h:.35"></i>F</span></div>
               <p class="act v3">Block 2h of focus time on Friday?</p>
               <div class="meter"><span>usage</span><b><i></i></b></div>
             </div>
-            <div class="icard">
+            <div class="icard" style="--acc: var(--c2)">
               <h5>Learning</h5>
               <p class="big">2 <small>courses due this month</small></p>
               <div class="prog v2" aria-hidden="true"><i style="--w:.6"></i></div>
               <p class="act v2">Resume "Kafka fundamentals"</p>
               <div class="meter"><span>usage</span><b><i></i></b></div>
             </div>
-            <div class="icard">
+            <div class="icard" style="--acc: var(--c3)">
               <h5>Recognition</h5>
               <p class="big">3 <small>colleagues recognised you</small></p>
               <p class="note v2">from 2 teams this week</p>
@@ -438,6 +501,6 @@
   sync();
 })();
 </script>
-<script src="assets/viz.js?v=bc8d5542" defer></script>
+<script src="assets/viz.js?v=51450aa6" defer></script>
 </body>
 </html>

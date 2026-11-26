@@ -845,23 +845,12 @@
     loop(root, dt => { t += dt; if (t > END) t = 0; apply(); });
   }
 
-  /* ---------- theme toggle: explicit choice persists; otherwise follow the OS ---------- */
-  function themeToggle() {
-    const btn = document.querySelector('.theme-toggle'), label = btn && btn.querySelector('[data-theme-label]');
+  /* ---------- theme: the toggle lives inline in index.html; here we just repaint canvases ---------- */
+  function themeSync() {
+    const repaint = () => { readTheme(); redraws.forEach(d => d()); };
+    new MutationObserver(repaint).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
     const mq = window.matchMedia ? matchMedia('(prefers-color-scheme: dark)') : null;
-    const current = () => document.documentElement.getAttribute('data-theme') || (mq && mq.matches ? 'dark' : 'light');
-    const sync = () => {
-      readTheme(); redraws.forEach(d => d());
-      if (label) { const next = current() === 'dark' ? 'light' : 'dark'; label.textContent = next; btn.setAttribute('aria-label', 'Switch to ' + next + ' mode'); }
-    };
-    if (btn) btn.addEventListener('click', () => {
-      const next = current() === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', next);
-      try { localStorage.setItem('theme', next); } catch (e) { /* private mode: still switches for this visit */ }
-      sync();
-    });
-    if (mq) { if (mq.addEventListener) mq.addEventListener('change', sync); else if (mq.addListener) mq.addListener(sync); }
-    sync();
+    if (mq) { if (mq.addEventListener) mq.addEventListener('change', repaint); else if (mq.addListener) mq.addListener(repaint); }
   }
 
   /* ---------- boot ---------- */
@@ -872,7 +861,7 @@
       if (!f) return;
       try { f(el); } catch (e) { report(el.dataset.viz, e); }
     });
-    try { themeToggle(); } catch (e) { report('theme', e); }
+    try { themeSync(); } catch (e) { report('theme', e); }
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
 })();
